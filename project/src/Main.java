@@ -1,6 +1,7 @@
 import controller.OutputController;
 import controller.SessionController;
 import model.DataBase;
+import view.MainMenuGUI;
 import view.ManagerMenu;
 import view.MainMenu;
 
@@ -29,7 +30,14 @@ public class Main {
             ManagerMenu.showCreationMenu();
         }
 
-        MainMenu.show();
+        //MainMenu.show();
+
+        //Corre porca!!!!
+        MainMenuGUI menu = new MainMenuGUI();
+        menu.init();
+        menu.setVisible(true);
+
+
         OutputController.appTimer(start);
         System.out.println("Thank you for using our app!!");
     }
