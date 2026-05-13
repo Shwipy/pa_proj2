@@ -12,11 +12,13 @@ public class MainMenuGUI extends JFrame implements ActionListener{
     private Container cont;
     JButton createButton, loginButton;
     JTextField userField, passwordField;
+    JPanel wrongPasswordPanel;
     Integer userId;
 
     public void init(){
         cont = getContentPane();
         cont.setLayout (new BorderLayout());
+        setResizable(false);
         setSize(480, 240);
 
         JPanel centerPanel = new JPanel();
@@ -29,9 +31,14 @@ public class MainMenuGUI extends JFrame implements ActionListener{
 
         JPanel passwordPanel = new JPanel(new FlowLayout());
         passwordPanel.add(new JLabel("Password:", SwingConstants.RIGHT));
-         passwordField = new JTextField(24);
+        passwordField = new JTextField(24);
         passwordPanel.add(passwordField);
 
+        wrongPasswordPanel = new JPanel(new FlowLayout());
+        JLabel wrongPassLabel = new JLabel("Wrong Password!", SwingConstants.RIGHT);
+        wrongPassLabel.setForeground(Color.RED);
+        wrongPasswordPanel.add(wrongPassLabel);
+        wrongPasswordPanel.setVisible(false);
 
         JLabel titleLabel = new JLabel("Login Form", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 16));
@@ -41,6 +48,7 @@ public class MainMenuGUI extends JFrame implements ActionListener{
         centerPanel.add(usernamePanel);
         centerPanel.add(new JPanel());
         centerPanel.add(passwordPanel);
+        centerPanel.add(wrongPasswordPanel);
 
         JPanel buttonPanel = new JPanel(new FlowLayout());
 
@@ -57,8 +65,6 @@ public class MainMenuGUI extends JFrame implements ActionListener{
 
         cont.add(centerPanel,BorderLayout.CENTER);
         cont.add(buttonPanel, BorderLayout.SOUTH);
-
-
     }
 
     public void actionPerformed (ActionEvent e){
@@ -68,10 +74,14 @@ public class MainMenuGUI extends JFrame implements ActionListener{
 
         else {
             userId = SessionController.login(userField.getText(), passwordField.getText());
-            System.out.println(userId);
+
+            if(userId == null){
+                wrongPasswordPanel.setVisible(true);
+            }else{
+                System.out.println(userId);
+                this.dispose();
+            }
+
         }
     }
-
-
-
 }

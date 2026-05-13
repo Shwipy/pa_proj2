@@ -15,7 +15,7 @@ public class Main {
      * Checks for users, if no users are in the Database the user gets redirected to the manager creation menu
      */
     public static void main(String[] args) {
-        SessionController.addLogExecution();
+        //SessionController.addLogExecution();
         Long start = System.currentTimeMillis();
 
         Boolean hasUsers = SessionController.hasUsers();

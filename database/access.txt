@@ -1,0 +1,1 @@
+jdbc:postgresql://db.nixvps.dev/TAM_db?user=andre&password=wcpUbbepvmseedhh&useSSL=true

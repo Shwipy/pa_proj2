@@ -1,0 +1,97 @@
+Table syslog{
+  last_exec bigint [not null]
+  numb_exec bigint [not null]
+}
+
+Table userlog{
+  id integer [primary key, increment, not null]
+  action bool [not null]
+  creation_date bigint [not null]
+  account_id bigint [ref: > account.id, not null]
+}
+
+Table notification{
+  id integer [primary key, increment, not null]
+  message varchar(256) [not null]
+  read bool [default: false, not null]
+  creation_date bigint [not null]
+  account_id bigint [ref: > account.id, not null]
+}
+
+Table account{
+  id integer [primary key, increment, not null]
+  name varchar(64) [not null]
+  username varchar(64) [not null]
+  password varchar(256) [not null]
+  active bool [default: false, not null]
+  email varchar(128) [not null]
+  type varchar(32) [not null]
+}
+
+Table client{
+  account_id integer [ref: > account.id, unique, not null]
+  nif varchar(9) [unique, not null]
+  phone_number varchar(9) [not null]
+  residence varchar(128) [not null]
+  business_sector varchar(64) [not null]
+  tier varchar(1) [not null]
+}
+
+Table employee{
+  account_id integer [ref: > account.id, unique, not null]
+  nif varchar(9) [unique, not null]
+  phone_number varchar(9) [not null]
+  residence varchar(128) [not null]
+  lvl_expertise smallint [not null]
+  start_date bigint [not null]
+}
+
+Table equipment{
+  id integer [primary key, increment, not null]
+  client_id integer [ref: > client.account_id, not null]
+  brand varchar(64) [not null]
+  model varchar(64) [not null]
+  sku varchar(7) [unique, not null]
+  batch varchar(16) [not null]
+  manufacture_date bigint [not null]
+  submission_date bigint [not null]
+  repair_date bigint [not null]
+}
+
+Table repair{
+  id integer [primary key, increment, not null]
+  employee_id integer [ref: > employee.account_id, not null]
+  equipment_id integer [ref: > equipment.id, not null]
+  repair_number varchar(16) [unique, not null]
+  //verificar se o tempo deve começar logo
+  start_date bigint [not null]
+  end_date bigint
+  duration bigint
+  price numeric(10,2)
+  state varchar(32) [not null]
+  notes varchar(256) 
+}
+
+Table part_repair{
+  repair_id integer [ref: > repair.id, not null]
+  part_id integer [ref: > part.id, not null]
+}
+
+Table part{
+  id integer [primary key, increment, not null]
+  employee_id integer [ref: > employee.account_id, not null]
+  repair_id integer [ref: > repair.id, not null]
+  code varchar(128) [unique, not null]
+  designation varchar(128) [not null]
+  manufacturer varchar(128) [not null]
+  amount integer [not null]
+}
+
+Table test{
+  id integer [primary key, increment, not null]
+  employee_id integer [ref: > employee.account_id, not null]
+  repair_id integer [ref: > repair.id, not null]
+  designation varchar(128) [not null]
+  description varchar(256) [not null]
+  test_date bigint [not null]
+}
