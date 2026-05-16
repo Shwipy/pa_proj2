@@ -130,9 +130,10 @@ public class MainMenuGUI extends JFrame implements ActionListener {
                     JOptionPane.INFORMATION_MESSAGE
             );
 
-            System.out.println(userId);
+            String accountType = SessionController.getAccountType(userId);
 
-           
+            System.out.println("User ID: " + userId);
+            System.out.println("Account type: " + accountType);
         }
     }
 }
