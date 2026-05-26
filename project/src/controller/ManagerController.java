@@ -145,20 +145,22 @@ public class ManagerController {
      * @param asc if the listing will be in and asc or desc order
      * @return an arraylist with the common data to 10 accounts
      */
-    public static ArrayList listUsers(Integer i, Boolean asc){
+//    public static ArrayList listUsers(Integer i, Boolean asc){
+    public static ArrayList listUsers(){
         DataBase db = new DataBase();
 
         try {
             StringBuffer getAccouts = new StringBuffer();
-            if(asc){
-                getAccouts.append(" SELECT * FROM account ORDER BY name ASC LIMIT 10 OFFSET ?");
-            }else{
-                getAccouts.append(" SELECT * FROM account ORDER BY name DESC LIMIT 10 OFFSET ?");
-            }
 
+//            if(asc){
+//                getAccouts.append(" SELECT * FROM account ORDER BY name ASC LIMIT 10 OFFSET ?");
+//            }else{
+//                getAccouts.append(" SELECT * FROM account ORDER BY name DESC LIMIT 10 OFFSET ?");
+//            }
+            getAccouts.append(" SELECT * FROM account ORDER BY name");
             PreparedStatement ps = db.getConn().prepareStatement(getAccouts.toString());
             ps.clearParameters();
-            ps.setInt(1, 10*i);
+            //ps.setInt(1, 10*i);
 
             ArrayList<Manager> users = new ArrayList<>();
             ResultSet result = ps.executeQuery();

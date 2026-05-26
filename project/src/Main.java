@@ -1,9 +1,7 @@
 import controller.OutputController;
 import controller.SessionController;
-import model.DataBase;
-import view.MainMenuGUI;
-import view.ManagerMenu;
-import view.MainMenu;
+import view.LoginGUI;
+
 
 /**
  * Starting point of the application
@@ -27,13 +25,13 @@ public class Main {
 
         if (!hasUsers) {
             System.out.println("There are no available users on the app.");
-            ManagerMenu.showCreationMenu();
+            //ManagerMenu.showCreationMenu();
         }
 
         //MainMenu.show();
 
         //Corre porca!!!!
-        MainMenuGUI menu = new MainMenuGUI();
+        LoginGUI menu = new LoginGUI();
         menu.init();
         menu.setVisible(true);
 

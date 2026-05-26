@@ -117,4 +117,16 @@ public class Manager {
                 '\t' + "Name: '" + name + '\'' + '\n'+
                 '\t' + "Email: '" + email + '\'';
     }
+
+    public Object[] toTableRow(){
+        return new Object[]{
+                this.getId(),
+                this.getName(),
+                this.getUsername(),
+                this.getActive(),
+                this.getApproved(),
+                this.getEmail(),
+                this.getType()
+        };
+    }
 }

@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class MainMenuGUI extends JFrame implements ActionListener {
+public class LoginGUI extends JFrame implements ActionListener {
 
     private Container cont;
 
@@ -41,6 +41,7 @@ public class MainMenuGUI extends JFrame implements ActionListener {
 
         userField = new JTextField(24);
         userField.setToolTipText("Enter your username.");
+        userField.setText("manager"); //------------------------------------------------------------REMOVE
         usernamePanel.add(userField);
 
    
@@ -49,6 +50,7 @@ public class MainMenuGUI extends JFrame implements ActionListener {
 
         passwordField = new JPasswordField(24);
         passwordField.setToolTipText("Enter your password.");
+        passwordField.setText("123"); //------------------------------------------------------------REMOVE
         passwordPanel.add(passwordField);
 
       
@@ -78,7 +80,7 @@ public class MainMenuGUI extends JFrame implements ActionListener {
         buttonPanel.add(new JPanel());
 
       
-        loginButton = new JButton("    Login     ");
+        loginButton = new JButton("     Login    ");
         loginButton.setToolTipText("Login into the application.");
         loginButton.addActionListener(this);
         buttonPanel.add(loginButton);
@@ -123,17 +125,22 @@ public class MainMenuGUI extends JFrame implements ActionListener {
             loginErrorLabel.setText("Invalid credentials, pending account or inactive account.");
             loginErrorPanel.setVisible(true);
         } else {
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Login successful. User ID: " + userId,
-                    "Login",
-                    JOptionPane.INFORMATION_MESSAGE
-            );
+//            JOptionPane.showMessageDialog(
+//                    this,
+//                    "Login successful. User ID: " + userId,
+//                    "Login",
+//                    JOptionPane.INFORMATION_MESSAGE
+//            );
 
             String accountType = SessionController.getAccountType(userId);
 
             System.out.println("User ID: " + userId);
             System.out.println("Account type: " + accountType);
+
+            HomeMenuGUI home = new HomeMenuGUI(userId,accountType);
+            home.init();
+            home.setVisible(true);
+            this.dispose();
         }
     }
 }
