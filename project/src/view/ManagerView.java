@@ -16,6 +16,7 @@ import java.util.ArrayList;
 
 public class ManagerView implements ActionListener {
     public JButton searchButton;
+    public JButton repairSearchButton;
 
     public JTabbedPane show(){
         JTabbedPane tabPanel = new JTabbedPane();
@@ -82,7 +83,7 @@ public class ManagerView implements ActionListener {
         //https://docs.oracle.com/javase/8/docs/api/javax/swing/table/DefaultTableModel.html
         DefaultTableModel repairModel = new DefaultTableModel(repairColumnNames,0);
 
-        ArrayList<Repair> repairs = RepairController.listAllRepairs(0, false, "date");
+        ArrayList<Repair> repairs = RepairController.listAllRepairs();
 
         if (repairs != null) {
             for (Repair repair : repairs) {
@@ -98,6 +99,31 @@ public class ManagerView implements ActionListener {
 
         JScrollPane repairScrollPane = new JScrollPane(repairTable);
 
+        JPanel repairSearchbar = new JPanel();
+        repairSearchbar.setLayout(new GridLayout(1,5));
+
+        JLabel repairSearchLabel = new JLabel("   Search: ", SwingConstants.RIGHT);
+        repairSearchbar.add(repairSearchLabel);
+
+        JTextField repairSearchTerm = new JTextField();
+        repairSearchbar.add(repairSearchTerm);
+
+        JComboBox repairSearchTypes = new JComboBox<>(new String[]{
+                "Repair Number",
+                "Repair State",
+                "Client Name",
+                "Equipment Brand",
+                "Equipment Code"
+        });
+        repairSearchbar.add(repairSearchTypes);
+
+        repairSearchbar.add(new JLabel());
+
+        repairSearchButton = new JButton("Search");
+        repairSearchButton.addActionListener(this);
+        repairSearchbar.add(repairSearchButton);
+
+        repairPanel.add(repairSearchbar, BorderLayout.NORTH);
         repairPanel.add(repairScrollPane, BorderLayout.CENTER);
         repairPanel.add(new JLabel("   Note: To view the details of a specific Repair, double click on the row!", SwingConstants.LEFT), BorderLayout.SOUTH);
 
@@ -120,6 +146,10 @@ public class ManagerView implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource().equals(searchButton)){
             System.out.println("NICE");
+        }
+
+        if (e.getSource().equals(repairSearchButton)){
+            System.out.println("REPAIR SEARCH");
         }
     }
 }
