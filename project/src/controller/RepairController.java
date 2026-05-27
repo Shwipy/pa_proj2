@@ -560,23 +560,22 @@ public class RepairController {
 		        if (orderBy == null || orderBy.equals("date")) {
 
 		            if (asc) {
-		                sqlQuery.append(" SELECT * FROM repair ORDER BY start_date ASC LIMIT 10 OFFSET ? ");
+		                sqlQuery.append(" SELECT * FROM repair ORDER BY start_date ASC ");
 		            } else {
-		                sqlQuery.append(" SELECT * FROM repair ORDER BY start_date DESC LIMIT 10 OFFSET ? ");
+		                sqlQuery.append(" SELECT * FROM repair ORDER BY start_date DESC ");
 		            }
 
 		        } else {
 
 		            if (asc) {
-		                sqlQuery.append(" SELECT * FROM repair ORDER BY repair_number ASC LIMIT 10 OFFSET ? ");
+		                sqlQuery.append(" SELECT * FROM repair ORDER BY repair_number ASC ");
 		            } else {
-		                sqlQuery.append(" SELECT * FROM repair ORDER BY repair_number DESC LIMIT 10 OFFSET ? ");
+		                sqlQuery.append(" SELECT * FROM repair ORDER BY repair_number DESC ");
 		            }
 		        }
 
 		        ps = db.getConn().prepareStatement(sqlQuery.toString());
 		        ps.clearParameters();
-		        ps.setInt(1, 10 * i);
 
 		        result = ps.executeQuery();
 
