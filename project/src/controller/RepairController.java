@@ -548,7 +548,7 @@ public class RepairController {
 	 * @param orderBy variable to identify which variable the list is being ordered by, start date/employee number
 	 * @return An array list containing 10 elements from the list
 	 */
-	 public static ArrayList<Repair> listAllRepairs(Integer i, Boolean asc, String orderBy) {
+	 public static ArrayList<Repair> listAllRepairs() {
 
 		    DataBase db = new DataBase();
 		    PreparedStatement ps = null;
@@ -557,22 +557,7 @@ public class RepairController {
 		    try {
 		        StringBuffer sqlQuery = new StringBuffer();
 
-		        if (orderBy == null || orderBy.equals("date")) {
-
-		            if (asc) {
-		                sqlQuery.append(" SELECT * FROM repair ORDER BY start_date ASC ");
-		            } else {
-		                sqlQuery.append(" SELECT * FROM repair ORDER BY start_date DESC ");
-		            }
-
-		        } else {
-
-		            if (asc) {
-		                sqlQuery.append(" SELECT * FROM repair ORDER BY repair_number ASC ");
-		            } else {
-		                sqlQuery.append(" SELECT * FROM repair ORDER BY repair_number DESC ");
-		            }
-		        }
+		        sqlQuery.append(" SELECT * FROM repair ");
 
 		        ps = db.getConn().prepareStatement(sqlQuery.toString());
 		        ps.clearParameters();
