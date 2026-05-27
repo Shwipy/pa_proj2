@@ -29,10 +29,6 @@ public class HomeMenuGUI extends JFrame implements ActionListener {
         Container cont = getContentPane();
         cont.setLayout(new BorderLayout());
 
-
-
-
-
         JPanel footerPanel = new JPanel();
         footerPanel.setLayout(new GridLayout(1, 5));
 
@@ -54,7 +50,7 @@ public class HomeMenuGUI extends JFrame implements ActionListener {
         footerPanel.add(logoutButton);
 
         if (accountType.equals("manager")){
-            cont.add(ManagerView.show(), BorderLayout.CENTER);
+            cont.add( new ManagerView().show(), BorderLayout.CENTER);
         } else if (accountType.equals("employee")) {
 
         } else if (accountType.equals("client")) {
@@ -74,7 +70,7 @@ public class HomeMenuGUI extends JFrame implements ActionListener {
 
                 this.dispose();
             }
-
         }
+
     }
 }

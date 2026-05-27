@@ -8,11 +8,14 @@ import javax.swing.plaf.basic.BasicColorChooserUI;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-public class ManagerView {
+public class ManagerView implements ActionListener {
+    public JButton searchButton;
 
-    public static JTabbedPane show(){
+    public JTabbedPane show(){
         JTabbedPane tabPanel = new JTabbedPane();
 
         JPanel accountPanel = new JPanel();
@@ -24,19 +27,7 @@ public class ManagerView {
         JPanel settingsPanel = new JPanel();
         settingsPanel.setLayout(new BorderLayout());
 
-        accountPanel.add(showAccountPanel(), BorderLayout.CENTER);
-
-        tabPanel.addTab("Accounts", accountPanel);
-        tabPanel.addTab("Repairs", repairPanel);
-        tabPanel.addTab("Notifications", notificationPanel);
-        tabPanel.addTab("Settings", settingsPanel);
-        return tabPanel;
-    }
-
-    public static JPanel showAccountPanel(){
-        JPanel accountPanel = new JPanel();
-        accountPanel.setLayout(new BorderLayout());
-
+        //------------Account Panel Main
         String [] columnNames = { "ID", "Name", "Username", "Active", "Approved" , "Email", "Type" };
 
         //https://docs.oracle.com/javase/tutorial/uiswing/components/table.html#data
@@ -56,10 +47,50 @@ public class ManagerView {
         //table.setFillsViewportHeight(true);
 
         JScrollPane scrollPane = new JScrollPane(table);
+
+        JPanel searchbar = new JPanel();
+        searchbar.setLayout(new GridLayout(1,5));
+
+        JLabel searchLabel = new JLabel("   Search: ",SwingConstants.RIGHT);
+        searchbar.add(searchLabel);
+
+        JTextField searchTerm = new JTextField();
+        searchbar.add(searchTerm);
+
+        JComboBox searchTypes = new JComboBox<>(new String[]{"Name","Username","Type"});
+        searchbar.add(searchTypes);
+
+        searchbar.add(new JLabel());
+
+        searchButton = new JButton("Search");
+        searchButton.addActionListener(this);
+        searchbar.add(searchButton);
+
+
+        accountPanel.add(searchbar, BorderLayout.NORTH);
         accountPanel.add(scrollPane, BorderLayout.CENTER);
-        accountPanel.add(new JLabel("   Search: ________________________  |DROPDOWN MENU para escolher o termo de pesquisa|  |Search Button|", SwingConstants.LEFT), BorderLayout.NORTH);
         accountPanel.add(new JLabel("   Note: To view the details of a specific User, double click on the row!", SwingConstants.LEFT), BorderLayout.SOUTH);
 
+
+        tabPanel.addTab("Accounts", accountPanel);
+        tabPanel.addTab("Repairs", repairPanel);
+        tabPanel.addTab("Notifications", notificationPanel);
+        tabPanel.addTab("Settings", settingsPanel);
+        return tabPanel;
+    }
+
+    public static JPanel showAccountPanel(){
+        JPanel accountPanel = new JPanel();
+        accountPanel.setLayout(new BorderLayout());
+
+
         return  accountPanel;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource().equals(searchButton)){
+            System.out.println("NICE");
+        }
     }
 }
