@@ -6,17 +6,47 @@ import model.Manager;
 import model.Repair;
 
 import javax.swing.*;
-import javax.swing.plaf.basic.BasicColorChooserUI;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class ManagerView implements ActionListener {
-    public JButton searchButton;
-    public JButton repairSearchButton;
+    private JButton accountSearchButton;
+    private JButton repairSearchButton;
+
+    private JComboBox accountSearchTypes;
+    private JComboBox repairSearchTypes;
+
+    private JTextField accountSearchTerm;
+    private JTextField repairSearchTerm;
+
+    private JTable accountTable;
+    private JTable repairTable;
+
+    private String [] accountColumnNames = {
+            "ID",
+            "Name",
+            "Username",
+            "Active",
+            "Approved" ,
+            "Email",
+            "Type"
+    };
+
+    private String [] repairColumnNames = {
+            "ID",
+            "Repair Number",
+            "Employee ID",
+            "Equipment ID",
+            "Start Date",
+            "End Date",
+            "Duration",
+            "Price",
+            "State",
+            "Notes"
+    };
 
     public JTabbedPane show(){
         JTabbedPane tabPanel = new JTabbedPane();
@@ -34,53 +64,54 @@ public class ManagerView implements ActionListener {
         settingsPanel.setLayout(new BorderLayout());
 
         //------------Account Panel Main
-        String [] columnNames = { "ID", "Name", "Username", "Active", "Approved" , "Email", "Type" };
-
         //https://docs.oracle.com/javase/tutorial/uiswing/components/table.html#data
         //https://docs.oracle.com/javase/8/docs/api/javax/swing/table/DefaultTableModel.html
-        DefaultTableModel model = new DefaultTableModel(columnNames,0);
+        DefaultTableModel accountModel = new DefaultTableModel(accountColumnNames,0);
 
         ArrayList<Manager> users = ManagerController.listUsers();
 
-        for (Manager user : users) {
-            model.addRow(user.toTableRow());
+        if (users != null){
+            for (Manager user : users) {
+                accountModel.addRow(user.toTableRow());
+            }
         }
 
-        JTable table = new JTable(model);
+        accountTable = new JTable(accountModel);
         //https://stackoverflow.com/questions/9919230/disable-user-edit-in-jtable/36747065#36747065
-        table.setDefaultEditor(Object.class, null);
-        table.setAutoCreateRowSorter(true);
+        accountTable.setDefaultEditor(Object.class, null);
+        accountTable.setAutoCreateRowSorter(true);
         //table.setFillsViewportHeight(true);
 
-        JScrollPane scrollPane = new JScrollPane(table);
+        JScrollPane accountScrollPane = new JScrollPane(accountTable);
 
-        JPanel searchbar = new JPanel();
-        searchbar.setLayout(new GridLayout(1,5));
+        JPanel accountSearchbar = new JPanel();
+        accountSearchbar.setLayout(new GridLayout(1,5));
 
-        JLabel searchLabel = new JLabel("   Search: ",SwingConstants.RIGHT);
-        searchbar.add(searchLabel);
+        JLabel accountSearchLabel = new JLabel("   Search: ",SwingConstants.RIGHT);
+        accountSearchbar.add(accountSearchLabel);
 
-        JTextField searchTerm = new JTextField();
-        searchbar.add(searchTerm);
+        accountSearchTerm = new JTextField();
+        accountSearchbar.add(accountSearchTerm);
 
-        JComboBox searchTypes = new JComboBox<>(new String[]{"Name","Username","Type"});
-        searchbar.add(searchTypes);
+        accountSearchTypes = new JComboBox<>(new String[]{
+                "Name",
+                "Username",
+                "Type"
+        });
+        accountSearchbar.add(accountSearchTypes);
 
-        searchbar.add(new JLabel());
+        accountSearchbar.add(new JLabel());
 
-        searchButton = new JButton("Search");
-        searchButton.addActionListener(this);
-        searchbar.add(searchButton);
+        accountSearchButton = new JButton("Search");
+        accountSearchButton.addActionListener(this);
+        accountSearchbar.add(accountSearchButton);
 
-        accountPanel.add(searchbar, BorderLayout.NORTH);
-        accountPanel.add(scrollPane, BorderLayout.CENTER);
+        accountPanel.add(accountSearchbar, BorderLayout.NORTH);
+        accountPanel.add(accountScrollPane, BorderLayout.CENTER);
         accountPanel.add(new JLabel("   Note: To view the details of a specific User, double click on the row!", SwingConstants.LEFT), BorderLayout.SOUTH);
 
         //------------Repair Panel Main
-        String [] repairColumnNames = { "ID", "Repair Number", "Employee ID", "Equipment ID", "Start Date", "End Date", "Duration", "Price", "State", "Notes" };
 
-        //https://docs.oracle.com/javase/tutorial/uiswing/components/table.html#data
-        //https://docs.oracle.com/javase/8/docs/api/javax/swing/table/DefaultTableModel.html
         DefaultTableModel repairModel = new DefaultTableModel(repairColumnNames,0);
 
         ArrayList<Repair> repairs = RepairController.listAllRepairs();
@@ -91,8 +122,7 @@ public class ManagerView implements ActionListener {
             }
         }
 
-        JTable repairTable = new JTable(repairModel);
-        //https://stackoverflow.com/questions/9919230/disable-user-edit-in-jtable/36747065#36747065
+        repairTable = new JTable(repairModel);
         repairTable.setDefaultEditor(Object.class, null);
         repairTable.setAutoCreateRowSorter(true);
         //repairTable.setFillsViewportHeight(true);
@@ -105,10 +135,10 @@ public class ManagerView implements ActionListener {
         JLabel repairSearchLabel = new JLabel("   Search: ", SwingConstants.RIGHT);
         repairSearchbar.add(repairSearchLabel);
 
-        JTextField repairSearchTerm = new JTextField();
+        repairSearchTerm = new JTextField();
         repairSearchbar.add(repairSearchTerm);
 
-        JComboBox repairSearchTypes = new JComboBox<>(new String[]{
+        repairSearchTypes = new JComboBox<>(new String[]{
                 "Repair Number",
                 "Repair State",
                 "Client Name",
@@ -117,7 +147,7 @@ public class ManagerView implements ActionListener {
         });
         repairSearchbar.add(repairSearchTypes);
 
-        repairSearchbar.add(new JLabel());
+        repairSearchbar.add(new JLabel("CheckBox WIP"));
 
         repairSearchButton = new JButton("Search");
         repairSearchButton.addActionListener(this);
@@ -135,21 +165,45 @@ public class ManagerView implements ActionListener {
         return tabPanel;
     }
 
-    public static JPanel showAccountPanel(){
-        JPanel accountPanel = new JPanel();
-        accountPanel.setLayout(new BorderLayout());
-
-        return  accountPanel;
-    }
-
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource().equals(searchButton)){
-            System.out.println("NICE");
+        if (e.getSource().equals(accountSearchButton)){
+            DefaultTableModel accountModel = new DefaultTableModel(accountColumnNames,0);
+
+            ArrayList<Manager> users = ManagerController.searchUsers(accountSearchTerm.getText(),accountSearchTypes.getSelectedItem().toString().toLowerCase());
+
+            if (users != null){
+                for (Manager user : users) {
+                    accountModel.addRow(user.toTableRow());
+                }
+            }
+
+            //https://stackoverflow.com/questions/10331949/setmodel-on-a-jtable-when-the-defaulttablemodel-has-changed
+            accountTable.setModel(accountModel);
+
         }
 
         if (e.getSource().equals(repairSearchButton)){
-            System.out.println("REPAIR SEARCH");
+            DefaultTableModel accountModel = new DefaultTableModel(accountColumnNames,0);
+            //https://www.w3schools.com/java/java_howto_remove_whitespace.asp
+            String formatedRepairType = repairSearchTypes.getSelectedItem().toString().toLowerCase().replaceAll("\\s+", "");
+            ArrayList<Repair> repairs = RepairController.searchRepairs(repairSearchTerm.getText(),formatedRepairType);
+
+            if (repairs != null){
+                for (Repair repair : repairs) {
+                    accountModel.addRow(repair.toTableRow());
+                }
+            }
+
+            //https://stackoverflow.com/questions/10331949/setmodel-on-a-jtable-when-the-defaulttablemodel-has-changed
+            accountTable.setModel(accountModel);
+        }
+
+        //need to change to try on a MouseAdapter
+        //https://stackoverflow.com/questions/14852719/double-click-listener-on-jtable-in-java
+        if (e.getSource().equals(accountTable)){
+            System.out.println("qwe");
+            System.out.println(accountTable.getSelectedRow());
         }
     }
 }
