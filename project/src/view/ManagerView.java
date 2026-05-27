@@ -1,7 +1,9 @@
 package view;
 
 import controller.ManagerController;
+import controller.RepairController;
 import model.Manager;
+import model.Repair;
 
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicColorChooserUI;
@@ -20,10 +22,13 @@ public class ManagerView implements ActionListener {
 
         JPanel accountPanel = new JPanel();
         accountPanel.setLayout(new BorderLayout());
+
         JPanel repairPanel = new JPanel();
         repairPanel.setLayout(new BorderLayout());
+
         JPanel notificationPanel = new JPanel();
         notificationPanel.setLayout(new BorderLayout());
+
         JPanel settingsPanel = new JPanel();
         settingsPanel.setLayout(new BorderLayout());
 
@@ -66,23 +71,47 @@ public class ManagerView implements ActionListener {
         searchButton.addActionListener(this);
         searchbar.add(searchButton);
 
-
         accountPanel.add(searchbar, BorderLayout.NORTH);
         accountPanel.add(scrollPane, BorderLayout.CENTER);
         accountPanel.add(new JLabel("   Note: To view the details of a specific User, double click on the row!", SwingConstants.LEFT), BorderLayout.SOUTH);
 
+        //------------Repair Panel Main
+        String [] repairColumnNames = { "ID", "Repair Number", "Employee ID", "Equipment ID", "Start Date", "End Date", "Duration", "Price", "State", "Notes" };
+
+        //https://docs.oracle.com/javase/tutorial/uiswing/components/table.html#data
+        //https://docs.oracle.com/javase/8/docs/api/javax/swing/table/DefaultTableModel.html
+        DefaultTableModel repairModel = new DefaultTableModel(repairColumnNames,0);
+
+        ArrayList<Repair> repairs = RepairController.listAllRepairs(0, false, "date");
+
+        if (repairs != null) {
+            for (Repair repair : repairs) {
+                repairModel.addRow(repair.toTableRow());
+            }
+        }
+
+        JTable repairTable = new JTable(repairModel);
+        //https://stackoverflow.com/questions/9919230/disable-user-edit-in-jtable/36747065#36747065
+        repairTable.setDefaultEditor(Object.class, null);
+        repairTable.setAutoCreateRowSorter(true);
+        //repairTable.setFillsViewportHeight(true);
+
+        JScrollPane repairScrollPane = new JScrollPane(repairTable);
+
+        repairPanel.add(repairScrollPane, BorderLayout.CENTER);
+        repairPanel.add(new JLabel("   Note: To view the details of a specific Repair, double click on the row!", SwingConstants.LEFT), BorderLayout.SOUTH);
 
         tabPanel.addTab("Accounts", accountPanel);
         tabPanel.addTab("Repairs", repairPanel);
         tabPanel.addTab("Notifications", notificationPanel);
         tabPanel.addTab("Settings", settingsPanel);
+
         return tabPanel;
     }
 
     public static JPanel showAccountPanel(){
         JPanel accountPanel = new JPanel();
         accountPanel.setLayout(new BorderLayout());
-
 
         return  accountPanel;
     }
