@@ -87,6 +87,21 @@ public class Repair {
         this.id = id;
     }
     
+    public Object[] toTableRow() {
+        return new Object[]{
+                this.getId(),
+                this.getRepairNumber(),
+                this.getEmployeeId(),
+                this.getEquipmentId(),
+                this.getStartDate(),
+                this.getEndDate(),
+                this.getDuration(),
+                this.getPrice(),
+                this.getState(),
+                this.getNotes()
+        };
+    }
+    
     public String toFormatedString() {
         return "[id=" + id +
                 ", employeeId=" + employeeId +
@@ -99,4 +114,5 @@ public class Repair {
                 ", state=" + state +
                 ", notes=" + notes + "]";
     }
+    
 }
