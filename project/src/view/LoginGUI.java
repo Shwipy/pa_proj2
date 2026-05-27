@@ -35,7 +35,6 @@ public class LoginGUI extends JFrame implements ActionListener {
         JLabel titleLabel = new JLabel("Login Form", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 16));
 
-      
         JPanel usernamePanel = new JPanel(new FlowLayout());
         usernamePanel.add(new JLabel("Username:", SwingConstants.RIGHT));
 
@@ -44,7 +43,6 @@ public class LoginGUI extends JFrame implements ActionListener {
         userField.setText("manager"); //------------------------------------------------------------REMOVE
         usernamePanel.add(userField);
 
-   
         JPanel passwordPanel = new JPanel(new FlowLayout());
         passwordPanel.add(new JLabel("Password:", SwingConstants.RIGHT));
 
@@ -53,7 +51,6 @@ public class LoginGUI extends JFrame implements ActionListener {
         passwordField.setText("123"); //------------------------------------------------------------REMOVE
         passwordPanel.add(passwordField);
 
-      
         loginErrorPanel = new JPanel(new FlowLayout());
 
         loginErrorLabel = new JLabel("Invalid credentials, pending account or inactive account.");
@@ -70,7 +67,6 @@ public class LoginGUI extends JFrame implements ActionListener {
         centerPanel.add(loginErrorPanel);
 
         JPanel buttonPanel = new JPanel(new FlowLayout());
-
   
         createButton = new JButton("    Create    ");
         createButton.setToolTipText("Create a new account.");
@@ -79,7 +75,6 @@ public class LoginGUI extends JFrame implements ActionListener {
 
         buttonPanel.add(new JPanel());
 
-      
         loginButton = new JButton("     Login    ");
         loginButton.setToolTipText("Login into the application.");
         loginButton.addActionListener(this);
@@ -104,33 +99,24 @@ public class LoginGUI extends JFrame implements ActionListener {
         }
     }
 
-  
     private void doLogin() {
         String username = userField.getText();
         String password = new String(passwordField.getPassword());
 
         loginErrorPanel.setVisible(false);
 
-       
         if (username.trim().isEmpty() || password.trim().isEmpty()) {
             loginErrorLabel.setText("Please fill in username and password.");
             loginErrorPanel.setVisible(true);
             return;
         }
 
-      
         userId = SessionController.login(username, password);
 
         if (userId == null) {
             loginErrorLabel.setText("Invalid credentials, pending account or inactive account.");
             loginErrorPanel.setVisible(true);
         } else {
-//            JOptionPane.showMessageDialog(
-//                    this,
-//                    "Login successful. User ID: " + userId,
-//                    "Login",
-//                    JOptionPane.INFORMATION_MESSAGE
-//            );
 
             String accountType = SessionController.getAccountType(userId);
 
