@@ -156,7 +156,7 @@ public class EquipmentController {
 	 * @param clientId owner of the equipments that will be listed
 	 * @return an ArrayList with 10 entries from a clients equipment list
 	 */
-	public static ArrayList<Equipment> listEquipmentsByClient(Integer i, Boolean asc, String orderBy, int clientId) {
+	public static ArrayList<Equipment> listEquipmentsByClient(int clientId) {
 
 	    DataBase db = new DataBase();
 	    PreparedStatement ps = null;
@@ -165,27 +165,12 @@ public class EquipmentController {
 	    try {
 	        StringBuffer sqlQuery = new StringBuffer();
 
-	        if (orderBy == null || orderBy.equals("brand")) {
-
-	            if (asc) {
-	                sqlQuery.append(" SELECT * FROM equipment WHERE client_id = ? ORDER BY brand ASC LIMIT 10 OFFSET ? ");
-	            } else {
-	                sqlQuery.append(" SELECT * FROM equipment WHERE client_id = ? ORDER BY brand DESC LIMIT 10 OFFSET ? ");
-	            }
-
-	        } else {
-
-	            if (asc) {
-	                sqlQuery.append(" SELECT * FROM equipment WHERE client_id = ? ORDER BY sku ASC LIMIT 10 OFFSET ? ");
-	            } else {
-	                sqlQuery.append(" SELECT * FROM equipment WHERE client_id = ? ORDER BY sku DESC LIMIT 10 OFFSET ? ");
-	            }
-	        }
+	        sqlQuery.append(" SELECT * FROM equipment WHERE client_id = ? ");
 
 	        ps = db.getConn().prepareStatement(sqlQuery.toString());
 	        ps.clearParameters();
+
 	        ps.setInt(1, clientId);
-	        ps.setInt(2, 10 * i);
 
 	        result = ps.executeQuery();
 
