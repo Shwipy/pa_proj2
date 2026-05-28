@@ -54,7 +54,7 @@ public class HomeMenuGUI extends JFrame implements ActionListener {
         } else if (accountType.equals("employee")) {
         	cont.add(new EmployeeView().show(), BorderLayout.CENTER);
         } else if (accountType.equals("client")) {
-        	cont.add( new ClientView().show(), BorderLayout.CENTER);
+        	cont.add(new ClientView(userId).show(), BorderLayout.CENTER);
         }
 
         cont.add(footerPanel,BorderLayout.SOUTH);
@@ -71,5 +71,6 @@ public class HomeMenuGUI extends JFrame implements ActionListener {
                 this.dispose();
             }
         }
+
     }
 }
