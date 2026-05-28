@@ -896,11 +896,11 @@ public class RepairController {
 		        StringBuffer sqlQuery = new StringBuffer();
 		        if (selected){
 					if (type.equals("repair number")) {
-						sqlQuery.append(" SELECT * FROM repair WHERE repair_number ILIKE ? AND state='finished' ORDER BY id ASC ");
+						sqlQuery.append(" SELECT * FROM repair WHERE repair_number ILIKE ? AND state != 'finished' ORDER BY id ASC ");
 					} else if (type.equals("repair state")) {
-						sqlQuery.append(" SELECT * FROM repair WHERE state ILIKE ? AND state='finished' ORDER BY id ASC ");
+						sqlQuery.append(" SELECT * FROM repair WHERE state ILIKE ? AND state != 'finished' ORDER BY id ASC ");
 					} else if (type.equals("client name")) {
-						sqlQuery.append(" SELECT * FROM repair INNER JOIN account ON repair.employee_id = account.id WHERE name ILIKE ? AND state='finished' ORDER BY repair.id ASC ");
+						sqlQuery.append(" SELECT * FROM repair INNER JOIN account ON repair.employee_id = account.id WHERE name ILIKE ? AND state != 'finished' ORDER BY repair.id ASC ");
 					}
 
 				}else{
