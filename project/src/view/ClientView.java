@@ -1,7 +1,9 @@
 package view;
 
 import controller.EquipmentController;
+import controller.RepairController;
 import model.Equipment;
+import model.Repair;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -15,12 +17,16 @@ public class ClientView implements ActionListener {
     private Integer clientId;
 
     private JButton equipmentSearchButton;
+    private JButton repairSearchButton;
 
     private JComboBox equipmentSearchTypes;
+    private JComboBox repairSearchTypes;
 
     private JTextField equipmentSearchTerm;
+    private JTextField repairSearchTerm;
 
     private JTable equipmentTable;
+    private JTable repairTable;
 
     private String [] equipmentColumnNames = {
             "ID",
@@ -32,6 +38,19 @@ public class ClientView implements ActionListener {
             "Manufacture Date",
             "Submission Date",
             "Repair Date"
+    };
+
+    private String [] repairColumnNames = {
+            "ID",
+            "Repair Number",
+            "Employee ID",
+            "Equipment ID",
+            "Start Date",
+            "End Date",
+            "Duration",
+            "Price",
+            "State",
+            "Notes"
     };
 
     public ClientView(Integer clientId) {
@@ -99,6 +118,52 @@ public class ClientView implements ActionListener {
         equipmentPanel.add(equipmentScrollPane, BorderLayout.CENTER);
         equipmentPanel.add(new JLabel("   Note: To view the details of a specific Equipment, double click on the row!", SwingConstants.LEFT), BorderLayout.SOUTH);
 
+        //------------Repair Panel Main
+        //https://docs.oracle.com/javase/tutorial/uiswing/components/table.html#data
+        //https://docs.oracle.com/javase/8/docs/api/javax/swing/table/DefaultTableModel.html
+        DefaultTableModel repairModel = new DefaultTableModel(repairColumnNames,0);
+
+        ArrayList<Repair> repairs = RepairController.listRepairsByClient(clientId);
+
+        if (repairs != null) {
+            for (Repair repair : repairs) {
+                repairModel.addRow(repair.toTableRow());
+            }
+        }
+
+        repairTable = new JTable(repairModel);
+        //https://stackoverflow.com/questions/9919230/disable-user-edit-in-jtable/36747065#36747065
+        repairTable.setDefaultEditor(Object.class, null);
+        repairTable.setAutoCreateRowSorter(true);
+        //repairTable.setFillsViewportHeight(true);
+
+        JScrollPane repairScrollPane = new JScrollPane(repairTable);
+
+        JPanel repairSearchbar = new JPanel();
+        repairSearchbar.setLayout(new GridLayout(1,5));
+
+        JLabel repairSearchLabel = new JLabel("   Search: ", SwingConstants.RIGHT);
+        repairSearchbar.add(repairSearchLabel);
+
+        repairSearchTerm = new JTextField();
+        repairSearchbar.add(repairSearchTerm);
+
+        repairSearchTypes = new JComboBox<>(new String[]{
+                "Number",
+                "State"
+        });
+        repairSearchbar.add(repairSearchTypes);
+
+        repairSearchbar.add(new JLabel());
+
+        repairSearchButton = new JButton("Search");
+        repairSearchButton.addActionListener(this);
+        repairSearchbar.add(repairSearchButton);
+
+        repairPanel.add(repairSearchbar, BorderLayout.NORTH);
+        repairPanel.add(repairScrollPane, BorderLayout.CENTER);
+        repairPanel.add(new JLabel("   Note: To view the details of a specific Repair, double click on the row!", SwingConstants.LEFT), BorderLayout.SOUTH);
+
         tabPanel.addTab("Equipments", equipmentPanel);
         tabPanel.addTab("Repairs", repairPanel);
         tabPanel.addTab("Notifications", notificationPanel);
@@ -125,6 +190,24 @@ public class ClientView implements ActionListener {
             }
 
             equipmentTable.setModel(equipmentModel);
+        }
+
+        if (e.getSource().equals(repairSearchButton)){
+            DefaultTableModel repairModel = new DefaultTableModel(repairColumnNames,0);
+
+            ArrayList<Repair> repairs = RepairController.searchRepairsByClient(
+                    repairSearchTerm.getText(),
+                    repairSearchTypes.getSelectedItem().toString().toLowerCase(),
+                    clientId
+            );
+
+            if (repairs != null) {
+                for (Repair repair : repairs) {
+                    repairModel.addRow(repair.toTableRow());
+                }
+            }
+
+            repairTable.setModel(repairModel);
         }
     }
 }
