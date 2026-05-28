@@ -10,9 +10,12 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
-public class ManagerView implements ActionListener {
+public class ManagerView implements ActionListener, MouseListener {
+
     private JButton accountSearchButton;
     private JButton repairSearchButton;
 
@@ -26,6 +29,8 @@ public class ManagerView implements ActionListener {
     private JTable repairTable;
 
     private JCheckBox repairCheckFinishedBox;
+
+    private JDialog accountViewData;
 
     private String [] accountColumnNames = {
             "ID",
@@ -82,7 +87,8 @@ public class ManagerView implements ActionListener {
         //https://stackoverflow.com/questions/9919230/disable-user-edit-in-jtable/36747065#36747065
         accountTable.setDefaultEditor(Object.class, null);
         accountTable.setAutoCreateRowSorter(true);
-        //table.setFillsViewportHeight(true);
+        //meti o mouselistener dentro da tabela para não ter de fazer depois confirmacoes a ver se a linha esta ou nao selected
+        accountTable.addMouseListener (this);
 
         JScrollPane accountScrollPane = new JScrollPane(accountTable);
 
@@ -177,8 +183,8 @@ public class ManagerView implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource().equals(accountSearchButton)){
-            DefaultTableModel accountModel = new DefaultTableModel(accountColumnNames,0);
 
+            DefaultTableModel accountModel = new DefaultTableModel(accountColumnNames,0);
             ArrayList<Manager> users = ManagerController.searchUsers(accountSearchTerm.getText(),accountSearchTypes.getSelectedItem().toString().toLowerCase());
 
             if (users != null){
@@ -208,9 +214,52 @@ public class ManagerView implements ActionListener {
 
         //need to change to try on a MouseAdapter
         //https://stackoverflow.com/questions/14852719/double-click-listener-on-jtable-in-java
-        if (e.getSource().equals(accountTable)){
-            System.out.println("qwe");
-            System.out.println(accountTable.getSelectedRow());
+//        if (e.getSource().equals(accountTable)){
+//            System.out.println("qwe");
+//            System.out.println(accountTable.getSelectedRow());
+//        }
+    }
+
+    //https://coderanch.com/t/341705/java/JTable-responding-row-clicks
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        if (e.getSource().equals(accountTable) && e.getClickCount() == 2){
+            System.out.println(accountTable.getModel().getValueAt(accountTable.getSelectedRow(),0));
+
+            JPanel dialogWindow = new JPanel();
+
+            dialogWindow.setSize(780, 500);
+
+            dialogWindow.setLayout(new BorderLayout());
+            accountViewData = new JDialog();
+            accountViewData.add(dialogWindow);
+            //Dialog.ModalityType.APPLICATION_MODAL;
+            accountViewData.setResizable(false);
+            accountViewData.setLocationRelativeTo(null);
+            //accountViewData.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+            //if (Shared.showDialog(this,"hey","123"));
+
         }
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
     }
 }

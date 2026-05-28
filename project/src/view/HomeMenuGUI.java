@@ -71,6 +71,5 @@ public class HomeMenuGUI extends JFrame implements ActionListener {
                 this.dispose();
             }
         }
-
     }
 }
