@@ -807,7 +807,7 @@ public class RepairController {
 	 * @param clientId client that created the repairs
 	 * @return An array list containing 10 repairs a client
 	 */
-	 public static ArrayList<Repair> listRepairsByClient(Integer i, Boolean asc, String orderBy, int clientId) {
+	 public static ArrayList<Repair> listRepairsByClient(int clientId) {
 
 		    DataBase db = new DataBase();
 		    PreparedStatement ps = null;
@@ -816,27 +816,15 @@ public class RepairController {
 		    try {
 		        StringBuffer sqlQuery = new StringBuffer();
 
-		        if (orderBy == null || orderBy.equals("date")) {
-
-		            if (asc) {
-		                sqlQuery.append(" SELECT repair.* FROM repair, equipment WHERE repair.equipment_id = equipment.id AND equipment.client_id = ? ORDER BY repair.start_date ASC LIMIT 10 OFFSET ? ");
-		            } else {
-		                sqlQuery.append(" SELECT repair.* FROM repair, equipment WHERE repair.equipment_id = equipment.id AND equipment.client_id = ? ORDER BY repair.start_date DESC LIMIT 10 OFFSET ? ");
-		            }
-
-		        } else {
-
-		            if (asc) {
-		                sqlQuery.append(" SELECT repair.* FROM repair, equipment WHERE repair.equipment_id = equipment.id AND equipment.client_id = ? ORDER BY repair.repair_number ASC LIMIT 10 OFFSET ? ");
-		            } else {
-		                sqlQuery.append(" SELECT repair.* FROM repair, equipment WHERE repair.equipment_id = equipment.id AND equipment.client_id = ? ORDER BY repair.repair_number DESC LIMIT 10 OFFSET ? ");
-		            }
-		        }
+		        sqlQuery.append(" SELECT repair.* ");
+		        sqlQuery.append(" FROM repair, equipment ");
+		        sqlQuery.append(" WHERE repair.equipment_id = equipment.id ");
+		        sqlQuery.append(" AND equipment.client_id = ? ");
 
 		        ps = db.getConn().prepareStatement(sqlQuery.toString());
 		        ps.clearParameters();
+
 		        ps.setInt(1, clientId);
-		        ps.setInt(2, 10 * i);
 
 		        result = ps.executeQuery();
 
@@ -877,7 +865,6 @@ public class RepairController {
 
 		    return null;
 		}
-
 	/**
 	 * Allow searching for a string in the repair table
 	 *
