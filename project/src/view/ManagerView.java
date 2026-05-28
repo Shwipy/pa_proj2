@@ -150,7 +150,7 @@ public class ManagerView implements ActionListener {
         JPanel repairCheckFinishedPanel = new JPanel();
         repairCheckFinishedPanel.setLayout(new GridLayout(1,2));
 
-        JLabel repairCheckFinishedLabel = new JLabel("Finished: ",SwingConstants.RIGHT);
+        JLabel repairCheckFinishedLabel = new JLabel("Incomplete: ",SwingConstants.RIGHT);
         repairCheckFinishedPanel.add(repairCheckFinishedLabel);
 
         repairCheckFinishedBox = new JCheckBox();
