@@ -79,6 +79,20 @@ public class Equipment {
         this.id = id;
     }
     
+    public Object[] toTableRow() {
+        return new Object[]{
+                this.getId(),
+                this.getClientId(),
+                this.getBrand(),
+                this.getModel(),
+                this.getSku(),
+                this.getBatch(),
+                this.getManufactureDate(),
+                this.getSubmissionDate(),
+                this.getRepairDate()
+        };
+    }
+    
     @Override
     public String toString() {
         return "Equipment ID: " + this.id +
