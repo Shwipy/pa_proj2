@@ -25,6 +25,8 @@ public class ManagerView implements ActionListener {
     private JTable accountTable;
     private JTable repairTable;
 
+    private JCheckBox repairCheckFinishedBox;
+
     private String [] accountColumnNames = {
             "ID",
             "Name",
@@ -141,13 +143,20 @@ public class ManagerView implements ActionListener {
         repairSearchTypes = new JComboBox<>(new String[]{
                 "Repair Number",
                 "Repair State",
-                "Client Name",
-                "Equipment Brand",
-                "Equipment Code"
+                "Client Name"
         });
         repairSearchbar.add(repairSearchTypes);
 
-        repairSearchbar.add(new JLabel("CheckBox WIP"));
+        JPanel repairCheckFinishedPanel = new JPanel();
+        repairCheckFinishedPanel.setLayout(new GridLayout(1,2));
+
+        JLabel repairCheckFinishedLabel = new JLabel("Finished: ",SwingConstants.RIGHT);
+        repairCheckFinishedPanel.add(repairCheckFinishedLabel);
+
+        repairCheckFinishedBox = new JCheckBox();
+        repairCheckFinishedPanel.add(repairCheckFinishedBox);
+
+        repairSearchbar.add(repairCheckFinishedPanel);
 
         repairSearchButton = new JButton("Search");
         repairSearchButton.addActionListener(this);
@@ -184,19 +193,17 @@ public class ManagerView implements ActionListener {
         }
 
         if (e.getSource().equals(repairSearchButton)){
-            DefaultTableModel accountModel = new DefaultTableModel(accountColumnNames,0);
-            //https://www.w3schools.com/java/java_howto_remove_whitespace.asp
-            String formatedRepairType = repairSearchTypes.getSelectedItem().toString().toLowerCase().replaceAll("\\s+", "");
-            ArrayList<Repair> repairs = RepairController.searchRepairs(repairSearchTerm.getText(),formatedRepairType);
+            DefaultTableModel repairModel = new DefaultTableModel(repairColumnNames,0);
+            ArrayList<Repair> repairs = RepairController.searchRepairs(repairSearchTerm.getText(), repairSearchTypes.getSelectedItem().toString().toLowerCase(), repairCheckFinishedBox.isSelected());
 
             if (repairs != null){
                 for (Repair repair : repairs) {
-                    accountModel.addRow(repair.toTableRow());
+                    repairModel.addRow(repair.toTableRow());
                 }
             }
 
             //https://stackoverflow.com/questions/10331949/setmodel-on-a-jtable-when-the-defaulttablemodel-has-changed
-            accountTable.setModel(accountModel);
+            repairTable.setModel(repairModel);
         }
 
         //need to change to try on a MouseAdapter

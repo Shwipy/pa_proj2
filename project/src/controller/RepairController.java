@@ -880,26 +880,38 @@ public class RepairController {
 
 	/**
 	 * Allow searching for a string in the repair table
-	 * @param search string being searched for in the database
-	 * @param type type of field we are searching on, number/state
+	 *
+	 * @param search   string being searched for in the database
+	 * @param type     type of field we are searching on, number/state
+	 * @param selected
 	 * @return An array list containing 10 elements from the filtered results
 	 */
 	//https://www.postgresql.org/docs/current/functions-matching.html
-	 public static ArrayList<Repair> searchRepairs(String search, String type) {
+	 public static ArrayList<Repair> searchRepairs(String search, String type, Boolean selected) {
 		    DataBase db = new DataBase();
 		    PreparedStatement ps = null;
 		    ResultSet result = null;
 
 		    try {
 		        StringBuffer sqlQuery = new StringBuffer();
+		        if (selected){
+					if (type.equals("repair number")) {
+						sqlQuery.append(" SELECT * FROM repair WHERE repair_number ILIKE ? AND state='finished' ORDER BY id ASC ");
+					} else if (type.equals("repair state")) {
+						sqlQuery.append(" SELECT * FROM repair WHERE state ILIKE ? AND state='finished' ORDER BY id ASC ");
+					} else if (type.equals("client name")) {
+						sqlQuery.append(" SELECT * FROM repair INNER JOIN account ON repair.employee_id = account.id WHERE name ILIKE ? AND state='finished' ORDER BY repair.id ASC ");
+					}
 
-		        if (type.equals("number")) {
-		            sqlQuery.append(" SELECT * FROM repair WHERE repair_number ILIKE ? ORDER BY id ASC ");
-		        } else if (type.equals("state")) {
-		            sqlQuery.append(" SELECT * FROM repair WHERE state ILIKE ? ORDER BY id ASC ");
-		        } else {
-		            sqlQuery.append(" SELECT repair.* FROM repair, equipment, account WHERE repair.equipment_id = equipment.id AND equipment.client_id = account.id AND account.name ILIKE ? ORDER BY repair.id ASC ");
-		        }
+				}else{
+					if (type.equals("repair number")) {
+						sqlQuery.append(" SELECT * FROM repair WHERE repair_number ILIKE ? ORDER BY id ASC ");
+					} else if (type.equals("repair state")) {
+						sqlQuery.append(" SELECT * FROM repair WHERE state ILIKE ? ORDER BY id ASC ");
+					} else if (type.equals("client name")) {
+						sqlQuery.append(" SELECT * FROM repair INNER JOIN account ON repair.employee_id = account.id WHERE name ILIKE ? ORDER BY repair.id ASC ");
+					}
+				}
 
 		        ps = db.getConn().prepareStatement(sqlQuery.toString());
 		        ps.clearParameters();
