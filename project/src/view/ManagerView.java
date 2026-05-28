@@ -30,8 +30,6 @@ public class ManagerView implements ActionListener, MouseListener {
 
     private JCheckBox repairCheckFinishedBox;
 
-    private JDialog accountViewData;
-
     private String [] accountColumnNames = {
             "ID",
             "Name",
@@ -226,20 +224,22 @@ public class ManagerView implements ActionListener, MouseListener {
         if (e.getSource().equals(accountTable) && e.getClickCount() == 2){
             System.out.println(accountTable.getModel().getValueAt(accountTable.getSelectedRow(),0));
 
+
+            JDialog dialog = new JDialog();
             JPanel dialogWindow = new JPanel();
 
-            dialogWindow.setSize(780, 500);
-
+            dialog.setSize(780, 500);
             dialogWindow.setLayout(new BorderLayout());
-            accountViewData = new JDialog();
-            accountViewData.add(dialogWindow);
-            //Dialog.ModalityType.APPLICATION_MODAL;
-            accountViewData.setResizable(false);
-            accountViewData.setLocationRelativeTo(null);
-            //accountViewData.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            //https://docs.oracle.com/javase/8/docs/api/java/awt/Dialog.ModalityType.html
+            dialog.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
 
-            //if (Shared.showDialog(this,"hey","123"));
+            dialog.add(dialogWindow);
+            dialog.setTitle("Things");
+            dialog.setResizable(false);
+            dialog.setLocationRelativeTo(null);
 
+            dialog.setVisible(true);
+            System.out.println("morreu");
         }
     }
 
