@@ -52,9 +52,9 @@ public class HomeMenuGUI extends JFrame implements ActionListener {
         if (accountType.equals("manager")){
             cont.add( new ManagerView().show(), BorderLayout.CENTER);
         } else if (accountType.equals("employee")) {
-
+        	cont.add(new EmployeeView().show(), BorderLayout.CENTER);
         } else if (accountType.equals("client")) {
-
+        	cont.add( new ClientView().show(), BorderLayout.CENTER);
         }
 
         cont.add(footerPanel,BorderLayout.SOUTH);
