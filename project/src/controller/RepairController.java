@@ -101,7 +101,7 @@ public class RepairController {
 	 * @param employeeId id of the employee with the repairs in question
 	 * @return Confirmation that the repair was or not added to the database
 	 */
-	public static ArrayList<Repair> listRepairsByEmployee(Integer i, Boolean asc, String orderBy, int employeeId) {
+	public static ArrayList<Repair> listRepairsByEmployee(int employeeId) {
 
 	    DataBase db = new DataBase();
 	    PreparedStatement ps = null;
@@ -110,27 +110,12 @@ public class RepairController {
 	    try {
 	        StringBuffer sqlQuery = new StringBuffer();
 
-	        if (orderBy == null || orderBy.equals("date")) {
-
-	            if (asc) {
-	                sqlQuery.append(" SELECT * FROM repair WHERE employee_id = ? ORDER BY start_date ASC LIMIT 10 OFFSET ? ");
-	            } else {
-	                sqlQuery.append(" SELECT * FROM repair WHERE employee_id = ? ORDER BY start_date DESC LIMIT 10 OFFSET ? ");
-	            }
-
-	        } else {
-
-	            if (asc) {
-	                sqlQuery.append(" SELECT * FROM repair WHERE employee_id = ? ORDER BY repair_number ASC LIMIT 10 OFFSET ? ");
-	            } else {
-	                sqlQuery.append(" SELECT * FROM repair WHERE employee_id = ? ORDER BY repair_number DESC LIMIT 10 OFFSET ? ");
-	            }
-	        }
+	        sqlQuery.append(" SELECT * FROM repair WHERE employee_id = ? ");
 
 	        ps = db.getConn().prepareStatement(sqlQuery.toString());
 	        ps.clearParameters();
+
 	        ps.setInt(1, employeeId);
-	        ps.setInt(2, 10 * i);
 
 	        result = ps.executeQuery();
 
@@ -171,7 +156,6 @@ public class RepairController {
 
 	    return null;
 	}
-
 	/**
 	 * Allows the verification of if an equipment is or not already being repaired
 	 * @param equipmentId id of the equipment thats being verified
