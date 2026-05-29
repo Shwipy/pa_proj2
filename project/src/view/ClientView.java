@@ -188,7 +188,8 @@ public class ClientView implements ActionListener {
                     equipmentModel.addRow(equipment.toTableRow());
                 }
             }
-
+            
+            //https://stackoverflow.com/questions/10331949/setmodel-on-a-jtable-when-the-defaulttablemodel-has-changed
             equipmentTable.setModel(equipmentModel);
         }
 
@@ -206,7 +207,7 @@ public class ClientView implements ActionListener {
                     repairModel.addRow(repair.toTableRow());
                 }
             }
-
+            //https://stackoverflow.com/questions/10331949/setmodel-on-a-jtable-when-the-defaulttablemodel-has-changed
             repairTable.setModel(repairModel);
         }
     }
