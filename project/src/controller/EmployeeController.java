@@ -1,9 +1,7 @@
 package controller;
-
 import model.Client;
 import model.DataBase;
 import model.Employee;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
