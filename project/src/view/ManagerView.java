@@ -6,6 +6,8 @@ import model.Manager;
 import model.Repair;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -14,7 +16,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
-public class ManagerView implements ActionListener, MouseListener {
+public class ManagerView implements ActionListener, MouseListener, ListSelectionListener {
 
     private JButton accountSearchButton;
     private JButton repairSearchButton;
@@ -29,6 +31,8 @@ public class ManagerView implements ActionListener, MouseListener {
     private JTable repairTable;
 
     private JCheckBox repairCheckFinishedBox;
+
+    private Integer selectedId=-1;
 
     private String [] accountColumnNames = {
             "ID",
@@ -87,6 +91,7 @@ public class ManagerView implements ActionListener, MouseListener {
         accountTable.setAutoCreateRowSorter(true);
         //meti o mouselistener dentro da tabela para não ter de fazer depois confirmacoes a ver se a linha esta ou nao selected
         accountTable.addMouseListener (this);
+        accountTable.getSelectionModel().addListSelectionListener(this);
 
         JScrollPane accountScrollPane = new JScrollPane(accountTable);
 
@@ -222,25 +227,22 @@ public class ManagerView implements ActionListener, MouseListener {
     @Override
     public void mouseClicked(MouseEvent e) {
         if (e.getSource().equals(accountTable) && e.getClickCount() == 2){
-            System.out.println(accountTable.getModel().getValueAt(accountTable.getSelectedRow(),0));
-
-
             JDialog dialog = new JDialog();
-            JPanel dialogWindow = new JPanel();
-
+            JPanel dialogWindow = new InfoDialog(selectedId,"account");
             dialog.setSize(780, 500);
-            dialogWindow.setLayout(new BorderLayout());
+
             //https://docs.oracle.com/javase/8/docs/api/java/awt/Dialog.ModalityType.html
             dialog.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
 
             dialog.add(dialogWindow);
-            dialog.setTitle("Things");
+            dialog.setTitle(String.valueOf(selectedId));
             dialog.setResizable(false);
             dialog.setLocationRelativeTo(null);
 
             dialog.setVisible(true);
             System.out.println("morreu");
         }
+
     }
 
     @Override
@@ -261,5 +263,15 @@ public class ManagerView implements ActionListener, MouseListener {
     @Override
     public void mouseExited(MouseEvent e) {
 
+    }
+
+    @Override
+    public void valueChanged(ListSelectionEvent e) {
+
+        //https://docs.oracle.com/en/java//javase/17/docs/api/java.desktop/java/awt/event/AdjustmentEvent.html
+        //O getSelectedRowCount > 0 ta aqui para não crashar quando mudamos a ordenaçao
+        if (!e.getValueIsAdjusting() && this.accountTable.getSelectedRowCount()>0){
+            selectedId = (Integer) this.accountTable.getValueAt(this.accountTable.getSelectedRow(),0);
+        }
     }
 }
