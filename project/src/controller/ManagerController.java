@@ -123,7 +123,7 @@ public class ManagerController {
             ps.setInt(5, manager.getId());
 
             ps.executeUpdate();
-
+            System.out.println("deu update i think");
             return true;
 
         } catch (SQLException e) {

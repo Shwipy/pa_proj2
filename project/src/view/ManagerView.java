@@ -17,6 +17,7 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 public class ManagerView implements ActionListener, MouseListener, ListSelectionListener {
+    private Integer managerId;
 
     private JButton accountSearchButton;
     private JButton repairSearchButton;
@@ -33,6 +34,7 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
     private JCheckBox repairCheckFinishedBox;
 
     private Integer selectedId=-1;
+    private String selectedType;
 
     private String [] accountColumnNames = {
             "ID",
@@ -56,6 +58,10 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
             "State",
             "Notes"
     };
+
+    public ManagerView(Integer managerId) {
+        this.managerId = managerId;
+    }
 
     public JTabbedPane show(){
         JTabbedPane tabPanel = new JTabbedPane();
@@ -136,7 +142,6 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
         repairTable = new JTable(repairModel);
         repairTable.setDefaultEditor(Object.class, null);
         repairTable.setAutoCreateRowSorter(true);
-        //repairTable.setFillsViewportHeight(true);
 
         JScrollPane repairScrollPane = new JScrollPane(repairTable);
 
@@ -179,6 +184,9 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
         tabPanel.addTab("Repairs", repairPanel);
         tabPanel.addTab("Notifications", notificationPanel);
         tabPanel.addTab("Settings", settingsPanel);
+
+        settingsPanel.add(new InfoPanel(managerId, "manager"));
+
 
         return tabPanel;
     }
@@ -228,7 +236,7 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
     public void mouseClicked(MouseEvent e) {
         if (e.getSource().equals(accountTable) && e.getClickCount() == 2){
             JDialog dialog = new JDialog();
-            JPanel dialogWindow = new InfoDialog(selectedId,"account");
+            JPanel dialogWindow = new InfoPanel(selectedId, selectedType);
             dialog.setSize(780, 500);
 
             //https://docs.oracle.com/javase/8/docs/api/java/awt/Dialog.ModalityType.html
@@ -272,6 +280,7 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
         //O getSelectedRowCount > 0 ta aqui para não crashar quando mudamos a ordenaçao
         if (!e.getValueIsAdjusting() && this.accountTable.getSelectedRowCount()>0){
             selectedId = (Integer) this.accountTable.getValueAt(this.accountTable.getSelectedRow(),0);
+            selectedType = this.accountTable.getValueAt(this.accountTable.getSelectedRow(),6).toString();
         }
     }
 }

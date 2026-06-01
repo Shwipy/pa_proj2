@@ -50,7 +50,7 @@ public class HomeMenuGUI extends JFrame implements ActionListener {
         footerPanel.add(logoutButton);
 
         if (accountType.equals("manager")){
-            cont.add( new ManagerView().show(), BorderLayout.CENTER);
+            cont.add( new ManagerView(userId).show(), BorderLayout.CENTER);
         } else if (accountType.equals("employee")) {
         	cont.add(new EmployeeView(userId).show(), BorderLayout.CENTER);
         } else if (accountType.equals("client")) {
@@ -71,6 +71,5 @@ public class HomeMenuGUI extends JFrame implements ActionListener {
                 this.dispose();
             }
         }
-
     }
 }

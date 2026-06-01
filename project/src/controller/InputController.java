@@ -35,14 +35,12 @@ public class InputController {
      * @param message small string to indicate the parameter being inputed ("Email>")
      * @return the value of the inserted email
      */
-    public static String readEmail(String message){
-        while(true){
-            String email = readString(message).toLowerCase();
-            if(Pattern.matches("^[a-z0-9]{1}[a-z0-9._-]+@[a-z]{1}[a-z.]+[a-z]{1}\\.[a-z]{2,3}$", email)){
-                return email;
-            }
-            System.out.println("Not a valid Email!");
+    public static Boolean validateEmail(String message){
+        String email = message.trim().toLowerCase();
+        if(Pattern.matches("^[a-z0-9]{1}[a-z0-9._-]+@[a-z]{1}[a-z.]+[a-z]{1}\\.[a-z]{2,3}$", email)){
+            return true;
         }
+        return false;
     }
 
     /**
@@ -179,4 +177,6 @@ public class InputController {
 
         return s;
     }
+
+
 }
