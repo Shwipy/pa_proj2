@@ -6,14 +6,9 @@ import model.Employee;
 import model.Manager;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
-import java.lang.management.ManagementFactory;
-import java.util.ArrayList;
-import java.util.regex.Pattern;
 
 public class InfoPanel extends JPanel implements ActionListener {
     private Integer id;
@@ -39,8 +34,6 @@ public class InfoPanel extends JPanel implements ActionListener {
     private JTextField expertiseField;
 
     private JButton editButton;
-    private JButton banButton;
-    private JButton approveButton;
 
     private JLabel errorLabel;
 
@@ -222,14 +215,8 @@ public class InfoPanel extends JPanel implements ActionListener {
         errorLabel = new JLabel("errormessage test");
         errorLabel.setVisible(false);
 
-        banButton = new JButton("Ban");
-        banButton.addActionListener(this);
-
-        approveButton = new JButton("Approve");
-        approveButton.addActionListener(this);
-
         footerPanel.add(errorLabel);
-        footerPanel.add(banButton);
+        footerPanel.add(new JPanel());
         footerPanel.add(new JPanel());
         footerPanel.add(editButton);
 
@@ -240,25 +227,28 @@ public class InfoPanel extends JPanel implements ActionListener {
         usernameField.setEditable(state);
         passwordField.setEditable(state);
         emailField.setEditable(state);
+        activeCheckBox.setEnabled(state);
+        approvedCheckBox.setEnabled(state);
 
+        if (type.equals("client")){
+            nifField.setEditable(true);
+            phoneField.setEditable(true);
+            residenceField.setEditable(true);
+
+        } else if (type.equals("employee")) {
+            nifField.setEditable(true);
+            phoneField.setEditable(true);
+            residenceField.setEditable(true);
+            expertiseField.setEditable(true);
+        }
         //typeField.setEditable(true);
-        //nifField.setEditable(true);
-        //phoneField.setEditable(true);
-        //residenceField.setEditable(true);
-        //expertiseField.setEditable(true);
+
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource().equals(editButton) && editButton.getText().equals("Edit Account")){
-
-            setEditable(true);
-            beingEdited = true;
-            editButton.setText("Save Changes");
-        }
-        if (e.getSource().equals(editButton) && editButton.getText().equals("Save Changes")) {
-            beingEdited = false;
-            valid=true;
+        if (e.getSource().equals(editButton) && beingEdited) {
+            valid = true;
             switch (type) {
 //                case "client":
 //                    Client updatedClient = client;
@@ -276,51 +266,38 @@ public class InfoPanel extends JPanel implements ActionListener {
                     updatedManager.setName(nameField.getText());
                     updatedManager.setUsername(usernameField.getText());
                     updatedManager.setPassword(passwordField.getText());
+                    updatedManager.setActive(activeCheckBox.isSelected());
+                    updatedManager.setApproved(approvedCheckBox.isSelected());
 
-                    if(InputController.validateEmail(emailField.getText())){
-                        updatedManager.setEmail(emailField.getText());
-                    }else{
-                        valid=false;
+                    if(!InputController.validateEmail(emailField.getText())){
+                        Shared.showErrorDialog(new JFrame(),"Invalid Email", "Invalid Form");
+                        return;
                     }
-                    if (valid){
-                        Boolean updated = ManagerController.updateManager(updatedManager);
 
-                        if (updated){
-                            errorLabel.setText("Updated with Success");
-                            errorLabel.setForeground(Color.GREEN);
-                            errorLabel.setVisible(true);
+                    updatedManager.setEmail(emailField.getText());
+                    Boolean updated = ManagerController.updateManager(updatedManager);
 
-                            setEditable(false);
-                            beingEdited = false;
-                            editButton.setText("Edit Account");
-                        }else{
-                            errorLabel.setText("Invalid Data");
-                            errorLabel.setForeground(Color.RED);
-                            errorLabel.setVisible(true);
-                        }
+                    if (updated){
+                        Shared.showInformationDialog(new JFrame(),"The data was updated with success.","Valid Form");
 
+                        editButton.setText("Edit Account");
+                        setEditable(false);
+                        beingEdited = false;
                     }else{
-                        errorLabel.setText("Invalid Data");
-                        errorLabel.setForeground(Color.RED);
-                        errorLabel.setVisible(true);
+                        Shared.showErrorDialog(new JFrame(),"There was an error updating the account.","Validation Error");
                     }
 
                     break;
 
                 case null:
                 default:
-                    System.out.println("User id not found!");
                     break;
             }
+        } else if (e.getSource().equals(editButton) && !beingEdited) {
+            setEditable(true);
+            beingEdited = true;
+            editButton.setText("Save Changes");
         }
 
-        if (e.getSource().equals(banButton)) {
-            ManagerController.banAccount(id, "ban");
-
-        }
-
-        if (e.getSource().equals(approveButton) ) {
-
-        }
     }
 }

@@ -4,7 +4,7 @@ import javax.swing.*;
 
 public class Shared {
 
-    public static Boolean showDialog(JFrame frame, String message, String title){
+    public static Boolean showOkCancelDialog(JFrame frame, String message, String title){
         int dialogResult = JOptionPane.showConfirmDialog(
                 frame,
                 message,
@@ -13,5 +13,24 @@ public class Shared {
         );
 
         return dialogResult == 0;
+    }
+
+    public static void showErrorDialog(JFrame frame, String message, String title){
+        JOptionPane.showMessageDialog(
+                frame,
+                message,
+                title,
+                JOptionPane.ERROR_MESSAGE
+        );
+
+    }
+
+    public static void showInformationDialog(JFrame frame, String message, String title){
+        JOptionPane.showMessageDialog(
+                frame,
+                message,
+                title,
+                JOptionPane.INFORMATION_MESSAGE
+        );
     }
 }

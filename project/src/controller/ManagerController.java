@@ -66,7 +66,7 @@ public class ManagerController {
 
         try {
             StringBuffer getManager = new StringBuffer();
-            getManager.append(" SELECT * FROM account WHERE id = ? ");
+            getManager.append(" SELECT * FROM account WHERE id = ?");
             PreparedStatement ps = db.getConn().prepareStatement(getManager.toString());
             ps.clearParameters();
             ps.setInt(1, id);
@@ -112,7 +112,9 @@ public class ManagerController {
                     "SET name = ?, " +
                     "username = ?, " +
                     "password = ?, " +
-                    "email = ? " +
+                    "email = ?, " +
+                    "active = ?, " +
+                    "approved = ? " +
                     "WHERE id = ?" );
             PreparedStatement ps = db.getConn().prepareStatement(updateAccount.toString());
             ps.clearParameters();
@@ -120,7 +122,9 @@ public class ManagerController {
             ps.setString(2, manager.getUsername());
             ps.setString(3, manager.getPassword());
             ps.setString(4, manager.getEmail());
-            ps.setInt(5, manager.getId());
+            ps.setBoolean(5, manager.getActive());
+            ps.setBoolean(6, manager.getApproved());
+            ps.setInt(7, manager.getId());
 
             ps.executeUpdate();
             System.out.println("deu update i think");
@@ -136,6 +140,7 @@ public class ManagerController {
         }finally {
             db.closeDb();
         }
+        System.out.println("DEU ERRO AQUI");
         return false;
     }
 
@@ -152,7 +157,7 @@ public class ManagerController {
         try {
             StringBuffer getAccouts = new StringBuffer();
 
-            getAccouts.append(" SELECT * FROM account ORDER BY name");
+            getAccouts.append(" SELECT * FROM account ORDER BY id ASC");
             PreparedStatement ps = db.getConn().prepareStatement(getAccouts.toString());
             ps.clearParameters();
 

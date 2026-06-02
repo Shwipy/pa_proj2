@@ -1,7 +1,6 @@
 package view;
 import controller.ManagerController;
 import controller.OutputController;
-import controller.SessionController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -63,7 +62,7 @@ public class HomeMenuGUI extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource().equals(logoutButton)) {
 
-            if(Shared.showDialog(this,"Are you sure you want to logout?", "Logout")){
+            if(Shared.showOkCancelDialog(this,"Are you sure you want to logout?", "Logout")){
                 LoginGUI login = new LoginGUI();
                 login.init();
                 login.setVisible(true);

@@ -18,14 +18,12 @@ public class InputController {
      * @return the value of the inserted NIF
      */
     //Para testar os Regex's: https://regex101.com/r/aiwNmf/1
-    public static String readNif(String message){
-        while(true){
-            String nif = readString(message);
-             if(Pattern.matches("\\d{9}", nif)){
-                 return nif;
-             }
-            System.out.println("Not a valid NIF!");
+    public static Boolean readNif(String message){
+        String nif = readString(message).trim();
+        if(Pattern.matches("\\d{9}", nif)){
+            return true;
         }
+        return  false;
     }
 
     /**
@@ -50,14 +48,12 @@ public class InputController {
      * @param message small string to indicate the parameter being inputed ("Phone>")
      * @return the value of the inserted phone number
      */
-    public static String readPhone(String message){
-        while(true){
-            String phone = readString(message);
-            if(Pattern.matches("[239]{1}\\d{8}", phone)){
-                return phone;
-            }
-            System.out.println("Not a valid Phone Number!");
+    public static Boolean validatePhone(String message){
+        String phone = readString(message).trim();
+        if(Pattern.matches("[239]{1}\\d{8}", phone)){
+            return true;
         }
+        return  false;
     }
 
     /**

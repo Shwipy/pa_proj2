@@ -7,3 +7,6 @@ https://docs.oracle.com/javase/8/docs/api/javax/swing/table/DefaultTableModel.ht
 
 Disable Table Edit:
 https://stackoverflow.com/questions/9919230/disable-user-edit-in-jtable/36747065#36747065
+
+Get Value From CheckBox:
+https://stackoverflow.com/questions/13432941/getting-jcheckbox-selected-box-value/13433004#13433004

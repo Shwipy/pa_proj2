@@ -191,22 +191,29 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
         return tabPanel;
     }
 
+    public void fillTable(Boolean search){
+        DefaultTableModel accountModel = new DefaultTableModel(accountColumnNames,0);
+        ArrayList<Manager> users;
+        if (search){
+            users = ManagerController.searchUsers(accountSearchTerm.getText(),accountSearchTypes.getSelectedItem().toString().toLowerCase());
+        }else{
+            users = ManagerController.listUsers();
+        }
+
+        if (users != null){
+            for (Manager user : users) {
+                accountModel.addRow(user.toTableRow());
+            }
+        }
+
+        //https://stackoverflow.com/questions/10331949/setmodel-on-a-jtable-when-the-defaulttablemodel-has-changed
+        accountTable.setModel(accountModel);
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource().equals(accountSearchButton)){
-
-            DefaultTableModel accountModel = new DefaultTableModel(accountColumnNames,0);
-            ArrayList<Manager> users = ManagerController.searchUsers(accountSearchTerm.getText(),accountSearchTypes.getSelectedItem().toString().toLowerCase());
-
-            if (users != null){
-                for (Manager user : users) {
-                    accountModel.addRow(user.toTableRow());
-                }
-            }
-
-            //https://stackoverflow.com/questions/10331949/setmodel-on-a-jtable-when-the-defaulttablemodel-has-changed
-            accountTable.setModel(accountModel);
-
+            fillTable(true);
         }
 
         if (e.getSource().equals(repairSearchButton)){
@@ -248,7 +255,7 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
             dialog.setLocationRelativeTo(null);
 
             dialog.setVisible(true);
-            System.out.println("morreu");
+            fillTable(false);
         }
 
     }
