@@ -6,13 +6,16 @@ import model.Employee;
 import model.Manager;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 public class InfoPanel extends JPanel implements ActionListener {
     private Integer id;
     private String type;
+    private Boolean settingsTab;
 
     private Client client = null;
     private Employee employee = null;
@@ -25,6 +28,7 @@ public class InfoPanel extends JPanel implements ActionListener {
     private JTextField usernameField;
     private JTextField passwordField;
     private JTextField emailField;
+    JPanel checkBoxPanel;
     private JCheckBox activeCheckBox;
     private JCheckBox approvedCheckBox;
     private JTextField typeField;
@@ -32,14 +36,19 @@ public class InfoPanel extends JPanel implements ActionListener {
     private JTextField phoneField;
     private JTextField residenceField;
     private JTextField expertiseField;
+    private JTextField bussinessSectorField;
+    private JTextField tierField;
 
     private JButton editButton;
+    private JButton searchFotoButton;
 
     private JLabel errorLabel;
 
-    public InfoPanel(Integer id, String type){
+    public InfoPanel(Integer id, String type, Boolean settingsTab){
+
         this.id = id;
         this.type = type;
+        this.settingsTab = settingsTab;
 
         this.setLayout(new BorderLayout());
 
@@ -101,7 +110,7 @@ public class InfoPanel extends JPanel implements ActionListener {
         emailPanel.add(emailLabel);
         emailPanel.add(emailField);
 
-        JPanel checkBoxPanel = new JPanel();
+        checkBoxPanel = new JPanel();
         JLabel activeLabel = new JLabel("Active: ",SwingConstants.RIGHT);
         activeCheckBox = new JCheckBox();
         activeCheckBox.setSelected(account.getActive());
@@ -114,6 +123,10 @@ public class InfoPanel extends JPanel implements ActionListener {
         approvedCheckBox.setEnabled(false);
         checkBoxPanel.add(approvedLabel);
         checkBoxPanel.add(approvedCheckBox);
+
+        if (settingsTab){
+            inSettingsTab(settingsTab);
+        }
 
         JPanel typePanel = new JPanel();
         JLabel typeLabel = new JLabel("Type:      ",SwingConstants.RIGHT);
@@ -168,6 +181,25 @@ public class InfoPanel extends JPanel implements ActionListener {
                 phoneField.setText(client.getPhoneNumber());
                 residenceField.setText(client.getResidence());
 
+                JPanel bussinessSectorPanel = new JPanel();
+                JLabel bussinessSectorLabel = new JLabel("Business Sector: ",SwingConstants.LEFT);
+                bussinessSectorField = new JTextField(24);
+                bussinessSectorField.setText(client.getBusinessSector());
+                bussinessSectorField.setEditable(false);
+                bussinessSectorPanel.add(bussinessSectorLabel);
+                bussinessSectorPanel.add(bussinessSectorField);
+
+                JPanel tierPanel = new JPanel();
+                JLabel tierLabel = new JLabel("Tier:     ",SwingConstants.RIGHT);
+                tierField = new JTextField(24);
+                tierField.setText(client.getTier());
+                tierField.setEditable(false);
+                tierPanel.add(tierLabel);
+                tierPanel.add(tierField);
+
+                personalDataPanel.add(bussinessSectorPanel);
+                personalDataPanel.add(tierPanel);
+
                 tabPanel.insertTab("Personal",null, personalDataPanel,null,1);
                 break;
 
@@ -201,7 +233,6 @@ public class InfoPanel extends JPanel implements ActionListener {
 
             case null:
             default:
-                System.out.println("User id not found!");
                 break;
         }
 
@@ -212,23 +243,43 @@ public class InfoPanel extends JPanel implements ActionListener {
         editButton = new JButton("Edit Account");
         editButton.addActionListener(this);
 
+        searchFotoButton = new JButton("Select Img");
+        searchFotoButton.addActionListener(this);
+        searchFotoButton.setEnabled(false);
+
         errorLabel = new JLabel("errormessage test");
         errorLabel.setVisible(false);
 
         footerPanel.add(errorLabel);
         footerPanel.add(new JPanel());
         footerPanel.add(new JPanel());
+        footerPanel.add(searchFotoButton);
         footerPanel.add(editButton);
 
         this.add(footerPanel,BorderLayout.SOUTH);
     }
+
+    public void inSettingsTab(Boolean settingsTab){
+
+        if (settingsTab){
+            activeCheckBox.setEnabled(!settingsTab);
+            checkBoxPanel.setVisible(!settingsTab);
+            approvedCheckBox.setEnabled(!settingsTab);
+            checkBoxPanel.setVisible(!settingsTab);
+        }else{
+            activeCheckBox.setEnabled(settingsTab);
+            approvedCheckBox.setEnabled(settingsTab);
+        }
+    }
+
     public void setEditable(Boolean state){
         nameField.setEditable(state);
         usernameField.setEditable(state);
         passwordField.setEditable(state);
         emailField.setEditable(state);
-        activeCheckBox.setEnabled(state);
         approvedCheckBox.setEnabled(state);
+        activeCheckBox.setEnabled(state);
+        searchFotoButton.setEnabled(state);
 
         if (type.equals("client")){
             nifField.setEditable(true);
@@ -241,12 +292,22 @@ public class InfoPanel extends JPanel implements ActionListener {
             residenceField.setEditable(true);
             expertiseField.setEditable(true);
         }
-        //typeField.setEditable(true);
 
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
+
+        if (e.getSource().equals(searchFotoButton)) {
+            JFileChooser imgChooser = new JFileChooser();
+            imgChooser.setAcceptAllFileFilterUsed(false);
+            FileNameExtensionFilter imgFilter = new FileNameExtensionFilter("Image Types","png", "jpg", "jpeg");
+            imgChooser.setFileFilter(imgFilter);
+            imgChooser.showDialog(this, "OPEN");
+            File file = imgChooser.getSelectedFile ();
+            System.out.println(file.toString());
+        }
+
         if (e.getSource().equals(editButton) && beingEdited) {
             valid = true;
             switch (type) {
@@ -255,17 +316,34 @@ public class InfoPanel extends JPanel implements ActionListener {
 //                    ManagerController.updateManager(updatedManager);
 //                    break;
 //
-//                case "employee":
-//                    employee = EmployeeController.getEmployee(id);
-//                    account = ManagerController.getManager(id);
-//                    break;
+                case "employee":
+                    employee = EmployeeController.getEmployee(id);
+                    account = ManagerController.getManager(id);
+
+
+                    break;
 
                 case "manager":
-
                     Manager updatedManager = account;
+
+                    if (nameField.getText().trim().isEmpty()) {
+                        Shared.showErrorDialog(new JFrame(),"Name field cannot be empty!", "Invalid Form");
+                        return;
+                    }
                     updatedManager.setName(nameField.getText());
+
+                    if (usernameField.getText().trim().isEmpty()) {
+                        Shared.showErrorDialog(new JFrame(),"Username field cannot be empty!", "Invalid Form");
+                        return;
+                    }
                     updatedManager.setUsername(usernameField.getText());
+
+                    if (passwordField.getText().trim().isEmpty()) {
+                        Shared.showErrorDialog(new JFrame(),"Password field cannot be empty!", "Invalid Form");
+                        return;
+                    }
                     updatedManager.setPassword(passwordField.getText());
+
                     updatedManager.setActive(activeCheckBox.isSelected());
                     updatedManager.setApproved(approvedCheckBox.isSelected());
 
@@ -273,8 +351,8 @@ public class InfoPanel extends JPanel implements ActionListener {
                         Shared.showErrorDialog(new JFrame(),"Invalid Email", "Invalid Form");
                         return;
                     }
-
                     updatedManager.setEmail(emailField.getText());
+
                     Boolean updated = ManagerController.updateManager(updatedManager);
 
                     if (updated){

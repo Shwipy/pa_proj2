@@ -33,7 +33,7 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
 
     private JCheckBox repairCheckFinishedBox;
 
-    private Integer selectedId=-1;
+    private Integer selectedId = -1;
     private String selectedType;
 
     private String [] accountColumnNames = {
@@ -185,7 +185,7 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
         tabPanel.addTab("Notifications", notificationPanel);
         tabPanel.addTab("Settings", settingsPanel);
 
-        settingsPanel.add(new InfoPanel(managerId, "manager"));
+        settingsPanel.add(new InfoPanel(managerId, "manager", true));
 
 
         return tabPanel;
@@ -229,13 +229,6 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
             //https://stackoverflow.com/questions/10331949/setmodel-on-a-jtable-when-the-defaulttablemodel-has-changed
             repairTable.setModel(repairModel);
         }
-
-        //need to change to try on a MouseAdapter
-        //https://stackoverflow.com/questions/14852719/double-click-listener-on-jtable-in-java
-//        if (e.getSource().equals(accountTable)){
-//            System.out.println("qwe");
-//            System.out.println(accountTable.getSelectedRow());
-//        }
     }
 
     //https://coderanch.com/t/341705/java/JTable-responding-row-clicks
@@ -243,7 +236,7 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
     public void mouseClicked(MouseEvent e) {
         if (e.getSource().equals(accountTable) && e.getClickCount() == 2){
             JDialog dialog = new JDialog();
-            JPanel dialogWindow = new InfoPanel(selectedId, selectedType);
+            JPanel dialogWindow = new InfoPanel(selectedId, selectedType, false);
             dialog.setSize(780, 500);
 
             //https://docs.oracle.com/javase/8/docs/api/java/awt/Dialog.ModalityType.html
@@ -261,24 +254,16 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
     }
 
     @Override
-    public void mousePressed(MouseEvent e) {
-
-    }
+    public void mousePressed(MouseEvent e) {}
 
     @Override
-    public void mouseReleased(MouseEvent e) {
-
-    }
+    public void mouseReleased(MouseEvent e) {}
 
     @Override
-    public void mouseEntered(MouseEvent e) {
-
-    }
+    public void mouseEntered(MouseEvent e) {}
 
     @Override
-    public void mouseExited(MouseEvent e) {
-
-    }
+    public void mouseExited(MouseEvent e) {}
 
     @Override
     public void valueChanged(ListSelectionEvent e) {

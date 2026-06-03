@@ -101,7 +101,7 @@ public class EmployeeView implements ActionListener {
         tabPanel.addTab("Notifications", notificationPanel);
         tabPanel.addTab("Settings", settingsPanel);
 
-        settingsPanel.add(new InfoPanel(employeeId, "employee"));
+        settingsPanel.add(new InfoPanel(employeeId, "employee", true));
         return tabPanel;
     }
 
