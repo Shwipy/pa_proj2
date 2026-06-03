@@ -72,7 +72,6 @@ public class InfoPanel extends JPanel implements ActionListener {
 
             case null:
             default:
-                System.out.println("User id not found!");
                 break;
         }
 
@@ -292,7 +291,128 @@ public class InfoPanel extends JPanel implements ActionListener {
             residenceField.setEditable(true);
             expertiseField.setEditable(true);
         }
+    }
 
+    public void validateFields(){
+        Manager updatedManager = account;
+        Employee updatedEmployee = employee;
+        Client updatedClient = client;
+        Boolean updated= false;
+
+        if (nameField.getText().trim().isEmpty()) {
+            Shared.showErrorDialog(new JFrame(),"Name field cannot be empty!", "Invalid Form");
+            return;
+        }
+
+        if (usernameField.getText().trim().isEmpty()) {
+            Shared.showErrorDialog(new JFrame(),"Username field cannot be empty!", "Invalid Form");
+            return;
+        }
+
+        if (passwordField.getText().trim().isEmpty()) {
+            Shared.showErrorDialog(new JFrame(),"Password field cannot be empty!", "Invalid Form");
+            return;
+        }
+
+        if(!InputController.validateEmail(emailField.getText())){
+            Shared.showErrorDialog(new JFrame(),"Invalid Email", "Invalid Form");
+            return;
+        }
+
+        if (!type.equals("manager")){
+            if (!InputController.validateNif(nifField.getText())){
+                Shared.showErrorDialog(new JFrame(),"Invalid NIF", "Invalid Form");
+                return;
+            }
+
+            if (!InputController.validatePhone(phoneField.getText())){
+                Shared.showErrorDialog(new JFrame(),"Invalid Phone", "Invalid Form");
+                return;
+            }
+
+            if (residenceField.getText().trim().isEmpty()){
+                Shared.showErrorDialog(new JFrame(),"Invalid Residence", "Invalid Form");
+                return;
+            }
+
+            if (type.equals("client")){
+
+                if (bussinessSectorField.getText().trim().isEmpty()){
+                    Shared.showErrorDialog(new JFrame(),"Invalid Bussiness Sector", "Invalid Form");
+                    return;
+                }
+
+//                if (tierField.getText().trim().isEmpty()){
+//                    Shared.showErrorDialog(new JFrame(),"Invalid Tier", "Invalid Form");
+//                    return;
+//                }
+            }
+
+            if (type.equals("employee")){
+                if (expertiseField.getText().trim().isEmpty()){
+                    Shared.showErrorDialog(new JFrame(),"Invalid Level of Expertise", "Invalid Form");
+                    return;
+                }
+            }
+        }
+
+        if (type.equals("manager")){
+            updatedManager.setName(nameField.getText());
+            updatedManager.setUsername(usernameField.getText());
+            updatedManager.setPassword(passwordField.getText());
+
+            updatedManager.setActive(activeCheckBox.isSelected());
+            updatedManager.setApproved(approvedCheckBox.isSelected());
+            updatedManager.setEmail(emailField.getText());
+
+            updated = ManagerController.updateManager(updatedManager);
+
+        } else if (type.equals("client")) {
+            updatedClient.setName(nameField.getText());
+            updatedClient.setUsername(usernameField.getText());
+            updatedClient.setPassword(passwordField.getText());
+
+            updatedClient.setActive(activeCheckBox.isSelected());
+            updatedClient.setApproved(approvedCheckBox.isSelected());
+            updatedClient.setEmail(emailField.getText());
+
+            updatedClient.setNif((nifField.getText()));
+            updatedClient.setPhoneNumber(phoneField.getText());
+            updatedClient.setResidence(residenceField.getText());
+
+            updatedClient.setBusinessSector(bussinessSectorField.getText());
+            updatedClient.setTier(tierField.getText());
+
+            updated = ClientController.updateClient(updatedClient);
+
+        } else if (type.equals("employee")) {
+            updatedEmployee.setName(nameField.getText());
+            updatedEmployee.setUsername(usernameField.getText());
+            updatedEmployee.setPassword(passwordField.getText());
+
+            updatedEmployee.setActive(activeCheckBox.isSelected());
+            updatedEmployee.setApproved(approvedCheckBox.isSelected());
+            updatedEmployee.setEmail(emailField.getText());
+
+            updatedEmployee.setNif((nifField.getText()));
+            updatedEmployee.setPhoneNumber(phoneField.getText());
+            updatedEmployee.setResidence(residenceField.getText());
+
+            updatedEmployee.setLvlExpertise(expertiseField.getText());
+
+            updated = EmployeeController.updateEmployee(updatedEmployee);
+        }
+
+
+        if (updated){
+            Shared.showInformationDialog(new JFrame(),"The data was updated with success.","Valid Form");
+
+            editButton.setText("Edit Account");
+            setEditable(false);
+            beingEdited = false;
+        }else{
+            Shared.showErrorDialog(new JFrame(),"There was an error updating the account.","Validation Error");
+        }
     }
 
     @Override
@@ -303,74 +423,14 @@ public class InfoPanel extends JPanel implements ActionListener {
             imgChooser.setAcceptAllFileFilterUsed(false);
             FileNameExtensionFilter imgFilter = new FileNameExtensionFilter("Image Types","png", "jpg", "jpeg");
             imgChooser.setFileFilter(imgFilter);
-            imgChooser.showDialog(this, "OPEN");
+            imgChooser.showDialog(this, "Select Profile Picture");
             File file = imgChooser.getSelectedFile ();
             System.out.println(file.toString());
         }
 
         if (e.getSource().equals(editButton) && beingEdited) {
-            valid = true;
-            switch (type) {
-//                case "client":
-//                    Client updatedClient = client;
-//                    ManagerController.updateManager(updatedManager);
-//                    break;
-//
-                case "employee":
-                    employee = EmployeeController.getEmployee(id);
-                    account = ManagerController.getManager(id);
+            validateFields();
 
-
-                    break;
-
-                case "manager":
-                    Manager updatedManager = account;
-
-                    if (nameField.getText().trim().isEmpty()) {
-                        Shared.showErrorDialog(new JFrame(),"Name field cannot be empty!", "Invalid Form");
-                        return;
-                    }
-                    updatedManager.setName(nameField.getText());
-
-                    if (usernameField.getText().trim().isEmpty()) {
-                        Shared.showErrorDialog(new JFrame(),"Username field cannot be empty!", "Invalid Form");
-                        return;
-                    }
-                    updatedManager.setUsername(usernameField.getText());
-
-                    if (passwordField.getText().trim().isEmpty()) {
-                        Shared.showErrorDialog(new JFrame(),"Password field cannot be empty!", "Invalid Form");
-                        return;
-                    }
-                    updatedManager.setPassword(passwordField.getText());
-
-                    updatedManager.setActive(activeCheckBox.isSelected());
-                    updatedManager.setApproved(approvedCheckBox.isSelected());
-
-                    if(!InputController.validateEmail(emailField.getText())){
-                        Shared.showErrorDialog(new JFrame(),"Invalid Email", "Invalid Form");
-                        return;
-                    }
-                    updatedManager.setEmail(emailField.getText());
-
-                    Boolean updated = ManagerController.updateManager(updatedManager);
-
-                    if (updated){
-                        Shared.showInformationDialog(new JFrame(),"The data was updated with success.","Valid Form");
-
-                        editButton.setText("Edit Account");
-                        setEditable(false);
-                        beingEdited = false;
-                    }else{
-                        Shared.showErrorDialog(new JFrame(),"There was an error updating the account.","Validation Error");
-                    }
-
-                    break;
-
-                case null:
-                default:
-                    break;
-            }
         } else if (e.getSource().equals(editButton) && !beingEdited) {
             setEditable(true);
             beingEdited = true;

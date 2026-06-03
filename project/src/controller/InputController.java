@@ -18,8 +18,8 @@ public class InputController {
      * @return the value of the inserted NIF
      */
     //Para testar os Regex's: https://regex101.com/r/aiwNmf/1
-    public static Boolean readNif(String message){
-        String nif = readString(message).trim();
+    public static Boolean validateNif(String message){
+        String nif = message.trim();
         if(Pattern.matches("\\d{9}", nif)){
             return true;
         }
@@ -49,7 +49,7 @@ public class InputController {
      * @return the value of the inserted phone number
      */
     public static Boolean validatePhone(String message){
-        String phone = readString(message).trim();
+        String phone = message.trim();
         if(Pattern.matches("[239]{1}\\d{8}", phone)){
             return true;
         }

@@ -143,7 +143,9 @@ public class ClientController {
                     "SET name = ?, " +
                     "username = ?, " +
                     "password = ?, " +
-                    "email = ? " +
+                    "email = ?, " +
+                    "active = ?, " +
+                    "approved = ? " +
                     "WHERE id = ?;" +
                     "UPDATE client " +
                     "SET nif = ?, " +
@@ -157,12 +159,14 @@ public class ClientController {
             ps.setString(2, client.getUsername());
             ps.setString(3, client.getPassword());
             ps.setString(4, client.getEmail());
-            ps.setInt(5, client.getId());
-            ps.setString(6, client.getNif());
-            ps.setString(7, client.getPhoneNumber());
-            ps.setString(8, client.getResidence());
-            ps.setString(9, client.getBusinessSector());
-            ps.setInt(10, client.getId());
+            ps.setBoolean(5, client.getActive());
+            ps.setBoolean(6, client.getApproved());
+            ps.setInt(7, client.getId());
+            ps.setString(8, client.getNif());
+            ps.setString(9, client.getPhoneNumber());
+            ps.setString(10, client.getResidence());
+            ps.setString(11, client.getBusinessSector());
+            ps.setInt(12, client.getId());
             ps.executeUpdate();
 
             return true;

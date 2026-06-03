@@ -145,12 +145,15 @@ public class EmployeeController {
                     "SET name = ?, " +
                     "username = ?, " +
                     "password = ?, " +
-                    "email = ? " +
+                    "email = ?, " +
+                    "active = ?, " +
+                    "approved = ? " +
                     "WHERE id = ?;" +
                     "UPDATE employee " +
                     "SET nif = ?, " +
                     "phone_number = ?, " +
-                    "residence = ? " +
+                    "residence = ?, " +
+                    "lvl_expertise = ? " +
                     "WHERE account_id = ? ");
             PreparedStatement ps = db.getConn().prepareStatement(updateAccount.toString());
             ps.clearParameters();
@@ -158,11 +161,14 @@ public class EmployeeController {
             ps.setString(2, employee.getUsername());
             ps.setString(3, employee.getPassword());
             ps.setString(4, employee.getEmail());
-            ps.setInt(5, employee.getId());
-            ps.setString(6, employee.getNif());
-            ps.setString(7, employee.getPhoneNumber());
-            ps.setString(8, employee.getResidence());
-            ps.setInt(9, employee.getId());
+            ps.setBoolean(5, employee.getActive());
+            ps.setBoolean(6, employee.getApproved());
+            ps.setInt(7, employee.getId());
+            ps.setString(8, employee.getNif());
+            ps.setString(9, employee.getPhoneNumber());
+            ps.setString(10, employee.getResidence());
+            ps.setString(11,employee.getLvlExpertise());
+            ps.setInt(12, employee.getId());
             ps.executeUpdate();
 
             return true;

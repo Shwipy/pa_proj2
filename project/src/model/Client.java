@@ -138,6 +138,18 @@ public class Client {
         this.businessSector = businessSector;
     }
 
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+    public void setApproved(Boolean approved) {
+        this.approved = approved;
+    }
+
+    public void setTier(String tier) {
+        this.tier = tier;
+    }
+
     @Override
     public String toString() {
         return "Account:" +'\n'+
