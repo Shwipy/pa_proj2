@@ -142,6 +142,8 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
         repairTable = new JTable(repairModel);
         repairTable.setDefaultEditor(Object.class, null);
         repairTable.setAutoCreateRowSorter(true);
+        repairTable.addMouseListener(this);
+        repairTable.removeColumn(repairTable.getColumnModel().getColumn(9));
 
         JScrollPane repairScrollPane = new JScrollPane(repairTable);
 
@@ -228,6 +230,7 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
 
             //https://stackoverflow.com/questions/10331949/setmodel-on-a-jtable-when-the-defaulttablemodel-has-changed
             repairTable.setModel(repairModel);
+            repairTable.removeColumn(repairTable.getColumnModel().getColumn(9));
         }
     }
 
@@ -251,6 +254,25 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
             fillTable(false);
         }
 
+        if (e.getSource().equals(repairTable) && e.getClickCount() == 2) {
+
+            int selectedRow = repairTable.getSelectedRow();
+
+            if (selectedRow >= 0) {
+                int modelRow = repairTable.convertRowIndexToModel(selectedRow);
+                String notes = String.valueOf(repairTable.getModel().getValueAt(modelRow, 9));
+
+                if (notes == null || notes.trim().equals("") || notes.equals("null")) {
+                    notes = "This repair has no notes.";
+                }
+
+                Shared.showInformationDialog(
+                        new JFrame(),
+                        notes,
+                        "Repair Notes"
+                );
+            }
+        }
     }
 
     @Override
