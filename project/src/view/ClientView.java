@@ -10,9 +10,11 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
-public class ClientView implements ActionListener {
+public class ClientView implements ActionListener, MouseListener {
 
     private Integer clientId;
 
@@ -135,7 +137,8 @@ public class ClientView implements ActionListener {
         //https://stackoverflow.com/questions/9919230/disable-user-edit-in-jtable/36747065#36747065
         repairTable.setDefaultEditor(Object.class, null);
         repairTable.setAutoCreateRowSorter(true);
-        //repairTable.setFillsViewportHeight(true);
+        repairTable.addMouseListener(this);
+        repairTable.removeColumn(repairTable.getColumnModel().getColumn(9));
 
         JScrollPane repairScrollPane = new JScrollPane(repairTable);
 
@@ -188,7 +191,7 @@ public class ClientView implements ActionListener {
                     equipmentModel.addRow(equipment.toTableRow());
                 }
             }
-            
+
             //https://stackoverflow.com/questions/10331949/setmodel-on-a-jtable-when-the-defaulttablemodel-has-changed
             equipmentTable.setModel(equipmentModel);
         }
@@ -207,8 +210,47 @@ public class ClientView implements ActionListener {
                     repairModel.addRow(repair.toTableRow());
                 }
             }
+
             //https://stackoverflow.com/questions/10331949/setmodel-on-a-jtable-when-the-defaulttablemodel-has-changed
             repairTable.setModel(repairModel);
+            repairTable.removeColumn(repairTable.getColumnModel().getColumn(9));
         }
     }
+
+    //https://coderanch.com/t/341705/java/JTable-responding-row-clicks
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        if (e.getSource().equals(repairTable) && e.getClickCount() == 2) {
+            System.out.println("Double click repair");
+
+            int selectedRow = repairTable.getSelectedRow();
+
+            if (selectedRow >= 0) {
+                int modelRow = repairTable.convertRowIndexToModel(selectedRow);
+                String notes = String.valueOf(repairTable.getModel().getValueAt(modelRow, 9));
+
+                if (notes == null || notes.trim().equals("") || notes.equals("null")) {
+                    notes = "This repair has no notes.";
+                }
+
+                Shared.showInformationDialog(
+                        new JFrame(),
+                        notes,
+                        "Repair Notes"
+                );
+            }
+        }
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {}
+
+    @Override
+    public void mouseReleased(MouseEvent e) {}
+
+    @Override
+    public void mouseEntered(MouseEvent e) {}
+
+    @Override
+    public void mouseExited(MouseEvent e) {}
 }
