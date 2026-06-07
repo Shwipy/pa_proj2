@@ -140,29 +140,40 @@ public class EmployeeView implements ActionListener, MouseListener {
         tabPanel.addTab("Settings", settingsPanel);
 
         settingsPanel.add(new InfoPanel(employeeId, "employee", true));
+
         return tabPanel;
+    }
+
+    public void fillRepairTable(Boolean search) {
+        DefaultTableModel repairModel = new DefaultTableModel(repairColumnNames,0);
+        ArrayList<Repair> repairs;
+
+        if (search) {
+            repairs = RepairController.searchRepairsByEmployee(
+                    repairSearchTerm.getText(),
+                    repairSearchTypes.getSelectedItem().toString().toLowerCase(),
+                    employeeId
+            );
+        } else {
+            repairs = RepairController.listRepairsByEmployee(employeeId);
+        }
+
+        if (repairs != null) {
+            for (Repair repair : repairs) {
+                repairModel.addRow(repair.toTableRow());
+            }
+        }
+
+        //https://stackoverflow.com/questions/10331949/setmodel-on-a-jtable-when-the-defaulttablemodel-has-changed
+        repairTable.setModel(repairModel);
+
+        repairTable.removeColumn(repairTable.getColumnModel().getColumn(9));
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource().equals(repairSearchButton)){
-            DefaultTableModel repairModel = new DefaultTableModel(repairColumnNames,0);
-
-            ArrayList<Repair> repairs = RepairController.searchRepairsByEmployee(
-                    repairSearchTerm.getText(),
-                    repairSearchTypes.getSelectedItem().toString().toLowerCase(),
-                    employeeId
-            );
-
-            if (repairs != null) {
-                for (Repair repair : repairs) {
-                    repairModel.addRow(repair.toTableRow());
-                }
-            }
-
-            //https://stackoverflow.com/questions/10331949/setmodel-on-a-jtable-when-the-defaulttablemodel-has-changed
-            repairTable.setModel(repairModel);
-            repairTable.removeColumn(repairTable.getColumnModel().getColumn(9));
+            fillRepairTable(true);
         }
     }
 
