@@ -88,6 +88,18 @@ public class Notification {
     public void setCreationDate(Long creationDate) {
         this.creationDate = creationDate;
     }
+    
+    public Object[] toTableRow() {
+        return new Object[]{
+                this.getId(),
+                this.getMessage(),
+                this.getIsRead(),
+                OutputController.dateFormater(this.getCreationDate(), "date"),
+                this.getSenderId(),
+                this.getType(),
+                this.getRepairId()
+        };
+    }
 
     @Override
     public String toString() {
