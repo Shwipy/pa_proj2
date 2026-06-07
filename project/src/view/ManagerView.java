@@ -1,8 +1,10 @@
 package view;
 
 import controller.ManagerController;
+import controller.NotificationController;
 import controller.RepairController;
 import model.Manager;
+import model.Notification;
 import model.Repair;
 
 import javax.swing.*;
@@ -30,6 +32,7 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
 
     private JTable accountTable;
     private JTable repairTable;
+    private JTable notificationTable;
 
     private JCheckBox repairCheckFinishedBox;
 
@@ -57,6 +60,16 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
             "Price",
             "State",
             "Notes"
+    };
+
+    private String [] notificationColumnNames = {
+            "ID",
+            "Message",
+            "Read",
+            "Creation Date",
+            "Sender ID",
+            "Type",
+            "Repair ID"
     };
 
     public ManagerView(Integer managerId) {
@@ -128,7 +141,7 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
         accountPanel.add(new JLabel("   Note: To view the details of a specific User, double click on the row!", SwingConstants.LEFT), BorderLayout.SOUTH);
 
         //------------Repair Panel Main
-
+        //https://docs.oracle.com/javase/8/docs/api/javax/swing/table/DefaultTableModel.html
         DefaultTableModel repairModel = new DefaultTableModel(repairColumnNames,0);
 
         ArrayList<Repair> repairs = RepairController.listAllRepairs();
@@ -182,6 +195,26 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
         repairPanel.add(repairScrollPane, BorderLayout.CENTER);
         repairPanel.add(new JLabel("   Note: To view the details of a specific Repair, double click on the row!", SwingConstants.LEFT), BorderLayout.SOUTH);
 
+        //------------Notification Panel Main
+        //https://docs.oracle.com/javase/8/docs/api/javax/swing/table/DefaultTableModel.html
+        DefaultTableModel notificationModel = new DefaultTableModel(notificationColumnNames,0);
+
+        ArrayList<Notification> notifications = NotificationController.listNotificationsManager();
+
+        if (notifications != null) {
+            for (Notification notification : notifications) {
+                notificationModel.addRow(notification.toTableRow());
+            }
+        }
+
+        notificationTable = new JTable(notificationModel);
+        notificationTable.setDefaultEditor(Object.class, null);
+        notificationTable.setAutoCreateRowSorter(true);
+
+        JScrollPane notificationScrollPane = new JScrollPane(notificationTable);
+
+        notificationPanel.add(notificationScrollPane, BorderLayout.CENTER);
+
         tabPanel.addTab("Accounts", accountPanel);
         tabPanel.addTab("Repairs", repairPanel);
         tabPanel.addTab("Notifications", notificationPanel);
@@ -211,8 +244,8 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
         //https://stackoverflow.com/questions/10331949/setmodel-on-a-jtable-when-the-defaulttablemodel-has-changed
         accountTable.setModel(accountModel);
     }
-    
-    
+
+
     public void fillRepairTable(Boolean search) {
         DefaultTableModel repairModel = new DefaultTableModel(repairColumnNames, 0);
         ArrayList<Repair> repairs;
@@ -249,7 +282,7 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
             fillRepairTable(true);
         }
     }
-    
+
     //https://coderanch.com/t/341705/java/JTable-responding-row-clicks
     @Override
     public void mouseClicked(MouseEvent e) {
