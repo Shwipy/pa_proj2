@@ -210,45 +210,63 @@ public class ClientView implements ActionListener, MouseListener {
         return tabPanel;
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource().equals(equipmentSearchButton)){
-            DefaultTableModel equipmentModel = new DefaultTableModel(equipmentColumnNames,0);
+    public void fillEquipmentTable(Boolean search) {
+        DefaultTableModel equipmentModel = new DefaultTableModel(equipmentColumnNames,0);
+        ArrayList<Equipment> equipments;
 
-            ArrayList<Equipment> equipments = EquipmentController.searchEquipmentsByClient(
+        if (search) {
+            equipments = EquipmentController.searchEquipmentsByClient(
                     equipmentSearchTerm.getText(),
                     equipmentSearchTypes.getSelectedItem().toString().toLowerCase(),
                     clientId
             );
-
-            if (equipments != null) {
-                for (Equipment equipment : equipments) {
-                    equipmentModel.addRow(equipment.toTableRow());
-                }
-            }
-
-            //https://stackoverflow.com/questions/10331949/setmodel-on-a-jtable-when-the-defaulttablemodel-has-changed
-            equipmentTable.setModel(equipmentModel);
+        } else {
+            equipments = EquipmentController.listEquipmentsByClient(clientId);
         }
 
-        if (e.getSource().equals(repairSearchButton)){
-            DefaultTableModel repairModel = new DefaultTableModel(repairColumnNames,0);
+        if (equipments != null) {
+            for (Equipment equipment : equipments) {
+                equipmentModel.addRow(equipment.toTableRow());
+            }
+        }
 
-            ArrayList<Repair> repairs = RepairController.searchRepairsByClient(
+        //https://stackoverflow.com/questions/10331949/setmodel-on-a-jtable-when-the-defaulttablemodel-has-changed
+        equipmentTable.setModel(equipmentModel);
+    }
+
+    public void fillRepairTable(Boolean search) {
+        DefaultTableModel repairModel = new DefaultTableModel(repairColumnNames,0);
+        ArrayList<Repair> repairs;
+
+        if (search) {
+            repairs = RepairController.searchRepairsByClient(
                     repairSearchTerm.getText(),
                     repairSearchTypes.getSelectedItem().toString().toLowerCase(),
                     clientId
             );
+        } else {
+            repairs = RepairController.listRepairsByClient(clientId);
+        }
 
-            if (repairs != null) {
-                for (Repair repair : repairs) {
-                    repairModel.addRow(repair.toTableRow());
-                }
+        if (repairs != null) {
+            for (Repair repair : repairs) {
+                repairModel.addRow(repair.toTableRow());
             }
+        }
 
-            //https://stackoverflow.com/questions/10331949/setmodel-on-a-jtable-when-the-defaulttablemodel-has-changed
-            repairTable.setModel(repairModel);
-            repairTable.removeColumn(repairTable.getColumnModel().getColumn(9));
+        //https://stackoverflow.com/questions/10331949/setmodel-on-a-jtable-when-the-defaulttablemodel-has-changed
+        repairTable.setModel(repairModel);
+        repairTable.removeColumn(repairTable.getColumnModel().getColumn(9));
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource().equals(equipmentSearchButton)){
+            fillEquipmentTable(true);
+        }
+
+        if (e.getSource().equals(repairSearchButton)){
+            fillRepairTable(true);
         }
     }
 
