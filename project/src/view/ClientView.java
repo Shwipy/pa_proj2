@@ -1,8 +1,10 @@
 package view;
 
 import controller.EquipmentController;
+import controller.NotificationController;
 import controller.RepairController;
 import model.Equipment;
+import model.Notification;
 import model.Repair;
 
 import javax.swing.*;
@@ -29,6 +31,7 @@ public class ClientView implements ActionListener, MouseListener {
 
     private JTable equipmentTable;
     private JTable repairTable;
+    private JTable notificationTable;
 
     private String [] equipmentColumnNames = {
             "ID",
@@ -53,6 +56,16 @@ public class ClientView implements ActionListener, MouseListener {
             "Price",
             "State",
             "Notes"
+    };
+
+    private String [] notificationColumnNames = {
+            "ID",
+            "Message",
+            "Read",
+            "Creation Date",
+            "Sender ID",
+            "Type",
+            "Repair ID"
     };
 
     public ClientView(Integer clientId) {
@@ -166,6 +179,28 @@ public class ClientView implements ActionListener, MouseListener {
         repairPanel.add(repairSearchbar, BorderLayout.NORTH);
         repairPanel.add(repairScrollPane, BorderLayout.CENTER);
         repairPanel.add(new JLabel("   Note: To view the details of a specific Repair, double click on the row!", SwingConstants.LEFT), BorderLayout.SOUTH);
+
+        //------------Notification Panel Main
+        //https://docs.oracle.com/javase/tutorial/uiswing/components/table.html#data
+        //https://docs.oracle.com/javase/8/docs/api/javax/swing/table/DefaultTableModel.html
+        DefaultTableModel notificationModel = new DefaultTableModel(notificationColumnNames,0);
+
+        ArrayList<Notification> notifications = NotificationController.listNotifications(clientId);
+
+        if (notifications != null) {
+            for (Notification notification : notifications) {
+                notificationModel.addRow(notification.toTableRow());
+            }
+        }
+
+        notificationTable = new JTable(notificationModel);
+        //https://stackoverflow.com/questions/9919230/disable-user-edit-in-jtable/36747065#36747065
+        notificationTable.setDefaultEditor(Object.class, null);
+        notificationTable.setAutoCreateRowSorter(true);
+
+        JScrollPane notificationScrollPane = new JScrollPane(notificationTable);
+
+        notificationPanel.add(notificationScrollPane, BorderLayout.CENTER);
 
         tabPanel.addTab("Equipments", equipmentPanel);
         tabPanel.addTab("Repairs", repairPanel);
