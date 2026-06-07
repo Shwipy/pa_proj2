@@ -281,48 +281,73 @@ public class NotificationController {
      * @param asc if the listing will be in and asc or desc order
      * @return an arraylist with the information of 10 notifications
      */
-    public static ArrayList listNotificationsManager(Integer i, Boolean asc){
+   public static ArrayList<Notification> listNotificationsManager() {
+
         DataBase db = new DataBase();
+        PreparedStatement ps = null;
+        ResultSet result = null;
 
         try {
-            StringBuffer getNotifications = new StringBuffer();
+            StringBuffer sqlQuery = new StringBuffer();
 
-            if(asc){
-                getNotifications.append(" SELECT * FROM notification WHERE read = false AND account_id IS NULL ORDER BY id ASC LIMIT 10 OFFSET ?");
-            }else{
-                getNotifications.append(" SELECT * FROM notification ORDER WHERE read = false AND account_id IS NULL BY id DESC LIMIT 10 OFFSET ?");
-            }
+            sqlQuery.append(" SELECT * FROM notification ");
+            sqlQuery.append(" WHERE read = false ");
+            sqlQuery.append(" AND account_id IS NULL ");
 
-            PreparedStatement ps = db.getConn().prepareStatement(getNotifications.toString());
+            ps = db.getConn().prepareStatement(sqlQuery.toString());
             ps.clearParameters();
-            ps.setInt(1, 10*i);
 
-            ArrayList<Notification> notifications = new ArrayList<>();
-            ResultSet result = ps.executeQuery();
+            result = ps.executeQuery();
+
+            ArrayList<Notification> notifications = new ArrayList<Notification>();
 
             while (result.next()) {
 
+                Integer accountId = null;
+                Integer senderId = null;
+                Integer repairId = null;
+
+                // https://docs.oracle.com/javase/8/docs/api/java/sql/ResultSet.html#getObject-java.lang.String-
+                Number accountIdValue = (Number) result.getObject("account_id");
+                Number senderIdValue = (Number) result.getObject("sender_id");
+                Number repairIdValue = (Number) result.getObject("repair_id");
+
+                // https://docs.oracle.com/javase/8/docs/api/java/lang/Number.html#intValue--
+                if (accountIdValue != null) {
+                    accountId = accountIdValue.intValue();
+                }
+
+                if (senderIdValue != null) {
+                    senderId = senderIdValue.intValue();
+                }
+
+                if (repairIdValue != null) {
+                    repairId = repairIdValue.intValue();
+                }
+
                 Notification notification = new Notification(
                         result.getInt("id"),
-                        result.getInt("account_id"),
+                        accountId,
                         result.getString("message"),
                         result.getBoolean("read"),
                         result.getLong("creation_date"),
-                        result.getInt("sender_id"),
+                        senderId,
                         result.getString("type"),
-                        result.getInt("repair_id")
-
+                        repairId
                 );
 
                 notifications.add(notification);
             }
+
             return notifications;
 
         } catch (SQLException e) {
-            System.out.println("!! SQL Exception !!\n"+e);
+            System.out.println("!! SQL Exception !!\n" + e);
             e.printStackTrace();
+        } finally {
+            db.closeDb();
         }
-        db.closeDb();
+
         return null;
     }
 
