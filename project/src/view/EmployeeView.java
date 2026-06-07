@@ -1,6 +1,8 @@
 package view;
 
+import controller.NotificationController;
 import controller.RepairController;
+import model.Notification;
 import model.Repair;
 
 import javax.swing.*;
@@ -23,6 +25,7 @@ public class EmployeeView implements ActionListener, MouseListener {
     private JTextField repairSearchTerm;
 
     private JTable repairTable;
+    private JTable notificationTable;
 
     private String [] repairColumnNames = {
             "ID",
@@ -35,6 +38,16 @@ public class EmployeeView implements ActionListener, MouseListener {
             "Price",
             "State",
             "Notes"
+    };
+
+    private String [] notificationColumnNames = {
+            "ID",
+            "Message",
+            "Read",
+            "Creation Date",
+            "Sender ID",
+            "Type",
+            "Repair ID"
     };
 
     public EmployeeView(Integer employeeId) {
@@ -99,6 +112,28 @@ public class EmployeeView implements ActionListener, MouseListener {
         repairPanel.add(repairSearchbar, BorderLayout.NORTH);
         repairPanel.add(repairScrollPane, BorderLayout.CENTER);
         repairPanel.add(new JLabel("   Note: To view the details of a specific Repair, double click on the row!", SwingConstants.LEFT), BorderLayout.SOUTH);
+
+        //------------Notification Panel Main
+        //https://docs.oracle.com/javase/tutorial/uiswing/components/table.html#data
+        //https://docs.oracle.com/javase/8/docs/api/javax/swing/table/DefaultTableModel.html
+        DefaultTableModel notificationModel = new DefaultTableModel(notificationColumnNames,0);
+
+        ArrayList<Notification> notifications = NotificationController.listNotifications(employeeId);
+
+        if (notifications != null) {
+            for (Notification notification : notifications) {
+                notificationModel.addRow(notification.toTableRow());
+            }
+        }
+
+        notificationTable = new JTable(notificationModel);
+        //https://stackoverflow.com/questions/9919230/disable-user-edit-in-jtable/36747065#36747065
+        notificationTable.setDefaultEditor(Object.class, null);
+        notificationTable.setAutoCreateRowSorter(true);
+
+        JScrollPane notificationScrollPane = new JScrollPane(notificationTable);
+
+        notificationPanel.add(notificationScrollPane, BorderLayout.CENTER);
 
         tabPanel.addTab("Repairs", repairPanel);
         tabPanel.addTab("Notifications", notificationPanel);
