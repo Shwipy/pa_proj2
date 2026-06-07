@@ -211,29 +211,45 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
         //https://stackoverflow.com/questions/10331949/setmodel-on-a-jtable-when-the-defaulttablemodel-has-changed
         accountTable.setModel(accountModel);
     }
+    
+    
+    public void fillRepairTable(Boolean search) {
+        DefaultTableModel repairModel = new DefaultTableModel(repairColumnNames, 0);
+        ArrayList<Repair> repairs;
+
+        if (search) {
+            repairs = RepairController.searchRepairs(
+                    repairSearchTerm.getText(),
+                    repairSearchTypes.getSelectedItem().toString().toLowerCase(),
+                    repairCheckFinishedBox.isSelected()
+            );
+        } else {
+            repairs = RepairController.listAllRepairs();
+        }
+
+        if (repairs != null) {
+            for (Repair repair : repairs) {
+                repairModel.addRow(repair.toTableRow());
+            }
+        }
+
+        //https://stackoverflow.com/questions/10331949/setmodel-on-a-jtable-when-the-defaulttablemodel-has-changed
+        repairTable.setModel(repairModel);
+
+        repairTable.removeColumn(repairTable.getColumnModel().getColumn(9));
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource().equals(accountSearchButton)){
+        if (e.getSource().equals(accountSearchButton)) {
             fillTable(true);
         }
 
-        if (e.getSource().equals(repairSearchButton)){
-            DefaultTableModel repairModel = new DefaultTableModel(repairColumnNames,0);
-            ArrayList<Repair> repairs = RepairController.searchRepairs(repairSearchTerm.getText(), repairSearchTypes.getSelectedItem().toString().toLowerCase(), repairCheckFinishedBox.isSelected());
-
-            if (repairs != null){
-                for (Repair repair : repairs) {
-                    repairModel.addRow(repair.toTableRow());
-                }
-            }
-
-            //https://stackoverflow.com/questions/10331949/setmodel-on-a-jtable-when-the-defaulttablemodel-has-changed
-            repairTable.setModel(repairModel);
-            repairTable.removeColumn(repairTable.getColumnModel().getColumn(9));
+        if (e.getSource().equals(repairSearchButton)) {
+            fillRepairTable(true);
         }
     }
-
+    
     //https://coderanch.com/t/341705/java/JTable-responding-row-clicks
     @Override
     public void mouseClicked(MouseEvent e) {
