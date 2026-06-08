@@ -362,7 +362,7 @@ public class NotificationController {
      * @param accountId id of the account that wants the notifications
      * @return an arraylist with the information of 10 notifications
      */
-    public static ArrayList<Notification> listNotifications(Integer accountId) {
+    public static ArrayList<Notification> listNotifications(Integer accountId, Boolean showAll) {
 
         DataBase db = new DataBase();
         PreparedStatement ps = null;
@@ -372,8 +372,11 @@ public class NotificationController {
             StringBuffer sqlQuery = new StringBuffer();
 
             sqlQuery.append(" SELECT * FROM notification ");
-            sqlQuery.append(" WHERE read = false ");
-            sqlQuery.append(" AND account_id = ? ");
+            sqlQuery.append(" WHERE account_id = ? ");
+
+            if (showAll == false) {
+                sqlQuery.append(" AND read = false ");
+            }
 
             ps = db.getConn().prepareStatement(sqlQuery.toString());
             ps.clearParameters();
