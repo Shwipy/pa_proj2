@@ -212,6 +212,10 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
         notificationTable = new JTable(notificationModel);
         notificationTable.setDefaultEditor(Object.class, null);
         notificationTable.setAutoCreateRowSorter(true);
+        notificationTable.addMouseListener(this);
+
+        // Esconde a coluna Message, mas mantém os dados no model.
+        notificationTable.removeColumn(notificationTable.getColumnModel().getColumn(1));
 
         JScrollPane notificationScrollPane = new JScrollPane(notificationTable);
 
@@ -310,6 +314,9 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
 
         //https://stackoverflow.com/questions/10331949/setmodel-on-a-jtable-when-the-defaulttablemodel-has-changed
         notificationTable.setModel(notificationModel);
+
+        // Esconde novamente a coluna Message depois de actualizar o model.
+        notificationTable.removeColumn(notificationTable.getColumnModel().getColumn(1));
     }
 
     @Override
@@ -363,6 +370,26 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
                         new JFrame(),
                         notes,
                         "Repair Notes"
+                );
+            }
+        }
+
+        if (e.getSource().equals(notificationTable) && e.getClickCount() == 2) {
+
+            int selectedRow = notificationTable.getSelectedRow();
+
+            if (selectedRow >= 0) {
+                int modelRow = notificationTable.convertRowIndexToModel(selectedRow);
+                String message = String.valueOf(notificationTable.getModel().getValueAt(modelRow, 1));
+
+                if (message == null || message.trim().equals("") || message.equals("null")) {
+                    message = "This notification has no message.";
+                }
+
+                Shared.showInformationDialog(
+                        new JFrame(),
+                        message,
+                        "Notification Message"
                 );
             }
         }
