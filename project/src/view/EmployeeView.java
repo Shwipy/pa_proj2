@@ -130,10 +130,13 @@ public class EmployeeView implements ActionListener, MouseListener {
         //https://stackoverflow.com/questions/9919230/disable-user-edit-in-jtable/36747065#36747065
         notificationTable.setDefaultEditor(Object.class, null);
         notificationTable.setAutoCreateRowSorter(true);
+        notificationTable.addMouseListener(this);
+        notificationTable.removeColumn(notificationTable.getColumnModel().getColumn(1));
 
         JScrollPane notificationScrollPane = new JScrollPane(notificationTable);
 
         notificationPanel.add(notificationScrollPane, BorderLayout.CENTER);
+        notificationPanel.add(new JLabel("   Note: To view the message of a specific Notification, double click on the row!", SwingConstants.LEFT), BorderLayout.SOUTH);
 
         tabPanel.addTab("Repairs", repairPanel);
         tabPanel.addTab("Notifications", notificationPanel);
@@ -197,6 +200,26 @@ public class EmployeeView implements ActionListener, MouseListener {
                         new JFrame(),
                         notes,
                         "Repair Notes"
+                );
+            }
+        }
+
+        if (e.getSource().equals(notificationTable) && e.getClickCount() == 2) {
+
+            int selectedRow = notificationTable.getSelectedRow();
+
+            if (selectedRow >= 0) {
+                int modelRow = notificationTable.convertRowIndexToModel(selectedRow);
+                String message = String.valueOf(notificationTable.getModel().getValueAt(modelRow, 1));
+
+                if (message == null || message.trim().equals("") || message.equals("null")) {
+                    message = "This notification has no message.";
+                }
+
+                Shared.showInformationDialog(
+                        new JFrame(),
+                        message,
+                        "Notification Message"
                 );
             }
         }
