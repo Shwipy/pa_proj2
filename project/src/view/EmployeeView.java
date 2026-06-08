@@ -19,6 +19,7 @@ public class EmployeeView implements ActionListener, MouseListener {
     private Integer employeeId;
 
     private JButton repairSearchButton;
+    private JButton notificationSearchButton;
 
     private JComboBox repairSearchTypes;
 
@@ -26,6 +27,8 @@ public class EmployeeView implements ActionListener, MouseListener {
 
     private JTable repairTable;
     private JTable notificationTable;
+
+    private JCheckBox notificationShowAllBox;
 
     private String [] repairColumnNames = {
             "ID",
@@ -118,7 +121,8 @@ public class EmployeeView implements ActionListener, MouseListener {
         //https://docs.oracle.com/javase/8/docs/api/javax/swing/table/DefaultTableModel.html
         DefaultTableModel notificationModel = new DefaultTableModel(notificationColumnNames,0);
 
-        ArrayList<Notification> notifications = NotificationController.listNotifications(employeeId);
+        ArrayList<Notification> notifications =
+                NotificationController.listNotifications(employeeId, false);
 
         if (notifications != null) {
             for (Notification notification : notifications) {
@@ -135,6 +139,30 @@ public class EmployeeView implements ActionListener, MouseListener {
 
         JScrollPane notificationScrollPane = new JScrollPane(notificationTable);
 
+        JPanel notificationSearchbar = new JPanel();
+        notificationSearchbar.setLayout(new GridLayout(1,5));
+
+        notificationSearchbar.add(new JLabel());
+        notificationSearchbar.add(new JLabel());
+        notificationSearchbar.add(new JLabel());
+
+        JPanel notificationShowAllPanel = new JPanel();
+        notificationShowAllPanel.setLayout(new GridLayout(1,2));
+
+        JLabel notificationShowAllLabel =
+                new JLabel("Show All: ", SwingConstants.RIGHT);
+        notificationShowAllPanel.add(notificationShowAllLabel);
+
+        notificationShowAllBox = new JCheckBox();
+        notificationShowAllPanel.add(notificationShowAllBox);
+
+        notificationSearchbar.add(notificationShowAllPanel);
+
+        notificationSearchButton = new JButton("Search");
+        notificationSearchButton.addActionListener(this);
+        notificationSearchbar.add(notificationSearchButton);
+
+        notificationPanel.add(notificationSearchbar, BorderLayout.NORTH);
         notificationPanel.add(notificationScrollPane, BorderLayout.CENTER);
         notificationPanel.add(new JLabel("   Note: To view the message of a specific Notification, double click on the row!", SwingConstants.LEFT), BorderLayout.SOUTH);
 
@@ -173,10 +201,35 @@ public class EmployeeView implements ActionListener, MouseListener {
         repairTable.removeColumn(repairTable.getColumnModel().getColumn(9));
     }
 
+    public void fillNotificationTable(Boolean showAll) {
+        DefaultTableModel notificationModel =
+                new DefaultTableModel(notificationColumnNames,0);
+
+        ArrayList<Notification> notifications =
+                NotificationController.listNotifications(employeeId, showAll);
+
+        if (notifications != null) {
+            for (Notification notification : notifications) {
+                notificationModel.addRow(notification.toTableRow());
+            }
+        }
+
+        //https://stackoverflow.com/questions/10331949/setmodel-on-a-jtable-when-the-defaulttablemodel-has-changed
+        notificationTable.setModel(notificationModel);
+
+        notificationTable.removeColumn(
+                notificationTable.getColumnModel().getColumn(1)
+        );
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource().equals(repairSearchButton)){
             fillRepairTable(true);
+        }
+
+        if (e.getSource().equals(notificationSearchButton)){
+            fillNotificationTable(notificationShowAllBox.isSelected());
         }
     }
 
@@ -209,10 +262,16 @@ public class EmployeeView implements ActionListener, MouseListener {
             int selectedRow = notificationTable.getSelectedRow();
 
             if (selectedRow >= 0) {
-                int modelRow = notificationTable.convertRowIndexToModel(selectedRow);
-                String message = String.valueOf(notificationTable.getModel().getValueAt(modelRow, 1));
+                int modelRow =
+                        notificationTable.convertRowIndexToModel(selectedRow);
 
-                if (message == null || message.trim().equals("") || message.equals("null")) {
+                String message = String.valueOf(
+                        notificationTable.getModel().getValueAt(modelRow, 1)
+                );
+
+                if (message == null
+                        || message.trim().equals("") || message.equals("null")) {
+
                     message = "This notification has no message.";
                 }
 
