@@ -213,8 +213,6 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
         notificationTable.setDefaultEditor(Object.class, null);
         notificationTable.setAutoCreateRowSorter(true);
         notificationTable.addMouseListener(this);
-
-        // Esconde a coluna Message, mas mantém os dados no model.
         notificationTable.removeColumn(notificationTable.getColumnModel().getColumn(1));
 
         JScrollPane notificationScrollPane = new JScrollPane(notificationTable);
@@ -314,8 +312,6 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
 
         //https://stackoverflow.com/questions/10331949/setmodel-on-a-jtable-when-the-defaulttablemodel-has-changed
         notificationTable.setModel(notificationModel);
-
-        // Esconde novamente a coluna Message depois de actualizar o model.
         notificationTable.removeColumn(notificationTable.getColumnModel().getColumn(1));
     }
 
