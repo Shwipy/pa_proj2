@@ -90,10 +90,20 @@ public class Notification {
     }
     
     public Object[] toTableRow() {
+
+        String readStatusIcon;
+        //https://emojidb.org/checkbox-emojis
+        if (this.getIsRead()){
+            readStatusIcon = "✔";
+        }else {
+            readStatusIcon = "❌";
+        };
+
         return new Object[]{
                 this.getId(),
                 this.getMessage(),
-                this.getIsRead(),
+                readStatusIcon,
+                //this.getIsRead(),
                 OutputController.dateFormater(this.getCreationDate(), "date"),
                 this.getSenderId(),
                 this.getType(),
