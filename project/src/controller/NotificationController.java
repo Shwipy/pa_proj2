@@ -281,7 +281,7 @@ public class NotificationController {
      * @param asc if the listing will be in and asc or desc order
      * @return an arraylist with the information of 10 notifications
      */
-   public static ArrayList<Notification> listNotificationsManager() {
+   public static ArrayList<Notification> listNotificationsManager(Boolean showAll) {
 
         DataBase db = new DataBase();
         PreparedStatement ps = null;
@@ -291,8 +291,11 @@ public class NotificationController {
             StringBuffer sqlQuery = new StringBuffer();
 
             sqlQuery.append(" SELECT * FROM notification ");
-            sqlQuery.append(" WHERE read = false ");
-            sqlQuery.append(" AND account_id IS NULL ");
+            sqlQuery.append(" WHERE account_id IS NULL ");
+
+            if (showAll == false) {
+                sqlQuery.append(" AND read = false ");
+            }
 
             ps = db.getConn().prepareStatement(sqlQuery.toString());
             ps.clearParameters();
@@ -307,12 +310,12 @@ public class NotificationController {
                 Integer senderId = null;
                 Integer repairId = null;
 
-                // https://docs.oracle.com/javase/8/docs/api/java/sql/ResultSet.html#getObject-java.lang.String-
+                //https://docs.oracle.com/javase/8/docs/api/java/sql/ResultSet.html#getObject-java.lang.String-
                 Number accountIdValue = (Number) result.getObject("account_id");
                 Number senderIdValue = (Number) result.getObject("sender_id");
                 Number repairIdValue = (Number) result.getObject("repair_id");
 
-                // https://docs.oracle.com/javase/8/docs/api/java/lang/Number.html#intValue--
+                //https://docs.oracle.com/javase/8/docs/api/java/lang/Number.html#intValue--
                 if (accountIdValue != null) {
                     accountId = accountIdValue.intValue();
                 }
@@ -350,6 +353,7 @@ public class NotificationController {
 
         return null;
     }
+
 
     /**
      * Fetches all unready notifications that are employees or clients based on id
