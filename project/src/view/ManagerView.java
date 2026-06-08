@@ -23,6 +23,7 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
 
     private JButton accountSearchButton;
     private JButton repairSearchButton;
+    private JButton notificationSearchButton;
 
     private JComboBox accountSearchTypes;
     private JComboBox repairSearchTypes;
@@ -35,6 +36,7 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
     private JTable notificationTable;
 
     private JCheckBox repairCheckFinishedBox;
+    private JCheckBox notificationShowAllBox;
 
     private Integer selectedId = -1;
     private String selectedType;
@@ -199,7 +201,7 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
         //https://docs.oracle.com/javase/8/docs/api/javax/swing/table/DefaultTableModel.html
         DefaultTableModel notificationModel = new DefaultTableModel(notificationColumnNames,0);
 
-        ArrayList<Notification> notifications = NotificationController.listNotificationsManager();
+        ArrayList<Notification> notifications = NotificationController.listNotificationsManager(false);
 
         if (notifications != null) {
             for (Notification notification : notifications) {
@@ -213,6 +215,29 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
 
         JScrollPane notificationScrollPane = new JScrollPane(notificationTable);
 
+        JPanel notificationSearchbar = new JPanel();
+        notificationSearchbar.setLayout(new GridLayout(1,5));
+
+        notificationSearchbar.add(new JLabel());
+        notificationSearchbar.add(new JLabel());
+        notificationSearchbar.add(new JLabel());
+
+        JPanel notificationShowAllPanel = new JPanel();
+        notificationShowAllPanel.setLayout(new GridLayout(1,2));
+
+        JLabel notificationShowAllLabel = new JLabel("Show All: ", SwingConstants.RIGHT);
+        notificationShowAllPanel.add(notificationShowAllLabel);
+
+        notificationShowAllBox = new JCheckBox();
+        notificationShowAllPanel.add(notificationShowAllBox);
+
+        notificationSearchbar.add(notificationShowAllPanel);
+
+        notificationSearchButton = new JButton("Search");
+        notificationSearchButton.addActionListener(this);
+        notificationSearchbar.add(notificationSearchButton);
+
+        notificationPanel.add(notificationSearchbar, BorderLayout.NORTH);
         notificationPanel.add(notificationScrollPane, BorderLayout.CENTER);
 
         tabPanel.addTab("Accounts", accountPanel);
@@ -272,6 +297,21 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
         repairTable.removeColumn(repairTable.getColumnModel().getColumn(9));
     }
 
+    public void fillNotificationTable(Boolean showAll) {
+        DefaultTableModel notificationModel = new DefaultTableModel(notificationColumnNames,0);
+
+        ArrayList<Notification> notifications = NotificationController.listNotificationsManager(showAll);
+
+        if (notifications != null) {
+            for (Notification notification : notifications) {
+                notificationModel.addRow(notification.toTableRow());
+            }
+        }
+
+        //https://stackoverflow.com/questions/10331949/setmodel-on-a-jtable-when-the-defaulttablemodel-has-changed
+        notificationTable.setModel(notificationModel);
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource().equals(accountSearchButton)) {
@@ -280,6 +320,10 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
 
         if (e.getSource().equals(repairSearchButton)) {
             fillRepairTable(true);
+        }
+
+        if (e.getSource().equals(notificationSearchButton)) {
+            fillNotificationTable(notificationShowAllBox.isSelected());
         }
     }
 
