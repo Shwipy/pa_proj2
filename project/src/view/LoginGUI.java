@@ -86,12 +86,10 @@ public class LoginGUI extends JFrame implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
         if (e.getSource().equals(createButton)) {
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Registration will be implemented in the next step.",
-                    "Create Account",
-                    JOptionPane.INFORMATION_MESSAGE
-            );
+            RegisterGUI register = new RegisterGUI();
+            register.init();
+            register.setVisible(true);
+            this.dispose();
         }
 
         if (e.getSource().equals(loginButton)) {

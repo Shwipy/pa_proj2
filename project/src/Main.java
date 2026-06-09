@@ -28,13 +28,9 @@ public class Main {
             //ManagerMenu.showCreationMenu();
         }
 
-        //MainMenu.show();
-
-        //Corre porca!!!!
         LoginGUI menu = new LoginGUI();
         menu.init();
         menu.setVisible(true);
-
 
         OutputController.appTimer(start);
         System.out.println("Thank you for using our app!!");
