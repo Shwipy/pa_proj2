@@ -2,6 +2,8 @@ import controller.OutputController;
 import controller.SessionController;
 import view.LoginGUI;
 
+import java.io.File;
+
 
 /**
  * Starting point of the application

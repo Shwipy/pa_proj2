@@ -69,4 +69,6 @@ public class Shared {
 
         return 1;
     }
+
+    public static
 }

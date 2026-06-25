@@ -236,6 +236,7 @@ public class ClientView implements ActionListener, MouseListener {
         tabPanel.addTab("Notifications", notificationPanel);
         tabPanel.addTab("Settings", settingsPanel);
 
+        settingsPanel.add(new InfoPanel(clientId, "client", true));
         return tabPanel;
     }
 

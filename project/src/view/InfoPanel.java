@@ -39,6 +39,9 @@ public class InfoPanel extends JPanel implements ActionListener {
     private JTextField bussinessSectorField;
     private JTextField tierField;
 
+    private JPanel imgPanel;
+    private JLabel imgLabel;
+
     private JButton editButton;
     private JButton searchFotoButton;
 
@@ -234,7 +237,23 @@ public class InfoPanel extends JPanel implements ActionListener {
             default:
                 break;
         }
+        //-----Direta--
+        //mudar para a img que vem da bd
+        imgPanel = new JPanel();
+        imgPanel.setLayout(new GridLayout(3, 1));
 
+        imgLabel = new JLabel();
+
+        Image image = Toolkit.getDefaultToolkit().getImage("profilepics/sample.png");
+        Image scaledImage = image.getScaledInstance(150, 150, Image.SCALE_DEFAULT);
+
+        imgLabel.setIcon( new ImageIcon(scaledImage) );
+
+        imgPanel.add(new JPanel());
+        imgPanel.add(imgLabel);
+        imgPanel.repaint();
+
+        //------------Footer--
         JPanel footerPanel = new JPanel();
         footerPanel.setLayout(new GridLayout(1, 5));
 
@@ -256,6 +275,7 @@ public class InfoPanel extends JPanel implements ActionListener {
         footerPanel.add(editButton);
 
         this.add(footerPanel,BorderLayout.SOUTH);
+        this.add(imgPanel,BorderLayout.EAST);
     }
 
     public void inSettingsTab(Boolean settingsTab){
