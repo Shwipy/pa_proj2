@@ -109,10 +109,6 @@ public class Client {
         return tier;
     }
 
-    public String setPic() {
-        return pic;
-    }
-
     public void setId(Integer id) {
         this.id = id;
     }
@@ -131,6 +127,10 @@ public class Client {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public void setPic(String pic) {
+        this.pic = pic;
     }
 
     public void setNif(String nif) {

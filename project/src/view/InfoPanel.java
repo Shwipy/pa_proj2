@@ -443,6 +443,7 @@ public class InfoPanel extends JPanel implements ActionListener {
             updatedClient.setActive(activeCheckBox.isSelected());
             updatedClient.setApproved(approvedCheckBox.isSelected());
             updatedClient.setEmail(emailField.getText());
+            updatedClient.setPic(selectedImagePath);
 
             updatedClient.setNif((nifField.getText()));
             updatedClient.setPhoneNumber(phoneField.getText());
@@ -461,6 +462,7 @@ public class InfoPanel extends JPanel implements ActionListener {
             updatedEmployee.setActive(activeCheckBox.isSelected());
             updatedEmployee.setApproved(approvedCheckBox.isSelected());
             updatedEmployee.setEmail(emailField.getText());
+            updatedEmployee.setPic(selectedImagePath);
 
             updatedEmployee.setNif((nifField.getText()));
             updatedEmployee.setPhoneNumber(phoneField.getText());

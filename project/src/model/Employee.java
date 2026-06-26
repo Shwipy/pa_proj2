@@ -140,8 +140,8 @@ public class Employee {
         this.email = email;
     }
 
-    public String setPic() {
-        return pic;
+    public void setPic(String pic) {
+        this.pic = pic;
     }
 
     public void setType(String type) {
