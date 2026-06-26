@@ -26,8 +26,8 @@ public class ClientController {
         try {
             //https://www.geeksforgeeks.org/java/how-to-get-the-insert-id-in-jdbc/
             StringBuffer insertAccountQuery = new StringBuffer();
-            insertAccountQuery.append(" INSERT INTO account (name, username, password, active, approved, email, type) ");
-            insertAccountQuery.append(" VALUES (?, ?, ?, ?, ?, ?, ?) ");
+            insertAccountQuery.append(" INSERT INTO account (name, username, password, active, approved, email, type, pic) ");
+            insertAccountQuery.append(" VALUES (?, ?, ?, ?, ?, ?, ?, ?) ");
             PreparedStatement ps = db.getConn().prepareStatement(insertAccountQuery.toString(), Statement.RETURN_GENERATED_KEYS);
             ps.clearParameters();
             ps.setString(1, client.getName());
@@ -37,6 +37,7 @@ public class ClientController {
             ps.setBoolean(5, client.getApproved());
             ps.setString(6, client.getEmail());
             ps.setString(7, client.getType());
+            ps.setString(8, client.getPic());
             ps.executeUpdate();
 
             result = ps.getGeneratedKeys();
@@ -110,6 +111,7 @@ public class ClientController {
                         result.getBoolean("active"),
                         result.getBoolean("approved"),
                         result.getString("email"),
+                        result.getString("pic"),
                         result.getString("type"),
                         result.getString("nif"),
                         result.getString("phone_number"),
@@ -145,7 +147,8 @@ public class ClientController {
                     "password = ?, " +
                     "email = ?, " +
                     "active = ?, " +
-                    "approved = ? " +
+                    "approved = ?, " +
+                    "pic = ?" +
                     "WHERE id = ?;" +
                     "UPDATE client " +
                     "SET nif = ?, " +
@@ -161,12 +164,13 @@ public class ClientController {
             ps.setString(4, client.getEmail());
             ps.setBoolean(5, client.getActive());
             ps.setBoolean(6, client.getApproved());
-            ps.setInt(7, client.getId());
-            ps.setString(8, client.getNif());
-            ps.setString(9, client.getPhoneNumber());
-            ps.setString(10, client.getResidence());
-            ps.setString(11, client.getBusinessSector());
-            ps.setInt(12, client.getId());
+            ps.setString(7, client.getPic());
+            ps.setInt(8, client.getId());
+            ps.setString(9, client.getNif());
+            ps.setString(10, client.getPhoneNumber());
+            ps.setString(11, client.getResidence());
+            ps.setString(12, client.getBusinessSector());
+            ps.setInt(13, client.getId());
             ps.executeUpdate();
 
             return true;

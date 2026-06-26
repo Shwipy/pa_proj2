@@ -11,6 +11,7 @@ public class Client {
     private Boolean active;
     private Boolean approved;
     private String email;
+    private String pic;
     private String type;
     private String nif;
     private String phoneNumber;
@@ -27,6 +28,7 @@ public class Client {
      * @param active If the client account is active and not banned
      * @param approved If the client account was approved after creation
      * @param email Email of the client
+     * @param pic Picture of the client
      * @param type Equals the type of account in this case client
      * @param nif NIF of the client
      * @param phoneNumber Phone Number of the client
@@ -34,7 +36,7 @@ public class Client {
      * @param businessSector Business Sector of the client
      * @param tier Tier of the client
      */
-    public Client(Integer id, String name, String username, String password, Boolean active, Boolean approved, String email, String type, String nif, String phoneNumber, String residence, String businessSector, String tier) {
+    public Client(Integer id, String name, String username, String password, Boolean active, Boolean approved, String email, String pic, String type, String nif, String phoneNumber, String residence, String businessSector, String tier) {
         this.id = id;
         this.name = name;
         this.username = username;
@@ -42,6 +44,7 @@ public class Client {
         this.active = active;
         this.approved = approved;
         this.email = email;
+        this.pic = pic;
         this.type = type;
         this.nif = nif;
         this.phoneNumber = phoneNumber;
@@ -78,6 +81,10 @@ public class Client {
         return email;
     }
 
+    public String getPic() {
+        return pic;
+    }
+
     public String getType() {
         return type;
     }
@@ -100,6 +107,10 @@ public class Client {
 
     public String getTier() {
         return tier;
+    }
+
+    public String setPic() {
+        return pic;
     }
 
     public void setId(Integer id) {

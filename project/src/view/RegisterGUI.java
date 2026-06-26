@@ -10,11 +10,12 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-
-//import static jdk.jpackage.internal.IOUtils.copyFile;
+import java.io.IOException;
+import java.nio.file.Files;
 
 public class RegisterGUI extends JFrame implements ActionListener {
     private Boolean accountTypeClient = true;
+    private String selectedImagePath = "sample.png";
 
     private JPanel accountPanel;
     private JPanel expertisePanel;
@@ -37,7 +38,7 @@ public class RegisterGUI extends JFrame implements ActionListener {
     private JTextField bussinessSectorField;
     private JTextField tierField;
 
-
+    private JButton loginButton;
     private JButton searchFotoButton;
     private JButton createButton;
     private JButton switchTypeButton;
@@ -56,6 +57,9 @@ public class RegisterGUI extends JFrame implements ActionListener {
         JPanel footerPanel = new JPanel();
         footerPanel.setLayout(new GridLayout(1, 5));
 
+        loginButton = new JButton("Login");
+        loginButton.addActionListener(this);
+
         searchFotoButton = new JButton("Select Img");
         searchFotoButton.addActionListener(this);
 
@@ -63,7 +67,7 @@ public class RegisterGUI extends JFrame implements ActionListener {
         createButton.setToolTipText("Press to validate and create a new account.");
         createButton.addActionListener(this);
 
-        footerPanel.add(new JPanel());
+        footerPanel.add(loginButton);
         footerPanel.add(new JPanel());
         footerPanel.add(new JPanel());
         footerPanel.add(searchFotoButton);
@@ -253,6 +257,7 @@ public class RegisterGUI extends JFrame implements ActionListener {
                 true,
                 false,
                     emailField.getText().toLowerCase(),
+                    selectedImagePath,
                 "client",
                     nifField.getText(),
                     phoneField.getText(),
@@ -260,7 +265,7 @@ public class RegisterGUI extends JFrame implements ActionListener {
                 bussinessSectorField.getText(),
                 ""
         );
-
+            System.out.println(selectedImagePath);
 
             inserted = ClientController.addClient(newClient);
 
@@ -293,24 +298,45 @@ public class RegisterGUI extends JFrame implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent e) {
+
+        if (e.getSource().equals(loginButton)) {
+            LoginGUI login = new LoginGUI();
+            login.init();
+            login.setVisible(true);
+            this.dispose();
+        }
+
         if (e.getSource().equals(searchFotoButton)) {
-            JFileChooser imgChooser = new JFileChooser();
-            imgChooser.setAcceptAllFileFilterUsed(false);
-            FileNameExtensionFilter imgFilter = new FileNameExtensionFilter("Image Types","png", "jpg", "jpeg", "jfif");
-            imgChooser.setFileFilter(imgFilter);
-            imgChooser.showDialog(this, "Select Profile Picture");
-            File file = imgChooser.getSelectedFile ();
-            String path = file.toString();
-            System.out.println(path);
+            try {
+                JFileChooser imgChooser = new JFileChooser();
+                imgChooser.setAcceptAllFileFilterUsed(false);
+                FileNameExtensionFilter imgFilter = new FileNameExtensionFilter("Image Types","png", "jpg", "jpeg", "jfif");
+                imgChooser.setFileFilter(imgFilter);
+                imgChooser.showDialog(this, "Select Profile Picture");
+                File file = imgChooser.getSelectedFile ();
+                String path = file.toString();
+                System.out.println(path);
 
-            Image image = Toolkit.getDefaultToolkit().getImage(path);
-            Image scaledImage = image.getScaledInstance(150, 150, Image.SCALE_DEFAULT);
+                Image image = Toolkit.getDefaultToolkit().getImage(path);
+                Image scaledImage = image.getScaledInstance(150, 150, Image.SCALE_DEFAULT);
 
-            imgLabel.setIcon( new ImageIcon(scaledImage) );
+                imgLabel.setIcon( new ImageIcon(scaledImage) );
 
-            imgPanel.add(new JPanel());
-            imgPanel.add(imgLabel);
-            imgPanel.repaint();
+                imgPanel.add(new JPanel());
+                imgPanel.add(imgLabel);
+                imgPanel.repaint();
+
+                //https://docs.oracle.com/javase/tutorial/essential/io/copy.html
+                File src = file;
+                File dest = new File("profilepics");
+                File destFile = new File(dest, src.getName());
+                selectedImagePath = destFile.getPath();
+
+                Files.copy(src.toPath(), destFile.toPath());
+
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
         }
 
         if (e.getSource().equals(switchTypeButton)) {
