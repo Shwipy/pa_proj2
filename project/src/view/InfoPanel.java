@@ -11,11 +11,14 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 
 public class InfoPanel extends JPanel implements ActionListener {
     private Integer id;
     private String type;
     private Boolean settingsTab;
+    private String selectedImagePath;
 
     private Client client = null;
     private Employee employee = null;
@@ -428,6 +431,7 @@ public class InfoPanel extends JPanel implements ActionListener {
             updatedManager.setActive(activeCheckBox.isSelected());
             updatedManager.setApproved(approvedCheckBox.isSelected());
             updatedManager.setEmail(emailField.getText());
+            updatedManager.setPic(selectedImagePath);
 
             updated = ManagerController.updateManager(updatedManager);
 
@@ -483,13 +487,38 @@ public class InfoPanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 
         if (e.getSource().equals(searchFotoButton)) {
-            JFileChooser imgChooser = new JFileChooser();
-            imgChooser.setAcceptAllFileFilterUsed(false);
-            FileNameExtensionFilter imgFilter = new FileNameExtensionFilter("Image Types","png", "jpg", "jpeg");
-            imgChooser.setFileFilter(imgFilter);
-            imgChooser.showDialog(this, "Select Profile Picture");
-            File file = imgChooser.getSelectedFile ();
-            System.out.println(file.toString());
+            File file;
+            try {
+                JFileChooser imgChooser = new JFileChooser();
+                imgChooser.setAcceptAllFileFilterUsed(false);
+                FileNameExtensionFilter imgFilter = new FileNameExtensionFilter("Image Types", "png", "jpg", "jpeg", "jfif");
+                imgChooser.setFileFilter(imgFilter);
+                imgChooser.showDialog(this, "Select Profile Picture");
+                file = imgChooser.getSelectedFile();
+                String path = file.toString();
+                System.out.println(path);
+
+                Image image = Toolkit.getDefaultToolkit().getImage(path);
+                Image scaledImage = image.getScaledInstance(150, 150, Image.SCALE_DEFAULT);
+
+                imgLabel.setIcon(new ImageIcon(scaledImage));
+
+                imgPanel.add(new JPanel());
+                imgPanel.add(imgLabel);
+                imgPanel.repaint();
+
+                //https://docs.oracle.com/javase/tutorial/essential/io/copy.html
+                File src = file;
+                File dest = new File("profilepics");
+                File destFile = new File(dest, src.getName());
+                selectedImagePath = destFile.getPath();
+
+                Files.copy(src.toPath(), destFile.toPath());
+
+            } catch (IOException ex) {
+                Shared.showErrorDialog(new JFrame(), "There was an error loading the image (try changing it's name i think?).", "Possible Duplication");
+                selectedImagePath = null;
+            }
         }
 
         if (e.getSource().equals(editButton) && beingEdited) {

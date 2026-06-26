@@ -117,7 +117,7 @@ public class ManagerController {
                     "email = ?, " +
                     "active = ?, " +
                     "approved = ?, " +
-                    "pic = ?" +
+                    "pic = ? " +
                     "WHERE id = ?" );
             PreparedStatement ps = db.getConn().prepareStatement(updateAccount.toString());
             ps.clearParameters();
