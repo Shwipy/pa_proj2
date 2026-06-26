@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 
 public class RegisterGUI extends JFrame implements ActionListener {
@@ -19,7 +20,7 @@ public class RegisterGUI extends JFrame implements ActionListener {
 
     private JPanel accountPanel;
     private JPanel expertisePanel;
-    private JPanel startDatePanel;
+    //private JPanel startDatePanel;
     private JPanel bussinessSectorPanel;
     private JPanel tierPanel;
     private JPanel imgPanel;
@@ -180,11 +181,11 @@ public class RegisterGUI extends JFrame implements ActionListener {
         expertisePanel.add(expertiseLabel);
         expertisePanel.add(expertiseField);
 
-        startDatePanel = new JPanel();
-        JLabel startDateLabel = new JLabel("Start Date:     ",SwingConstants.RIGHT);
-        JTextField startDateField = new JTextField(24);
-        startDatePanel.add(startDateLabel);
-        startDatePanel.add(startDateField);
+        //startDatePanel = new JPanel();
+        //JLabel startDateLabel = new JLabel("Start Date:     ",SwingConstants.RIGHT);
+        //JTextField startDateField = new JTextField(24);
+        //startDatePanel.add(startDateLabel);
+        //startDatePanel.add(startDateField);
 
         JScrollPane scrollPane = new JScrollPane(accountPanel);
         cont.add(scrollPane, BorderLayout.CENTER);
@@ -279,19 +280,20 @@ public class RegisterGUI extends JFrame implements ActionListener {
                     true,
                     false,
                     emailField.getText().toLowerCase(),
+                    selectedImagePath,
                     "employee",
                     nifField.getText(),
                     phoneField.getText(),
                     residenceField.getText(),
                     expertiseField.getText(),
-                    (long)1781000063
+                    System.currentTimeMillis() / 1000
             );
 
             inserted = EmployeeController.addEmployee(newEmployee);
         }
 
         if (inserted){
-            Shared.showInformationDialog(new JFrame(),"User was created with success.","Valid Form");
+            Shared.showInformationDialog(new JFrame(),"User was created with success. Wait for the account to get validated.","Valid Form");
         }else{
             Shared.showErrorDialog(new JFrame(),"There was an error creating the account (duplicate field).","Validation Error");
         }
@@ -307,20 +309,21 @@ public class RegisterGUI extends JFrame implements ActionListener {
         }
 
         if (e.getSource().equals(searchFotoButton)) {
+            File file;
             try {
                 JFileChooser imgChooser = new JFileChooser();
                 imgChooser.setAcceptAllFileFilterUsed(false);
-                FileNameExtensionFilter imgFilter = new FileNameExtensionFilter("Image Types","png", "jpg", "jpeg", "jfif");
+                FileNameExtensionFilter imgFilter = new FileNameExtensionFilter("Image Types", "png", "jpg", "jpeg", "jfif");
                 imgChooser.setFileFilter(imgFilter);
                 imgChooser.showDialog(this, "Select Profile Picture");
-                File file = imgChooser.getSelectedFile ();
+                file = imgChooser.getSelectedFile();
                 String path = file.toString();
                 System.out.println(path);
 
                 Image image = Toolkit.getDefaultToolkit().getImage(path);
                 Image scaledImage = image.getScaledInstance(150, 150, Image.SCALE_DEFAULT);
 
-                imgLabel.setIcon( new ImageIcon(scaledImage) );
+                imgLabel.setIcon(new ImageIcon(scaledImage));
 
                 imgPanel.add(new JPanel());
                 imgPanel.add(imgLabel);
@@ -335,7 +338,8 @@ public class RegisterGUI extends JFrame implements ActionListener {
                 Files.copy(src.toPath(), destFile.toPath());
 
             } catch (IOException ex) {
-                throw new RuntimeException(ex);
+                Shared.showErrorDialog(new JFrame(), "There was an error loading the image (try changing it's name i think?).", "Possible Duplication");
+                selectedImagePath = null;
             }
         }
 
@@ -349,7 +353,7 @@ public class RegisterGUI extends JFrame implements ActionListener {
                 accountPanel.remove(tierPanel);
 
                 accountPanel.add(expertisePanel);
-                accountPanel.add(startDatePanel);
+                //accountPanel.add(startDatePanel);
 
                 accountPanel.revalidate();
                 accountPanel.repaint();
@@ -359,7 +363,7 @@ public class RegisterGUI extends JFrame implements ActionListener {
                 typeField.setText("Client");
 
                 accountPanel.remove(expertisePanel);
-                accountPanel.remove(startDatePanel);
+                //accountPanel.remove(startDatePanel);
 
                 accountPanel.add(bussinessSectorPanel);
                 accountPanel.add(tierPanel);

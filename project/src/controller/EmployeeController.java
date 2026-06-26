@@ -23,8 +23,8 @@ public class EmployeeController {
         ResultSet result = null;
         try {
             StringBuffer insertAccountQuery = new StringBuffer();
-            insertAccountQuery.append(" INSERT INTO account (name, username, password, active, approved, email, type) ");
-            insertAccountQuery.append(" VALUES (?, ?, ?, ?, ?, ?, ?) ");
+            insertAccountQuery.append(" INSERT INTO account (name, username, password, active, approved, email, type, pic) ");
+            insertAccountQuery.append(" VALUES (?, ?, ?, ?, ?, ?, ?, ?) ");
             PreparedStatement ps = db.getConn().prepareStatement(insertAccountQuery.toString(), Statement.RETURN_GENERATED_KEYS);
             ps.clearParameters();
             ps.setString(1, employee.getName());
@@ -34,6 +34,7 @@ public class EmployeeController {
             ps.setBoolean(5, employee.getApproved());
             ps.setString(6, employee.getEmail());
             ps.setString(7, employee.getType());
+            ps.setString(8, employee.getPic());
             ps.executeUpdate();
 
             result = ps.getGeneratedKeys();
@@ -112,6 +113,7 @@ public class EmployeeController {
                         result.getBoolean("active"),
                         result.getBoolean("approved"),
                         result.getString("email"),
+                        result.getString("pic"),
                         result.getString("type"),
                         result.getString("nif"),
                         result.getString("phone_number"),
@@ -147,7 +149,8 @@ public class EmployeeController {
                     "password = ?, " +
                     "email = ?, " +
                     "active = ?, " +
-                    "approved = ? " +
+                    "approved = ?, " +
+                    "pic = ?" +
                     "WHERE id = ?;" +
                     "UPDATE employee " +
                     "SET nif = ?, " +
@@ -163,12 +166,13 @@ public class EmployeeController {
             ps.setString(4, employee.getEmail());
             ps.setBoolean(5, employee.getActive());
             ps.setBoolean(6, employee.getApproved());
-            ps.setInt(7, employee.getId());
-            ps.setString(8, employee.getNif());
-            ps.setString(9, employee.getPhoneNumber());
-            ps.setString(10, employee.getResidence());
-            ps.setString(11,employee.getLvlExpertise());
-            ps.setInt(12, employee.getId());
+            ps.setString(7, employee.getPic());
+            ps.setInt(8, employee.getId());
+            ps.setString(9, employee.getNif());
+            ps.setString(10, employee.getPhoneNumber());
+            ps.setString(11, employee.getResidence());
+            ps.setString(12,employee.getLvlExpertise());
+            ps.setInt(13, employee.getId());
             ps.executeUpdate();
 
             return true;

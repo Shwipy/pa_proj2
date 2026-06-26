@@ -26,8 +26,8 @@ public class ManagerController {
 
         try {
             StringBuffer insertAccountQuery = new StringBuffer();
-            insertAccountQuery.append(" INSERT INTO account (name, username, password, active, approved, email, type) ");
-            insertAccountQuery.append(" VALUES (?, ?, ?, ?, ?, ?, ?) ");
+            insertAccountQuery.append(" INSERT INTO account (name, username, password, active, approved, email, pic, type) ");
+            insertAccountQuery.append(" VALUES (?, ?, ?, ?, ?, ?, ?, ?) ");
             PreparedStatement ps = db.getConn().prepareStatement(insertAccountQuery.toString());
             ps.clearParameters();
             ps.setString(1, manager.getName());
@@ -36,7 +36,8 @@ public class ManagerController {
             ps.setBoolean(4, manager.getActive());
             ps.setBoolean(5, manager.getApproved());
             ps.setString(6, manager.getEmail());
-            ps.setString(7, manager.getType());
+            ps.setString(7,manager.getPic());
+            ps.setString(8, manager.getType());
             ps.executeUpdate();
 
             db.closeDb();
@@ -83,6 +84,7 @@ public class ManagerController {
                         result.getBoolean("approved"),
                         result.getString("password"),
                         result.getString("email"),
+                        result.getString("pic"),
                         result.getString("type")
                         );
 
@@ -114,7 +116,8 @@ public class ManagerController {
                     "password = ?, " +
                     "email = ?, " +
                     "active = ?, " +
-                    "approved = ? " +
+                    "approved = ?, " +
+                    "pic = ?" +
                     "WHERE id = ?" );
             PreparedStatement ps = db.getConn().prepareStatement(updateAccount.toString());
             ps.clearParameters();
@@ -124,7 +127,8 @@ public class ManagerController {
             ps.setString(4, manager.getEmail());
             ps.setBoolean(5, manager.getActive());
             ps.setBoolean(6, manager.getApproved());
-            ps.setInt(7, manager.getId());
+            ps.setString(7, manager.getPic());
+            ps.setInt(8, manager.getId());
 
             ps.executeUpdate();
             System.out.println("deu update i think");
@@ -145,10 +149,8 @@ public class ManagerController {
     }
 
     /**
-     * Allows for the listing in intervals of 10 values of all types of accounts
-     * @param i variable referring to the paging
-     * @param asc if the listing will be in and asc or desc order
-     * @return an arraylist with the common data to 10 accounts
+     * Allows for the listing of all types of accounts
+     * @return an arraylist with the common data of all accounts
      */
 //    public static ArrayList listUsers(Integer i, Boolean asc){
     public static ArrayList listUsers(){
@@ -174,6 +176,7 @@ public class ManagerController {
                         result.getBoolean("approved"),
                         result.getString("password"),
                         result.getString("email"),
+                        result.getString("pic"),
                         result.getString("type")
                 );
 
@@ -230,6 +233,7 @@ public class ManagerController {
                         result.getBoolean("approved"),
                         result.getString("password"),
                         result.getString("email"),
+                        result.getString("pic"),
                         result.getString("type")
                 );
 

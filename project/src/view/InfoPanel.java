@@ -177,6 +177,9 @@ public class InfoPanel extends JPanel implements ActionListener {
         personalDataPanel.add(phonePanel);
         personalDataPanel.add(residencePanel);
 
+        Image image;
+        Image scaledImage;
+
         switch (type) {
             case "client":
                 nifField.setText(client.getNif());
@@ -203,6 +206,25 @@ public class InfoPanel extends JPanel implements ActionListener {
                 personalDataPanel.add(tierPanel);
 
                 tabPanel.insertTab("Personal",null, personalDataPanel,null,1);
+
+                //-----Direta--
+                //mudar para a img que vem da bd
+                imgPanel = new JPanel();
+                imgPanel.setLayout(new GridLayout(3, 1));
+
+                imgLabel = new JLabel();
+                if(client.getPic() != null && !client.getPic().isEmpty() ){
+                    image = Toolkit.getDefaultToolkit().getImage(client.getPic());
+                }else{
+                    image = Toolkit.getDefaultToolkit().getImage("profilepics/sample.png");
+                }
+                scaledImage = image.getScaledInstance(150, 150, Image.SCALE_DEFAULT);
+
+                imgLabel.setIcon( new ImageIcon(scaledImage) );
+
+                imgPanel.add(new JPanel());
+                imgPanel.add(imgLabel);
+                imgPanel.repaint();
                 break;
 
             case "employee":
@@ -231,27 +253,49 @@ public class InfoPanel extends JPanel implements ActionListener {
 
                 //https://docs.oracle.com/javase/8/docs/api/javax/swing/JTabbedPane.html#insertTab-java.lang.String-javax.swing.Icon-java.awt.Component-java.lang.String-int-
                 tabPanel.insertTab("Personal",null, personalDataPanel,"qwe",1);
+
+                //-----Direta--
+                //EU SEI QUE NÃO DEVIA ESTAR A DUPLICAR CODIGO MAS ESTAMOS SEM TEMPO!!
+                imgPanel = new JPanel();
+                imgPanel.setLayout(new GridLayout(3, 1));
+
+                imgLabel = new JLabel();
+                if (employee.getPic() != null && !employee.getPic().isEmpty() ){
+                    image = Toolkit.getDefaultToolkit().getImage(employee.getPic());
+                }else{
+                    image = Toolkit.getDefaultToolkit().getImage("profilepics/sample.png");
+                }
+                scaledImage = image.getScaledInstance(150, 150, Image.SCALE_DEFAULT);
+
+                imgLabel.setIcon( new ImageIcon(scaledImage) );
+
+                imgPanel.add(new JPanel());
+                imgPanel.add(imgLabel);
+                imgPanel.repaint();
                 break;
 
             case null:
             default:
+                //-----Direta--
+                //EU SEI QUE NÃO DEVIA ESTAR A DUPLICAR CODIGO MAS ESTAMOS SEM TEMPO!!
+                imgPanel = new JPanel();
+                imgPanel.setLayout(new GridLayout(3, 1));
+
+                imgLabel = new JLabel();
+                if (account.getPic() != null && !account.getPic().isEmpty()){
+                    image = Toolkit.getDefaultToolkit().getImage(account.getPic());
+                }else{
+                    image = Toolkit.getDefaultToolkit().getImage("profilepics/sample.png");
+                }
+                scaledImage = image.getScaledInstance(150, 150, Image.SCALE_DEFAULT);
+
+                imgLabel.setIcon( new ImageIcon(scaledImage) );
+
+                imgPanel.add(new JPanel());
+                imgPanel.add(imgLabel);
+                imgPanel.repaint();
                 break;
         }
-        //-----Direta--
-        //mudar para a img que vem da bd
-        imgPanel = new JPanel();
-        imgPanel.setLayout(new GridLayout(3, 1));
-
-        imgLabel = new JLabel();
-
-        Image image = Toolkit.getDefaultToolkit().getImage("profilepics/sample.png");
-        Image scaledImage = image.getScaledInstance(150, 150, Image.SCALE_DEFAULT);
-
-        imgLabel.setIcon( new ImageIcon(scaledImage) );
-
-        imgPanel.add(new JPanel());
-        imgPanel.add(imgLabel);
-        imgPanel.repaint();
 
         //------------Footer--
         JPanel footerPanel = new JPanel();

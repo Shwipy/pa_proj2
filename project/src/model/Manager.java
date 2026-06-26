@@ -12,20 +12,22 @@ public class Manager {
     private Boolean active;
     private Boolean approved;
     private String email;
+    private  String pic;
     private String type;
 
     /**
      * Constructor that assigns attributes to a Manager
-     * @param id Id of the employee
-     * @param name Name of the employee
-     * @param username Username of the employee
-     * @param password Password of the employee
-     * @param active If the employee account is active and not banned
-     * @param approved If the employee account was approved after creation
-     * @param email Email of the employee
-     * @param type Equals the type of account in this case employee
+     * @param id Id of the Manager
+     * @param name Name of the Manager
+     * @param username Username of the Manager
+     * @param password Password of the Manager
+     * @param active If the Manager account is active and not banned
+     * @param approved If the Manager account was approved after creation
+     * @param email Email of the Manager
+     * @param pic Picture of the Manager
+     * @param type Equals the type of account in this case Manager
      */
-    public Manager(Integer id, String name, String username, Boolean active, Boolean approved, String password, String email, String type) {
+    public Manager(Integer id, String name, String username, Boolean active, Boolean approved, String password, String email, String pic, String type) {
         this.id = id;
         this.name = name;
         this.username = username;
@@ -33,6 +35,7 @@ public class Manager {
         this.approved = approved;
         this.password = password;
         this.email = email;
+        this.pic = pic;
         this.type = type;
     }
 
@@ -64,6 +67,10 @@ public class Manager {
         return email;
     }
 
+    public String getPic() {
+        return pic;
+    }
+
     public String getType() {
         return type;
     }
@@ -90,6 +97,9 @@ public class Manager {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+    public String setPic() {
+        return pic;
     }
 
     public void setType(String type) {

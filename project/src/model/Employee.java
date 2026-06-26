@@ -13,6 +13,7 @@ public class Employee {
     private Boolean active;
     private Boolean approved;
     private  String email;
+    private String pic;
     private String type;
     private String nif;
     private String phoneNumber;
@@ -30,6 +31,7 @@ public class Employee {
      * @param active If the employee account is active and not banned
      * @param approved If the employee account was approved after creation
      * @param email Email of the employee
+     * @param pic Picture of the employee
      * @param type Equals the type of account in this case employee
      * @param nif NIF of the employee
      * @param phoneNumber Phone Number of the employee
@@ -37,7 +39,7 @@ public class Employee {
      * @param lvlExpertice Level of Expertise of the employee
      * @param startDate Date the employee was registered
      */
-    public Employee(Integer id, String name, String username, String password, Boolean active, Boolean approved, String email, String type, String nif, String phoneNumber, String residence, String lvlExpertice, Long startDate) {
+    public Employee(Integer id, String name, String username, String password, Boolean active, Boolean approved, String email, String pic, String type, String nif, String phoneNumber, String residence, String lvlExpertice, Long startDate) {
         this.id = id;
         this.name = name;
         this.username = username;
@@ -45,6 +47,7 @@ public class Employee {
         this.active = active;
         this.approved = approved;
         this.email = email;
+        this.pic = pic;
         this.type = type;
         this.nif = nif;
         this.phoneNumber = phoneNumber;
@@ -79,6 +82,10 @@ public class Employee {
 
     public String getEmail() {
         return email;
+    }
+
+    public String getPic() {
+        return pic;
     }
 
     public String getType() {
@@ -131,6 +138,10 @@ public class Employee {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String setPic() {
+        return pic;
     }
 
     public void setType(String type) {
