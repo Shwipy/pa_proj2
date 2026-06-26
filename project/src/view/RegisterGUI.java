@@ -11,7 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
-import static jdk.jpackage.internal.IOUtils.copyFile;
+//import static jdk.jpackage.internal.IOUtils.copyFile;
 
 public class RegisterGUI extends JFrame implements ActionListener {
     private Boolean accountTypeClient = true;
