@@ -151,8 +151,6 @@ public class ClientView implements ActionListener, MouseListener {
         equipmentPanel.add(new JLabel("   Note: To view the details of a specific Equipment, double click on the row!", SwingConstants.LEFT), BorderLayout.SOUTH);
 
         //------------Repair Panel Main
-        //https://docs.oracle.com/javase/tutorial/uiswing/components/table.html#data
-        //https://docs.oracle.com/javase/8/docs/api/javax/swing/table/DefaultTableModel.html
         DefaultTableModel repairModel = new DefaultTableModel(repairColumnNames, 0);
 
         ArrayList<Repair> repairs = RepairController.listRepairsByClient(clientId);
@@ -164,7 +162,6 @@ public class ClientView implements ActionListener, MouseListener {
         }
 
         repairTable = new JTable(repairModel);
-        //https://stackoverflow.com/questions/9919230/disable-user-edit-in-jtable/36747065#36747065
         repairTable.setDefaultEditor(Object.class, null);
         repairTable.setAutoCreateRowSorter(true);
         repairTable.addMouseListener(this);
@@ -200,8 +197,6 @@ public class ClientView implements ActionListener, MouseListener {
         repairPanel.add(new JLabel("   Note: To view the details of a specific Repair, double click on the row!", SwingConstants.LEFT), BorderLayout.SOUTH);
 
         //------------Notification Panel Main
-        //https://docs.oracle.com/javase/tutorial/uiswing/components/table.html#data
-        //https://docs.oracle.com/javase/8/docs/api/javax/swing/table/DefaultTableModel.html
         DefaultTableModel notificationModel = new DefaultTableModel(notificationColumnNames, 0);
 
         ArrayList<Notification> notifications = NotificationController.listNotifications(clientId, false);
@@ -216,7 +211,6 @@ public class ClientView implements ActionListener, MouseListener {
         }
 
         notificationTable = new JTable(notificationModel);
-        //https://stackoverflow.com/questions/9919230/disable-user-edit-in-jtable/36747065#36747065
         notificationTable.setDefaultEditor(Object.class, null);
         notificationTable.setAutoCreateRowSorter(true);
         notificationTable.addMouseListener(this);
@@ -268,11 +262,7 @@ public class ClientView implements ActionListener, MouseListener {
         ArrayList<Equipment> equipments;
 
         if (search) {
-            equipments = EquipmentController.searchEquipmentsByClient(
-                    equipmentSearchTerm.getText(),
-                    equipmentSearchTypes.getSelectedItem().toString().toLowerCase(),
-                    clientId
-            );
+            equipments = EquipmentController.searchEquipmentsByClient(equipmentSearchTerm.getText(), equipmentSearchTypes.getSelectedItem().toString().toLowerCase(), clientId);
         } else {
             equipments = EquipmentController.listEquipmentsByClient(clientId);
         }
@@ -296,11 +286,7 @@ public class ClientView implements ActionListener, MouseListener {
         ArrayList<Repair> repairs;
 
         if (search) {
-            repairs = RepairController.searchRepairsByClient(
-                    repairSearchTerm.getText(),
-                    repairSearchTypes.getSelectedItem().toString().toLowerCase(),
-                    clientId
-            );
+            repairs = RepairController.searchRepairsByClient(repairSearchTerm.getText(), repairSearchTypes.getSelectedItem().toString().toLowerCase(), clientId);
         } else {
             repairs = RepairController.listRepairsByClient(clientId);
         }
@@ -311,7 +297,6 @@ public class ClientView implements ActionListener, MouseListener {
             }
         }
 
-        //https://stackoverflow.com/questions/10331949/setmodel-on-a-jtable-when-the-defaulttablemodel-has-changed
         repairTable.setModel(repairModel);
         repairTable.removeColumn(repairTable.getColumnModel().getColumn(9));
     }
@@ -331,7 +316,6 @@ public class ClientView implements ActionListener, MouseListener {
             }
         }
 
-        //https://stackoverflow.com/questions/10331949/setmodel-on-a-jtable-when-the-defaulttablemodel-has-changed
         notificationTable.setModel(notificationModel);
         notificationTable.removeColumn(notificationTable.getColumnModel().getColumn(1));
     }
@@ -343,16 +327,11 @@ public class ClientView implements ActionListener, MouseListener {
 
         JDialog dialog = new JDialog();
 
-        JPanel dialogWindow = new EquipmentWindow(
-                clientId,
-                this
-        );
+        JPanel dialogWindow = new EquipmentWindow(clientId, this);
 
         dialog.setSize(600, 400);
 
-        dialog.setModalityType(
-                Dialog.ModalityType.APPLICATION_MODAL
-        );
+        dialog.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
 
         dialog.add(dialogWindow);
         dialog.setTitle("Add Equipment");
@@ -371,16 +350,11 @@ public class ClientView implements ActionListener, MouseListener {
 
         JDialog dialog = new JDialog();
 
-        JPanel dialogWindow = new RepairWindow(
-                clientId,
-                this
-        );
+        JPanel dialogWindow = new RepairWindow(clientId, this);
 
         dialog.setSize(600, 400);
 
-        dialog.setModalityType(
-                Dialog.ModalityType.APPLICATION_MODAL
-        );
+        dialog.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
 
         dialog.add(dialogWindow);
         dialog.setTitle("Add Repair");
@@ -440,11 +414,7 @@ public class ClientView implements ActionListener, MouseListener {
                     notes = "This repair has no notes.";
                 }
 
-                Shared.showInformationDialog(
-                        new JFrame(),
-                        notes,
-                        "Repair Notes"
-                );
+                Shared.showInformationDialog(new JFrame(), notes, "Repair Notes");
             }
         }
 
@@ -462,11 +432,7 @@ public class ClientView implements ActionListener, MouseListener {
 
                 if (notification == null) {
 
-                    Shared.showErrorDialog(
-                            new JFrame(),
-                            "This notification is no longer available.",
-                            "Notification Error"
-                    );
+                    Shared.showErrorDialog(new JFrame(), "This notification is no longer available.", "Notification Error");
 
                     return;
                 }
@@ -479,12 +445,7 @@ public class ClientView implements ActionListener, MouseListener {
                     if (message == null || message.trim().equals("") || message.equals("null")) {
                         message = "This notification has no message.";
                     }
-
-                    Shared.showInformationDialog(
-                            new JFrame(),
-                            message,
-                            "Notification Message"
-                    );
+                    Shared.showInformationDialog(new JFrame(), message, "Notification Message");
 
                     NotificationController.maskAsRead(notification);
 
@@ -500,11 +461,7 @@ public class ClientView implements ActionListener, MouseListener {
                         message = "This notification has no message.";
                     }
 
-                    Shared.showInformationDialog(
-                            new JFrame(),
-                            message,
-                            "Notification Message"
-                    );
+                    Shared.showInformationDialog(new JFrame(), message, "Notification Message");
                 }
             }
         }

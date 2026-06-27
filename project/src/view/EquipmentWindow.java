@@ -122,79 +122,43 @@ public class EquipmentWindow extends JPanel implements ActionListener {
 
         if (brandField.getText().trim().isEmpty()) {
 
-            Shared.showErrorDialog(
-                    new JFrame(),
-                    "Brand field cannot be empty!",
-                    "Invalid Form"
-            );
+            Shared.showErrorDialog(new JFrame(), "Brand field cannot be empty!", "Invalid Form");
 
             return;
         }
 
         if (modelField.getText().trim().isEmpty()) {
 
-            Shared.showErrorDialog(
-                    new JFrame(),
-                    "Model field cannot be empty!",
-                    "Invalid Form"
-            );
+            Shared.showErrorDialog(new JFrame(), "Model field cannot be empty!", "Invalid Form");
 
             return;
         }
 
         if (batchField.getText().trim().isEmpty()) {
-
-            Shared.showErrorDialog(
-                    new JFrame(),
-                    "Batch field cannot be empty!",
-                    "Invalid Form"
-            );
-
+            Shared.showErrorDialog(new JFrame(), "Batch field cannot be empty!", "Invalid Form");
             return;
         }
 
         if (manufactureDateField.getText().trim().isEmpty()) {
-
-            Shared.showErrorDialog(
-                    new JFrame(),
-                    "Manufacture date field cannot be empty!",
-                    "Invalid Form"
-            );
-
+            Shared.showErrorDialog(new JFrame(), "Manufacture date field cannot be empty!", "Invalid Form");
             return;
         }
 
         try {
-
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
             dateFormat.setLenient(false);
-
             Date date = dateFormat.parse(manufactureDateField.getText().trim());
-
             manufactureDate = date.getTime() / 1000;
 
         } catch (ParseException e) {
-
-            Shared.showErrorDialog(
-                    new JFrame(),
-                    "Invalid manufacture date. Use yyyy-MM-dd.",
-                    "Invalid Form"
-            );
-
+            Shared.showErrorDialog(new JFrame(), "Invalid manufacture date. Use yyyy-MM-dd.", "Invalid Form");
             return;
         }
 
         String sku = EquipmentController.generateSKU();
 
         if (sku == null) {
-
-            Shared.showErrorDialog(
-                    new JFrame(),
-                    "There was an error generating the SKU.",
-                    "Validation Error"
-            );
-
+            Shared.showErrorDialog(new JFrame(), "There was an error generating the SKU.", "Validation Error");
             return;
         }
 
@@ -213,22 +177,11 @@ public class EquipmentWindow extends JPanel implements ActionListener {
         inserted = EquipmentController.addEquipment(newEquipment);
 
         if (inserted) {
-
-            Shared.showInformationDialog(
-                    new JFrame(),
-                    "Equipment was created with success.",
-                    "Valid Form"
-            );
-
+            Shared.showInformationDialog(new JFrame(), "Equipment was created with success.", "Valid Form");
             clientView.fillEquipmentTable(false);
 
         } else {
-
-            Shared.showErrorDialog(
-                    new JFrame(),
-                    "There was an error creating the equipment.",
-                    "Validation Error"
-            );
+            Shared.showErrorDialog(new JFrame(), "There was an error creating the equipment.", "Validation Error");
         }
     }
 

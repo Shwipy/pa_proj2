@@ -14,6 +14,7 @@ public class SendMail {
      * Fetches all unready notifications that are meant for managers
      * @param destinationEmail String with the email of the person trying to create account
      */
+    //Função baseada nos slides LEI_PA_Cap_05.Comunicação em Rede (Sockets)
     public static void sendMail(String destinationEmail) {
         String to = destinationEmail;
         final String from = "andresequeira99@gmail.com";
@@ -25,9 +26,9 @@ public class SendMail {
         properties.setProperty("mail.host", host);
         properties.setProperty("mail.smtp.auth", "true");
         properties.setProperty("mail.smtp.port", port);
-        properties.setProperty("mail.smtp.socketFactory.class","javax.net.ssl.SSLSocketFactory");
+        properties.setProperty("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
         Session session = Session.getDefaultInstance(properties,
-                new javax.mail.Authenticator () {
+                new javax.mail.Authenticator() {
                     protected PasswordAuthentication getPasswordAuthentication() {
                         return new PasswordAuthentication(from, pwd);
                     }

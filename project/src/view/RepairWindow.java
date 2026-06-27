@@ -33,19 +33,13 @@ public class RepairWindow extends JPanel implements ActionListener {
 
         JPanel titlePanel = new JPanel();
 
-        JLabel titleLabel = new JLabel(
-                "ADD REPAIR",
-                SwingConstants.CENTER
-        );
+        JLabel titleLabel = new JLabel("ADD REPAIR", SwingConstants.CENTER);
 
         titlePanel.add(titleLabel);
 
         JPanel equipmentIdPanel = new JPanel();
 
-        JLabel equipmentIdLabel = new JLabel(
-                "Equipment ID: ",
-                SwingConstants.RIGHT
-        );
+        JLabel equipmentIdLabel = new JLabel("Equipment ID: ", SwingConstants.RIGHT);
 
         equipmentIdField = new JTextField(24);
 
@@ -54,10 +48,7 @@ public class RepairWindow extends JPanel implements ActionListener {
 
         JPanel notesPanel = new JPanel();
 
-        JLabel notesLabel = new JLabel(
-                "Notes:              ",
-                SwingConstants.RIGHT
-        );
+        JLabel notesLabel = new JLabel("Notes:              ", SwingConstants.RIGHT);
 
         notesArea = new JTextArea(4, 24);
         notesArea.setLineWrap(true);
@@ -81,9 +72,7 @@ public class RepairWindow extends JPanel implements ActionListener {
 
         createButton = new JButton("Create Repair");
 
-        createButton.setToolTipText(
-                "Press to validate and create a new repair."
-        );
+        createButton.setToolTipText("Press to validate and create a new repair.");
 
         createButton.addActionListener(this);
 
@@ -109,54 +98,28 @@ public class RepairWindow extends JPanel implements ActionListener {
 
         if (equipmentIdField.getText().trim().isEmpty()) {
 
-            Shared.showErrorDialog(
-                    new JFrame(),
-                    "Equipment ID field cannot be empty!",
-                    "Invalid Form"
-            );
-
+            Shared.showErrorDialog(new JFrame(), "Equipment ID field cannot be empty!", "Invalid Form");
             return;
         }
 
         try {
-
-            equipmentId = Integer.parseInt(
-                    equipmentIdField.getText().trim()
-            );
+            equipmentId = Integer.parseInt(equipmentIdField.getText().trim());
 
         } catch (NumberFormatException e) {
 
-            Shared.showErrorDialog(
-                    new JFrame(),
-                    "Equipment ID must be a valid number!",
-                    "Invalid Form"
-            );
-
+            Shared.showErrorDialog(new JFrame(), "Equipment ID must be a valid number!", "Invalid Form");
             return;
         }
 
-        if (!EquipmentController.existsEquipmentForClient(
-                equipmentId,
-                clientId
-        )) {
+        if (!EquipmentController.existsEquipmentForClient(equipmentId, clientId)) {
 
-            Shared.showErrorDialog(
-                    new JFrame(),
-                    "This equipment does not belong to this client!",
-                    "Invalid Equipment"
-            );
-
+            Shared.showErrorDialog(new JFrame(), "This equipment does not belong to this client!", "Invalid Equipment");
             return;
         }
 
         if (RepairController.equipmentHasActiveRepair(equipmentId)) {
 
-            Shared.showErrorDialog(
-                    new JFrame(),
-                    "This equipment already has an active repair!",
-                    "Invalid Repair"
-            );
-
+            Shared.showErrorDialog(new JFrame(), "This equipment already has an active repair!", "Invalid Repair");
             return;
         }
 
@@ -164,12 +127,7 @@ public class RepairWindow extends JPanel implements ActionListener {
 
         if (repairNumber == null) {
 
-            Shared.showErrorDialog(
-                    new JFrame(),
-                    "There was an error generating the repair number.",
-                    "Validation Error"
-            );
-
+            Shared.showErrorDialog(new JFrame(), "There was an error generating the repair number.", "Validation Error");
             return;
         }
 
@@ -189,22 +147,11 @@ public class RepairWindow extends JPanel implements ActionListener {
         inserted = RepairController.addRepair(newRepair);
 
         if (inserted) {
-
-            Shared.showInformationDialog(
-                    new JFrame(),
-                    "Repair was created with success.",
-                    "Valid Form"
-            );
-
+            Shared.showInformationDialog(new JFrame(), "Repair was created with success.", "Valid Form");
             clientView.fillRepairTable(false);
 
         } else {
-
-            Shared.showErrorDialog(
-                    new JFrame(),
-                    "There was an error creating the repair.",
-                    "Validation Error"
-            );
+            Shared.showErrorDialog(new JFrame(), "There was an error creating the repair.", "Validation Error");
         }
     }
 

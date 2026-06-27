@@ -123,8 +123,6 @@ public class EmployeeView implements ActionListener, MouseListener {
         repairPanel.add(new JLabel("   Note: To view the details of a specific Repair, double click on the row!", SwingConstants.LEFT), BorderLayout.SOUTH);
 
         //------------Notification Panel Main
-        //https://docs.oracle.com/javase/tutorial/uiswing/components/table.html#data
-        //https://docs.oracle.com/javase/8/docs/api/javax/swing/table/DefaultTableModel.html
         DefaultTableModel notificationModel = new DefaultTableModel(notificationColumnNames, 0);
 
         ArrayList<Notification> notifications =
@@ -140,7 +138,6 @@ public class EmployeeView implements ActionListener, MouseListener {
         }
 
         notificationTable = new JTable(notificationModel);
-        //https://stackoverflow.com/questions/9919230/disable-user-edit-in-jtable/36747065#36747065
         notificationTable.setDefaultEditor(Object.class, null);
         notificationTable.setAutoCreateRowSorter(true);
         notificationTable.addMouseListener(this);
@@ -193,11 +190,7 @@ public class EmployeeView implements ActionListener, MouseListener {
         ArrayList<Repair> repairs;
 
         if (search) {
-            repairs = RepairController.searchRepairsByEmployee(
-                    repairSearchTerm.getText(),
-                    repairSearchTypes.getSelectedItem().toString().toLowerCase(),
-                    employeeId
-            );
+            repairs = RepairController.searchRepairsByEmployee(repairSearchTerm.getText(), repairSearchTypes.getSelectedItem().toString().toLowerCase(), employeeId);
         } else {
             repairs = RepairController.listRepairsByEmployee(employeeId);
         }
@@ -231,12 +224,9 @@ public class EmployeeView implements ActionListener, MouseListener {
             }
         }
 
-        //https://stackoverflow.com/questions/10331949/setmodel-on-a-jtable-when-the-defaulttablemodel-has-changed
         notificationTable.setModel(notificationModel);
 
-        notificationTable.removeColumn(
-                notificationTable.getColumnModel().getColumn(1)
-        );
+        notificationTable.removeColumn(notificationTable.getColumnModel().getColumn(1));
     }
 
     /**
@@ -274,11 +264,7 @@ public class EmployeeView implements ActionListener, MouseListener {
                     notes = "This repair has no notes.";
                 }
 
-                Shared.showInformationDialog(
-                        new JFrame(),
-                        notes,
-                        "Repair Notes"
-                );
+                Shared.showInformationDialog(new JFrame(), notes, "Repair Notes");
             }
         }
 
@@ -288,25 +274,15 @@ public class EmployeeView implements ActionListener, MouseListener {
 
             if (selectedRow >= 0) {
 
-                int modelRow =
-                        notificationTable.convertRowIndexToModel(selectedRow);
+                int modelRow = notificationTable.convertRowIndexToModel(selectedRow);
 
-                Integer notificationId = (Integer)
-                        notificationTable.getModel().getValueAt(modelRow, 0);
+                Integer notificationId = (Integer) notificationTable.getModel().getValueAt(modelRow, 0);
 
-                Notification notification =
-                        NotificationController.getNotification(
-                                notificationId,
-                                employeeId
-                        );
+                Notification notification = NotificationController.getNotification(notificationId, employeeId);
 
                 if (notification == null) {
 
-                    Shared.showErrorDialog(
-                            new JFrame(),
-                            "This notification is no longer available.",
-                            "Notification Error"
-                    );
+                    Shared.showErrorDialog(new JFrame(), "This notification is no longer available.", "Notification Error");
 
                     return;
                 }
@@ -314,62 +290,34 @@ public class EmployeeView implements ActionListener, MouseListener {
                 //--------------------------------------Assign Employee--------------------------------------
                 if (notification.getType().equals("assignEmployee")) {
 
-                    Boolean answer = Shared.showYesNoDialog(
-                            new JFrame(),
-                            notification.getMessage(),
-                            "Repair Assignment"
-                    );
+                    Boolean answer = Shared.showYesNoDialog(new JFrame(), notification.getMessage(), "Repair Assignment");
 
                     //--------------------------------------Accept Repair--------------------------------------
                     if (answer) {
-
-                        if (RepairController.acceptRepair(
-                                notification.getRepairId(),
-                                notification.getAccountId()
-                        )) {
-
+                        if (RepairController.acceptRepair(notification.getRepairId(), notification.getAccountId())) {
                             NotificationController.maskAsRead(notification);
 
-                            Shared.showInformationDialog(
-                                    new JFrame(),
-                                    "You were assigned to the repair!",
-                                    "Valid Operation"
-                            );
+                            Shared.showInformationDialog(new JFrame(), "You were assigned to the repair!", "Valid Operation");
 
                             fillRepairTable(false);
 
-                            fillNotificationTable(
-                                    notificationShowAllBox.isSelected()
-                            );
+                            fillNotificationTable(notificationShowAllBox.isSelected());
 
                         } else {
 
-                            Shared.showErrorDialog(
-                                    new JFrame(),
-                                    "There was a problem accepting the repair.",
-                                    "Operation Error"
-                            );
+                            Shared.showErrorDialog(new JFrame(), "There was a problem accepting the repair.", "Operation Error");
                         }
 
                         //--------------------------------------Reject Assignment--------------------------------------
                     } else {
 
-                        NotificationController.dennyRepair(
-                                notification.getAccountId(),
-                                notification.getRepairId()
-                        );
+                        NotificationController.dennyRepair(notification.getAccountId(), notification.getRepairId());
 
                         NotificationController.maskAsRead(notification);
 
-                        Shared.showInformationDialog(
-                                new JFrame(),
-                                "You declined being assigned to the repair!",
-                                "Valid Operation"
-                        );
+                        Shared.showInformationDialog(new JFrame(), "You declined being assigned to the repair!", "Valid Operation");
 
-                        fillNotificationTable(
-                                notificationShowAllBox.isSelected()
-                        );
+                        fillNotificationTable(notificationShowAllBox.isSelected());
                     }
 
                     //--------------------------------------Other Notifications--------------------------------------
@@ -377,18 +325,11 @@ public class EmployeeView implements ActionListener, MouseListener {
 
                     String message = notification.getMessage();
 
-                    if (message == null
-                            || message.trim().equals("")
-                            || message.equals("null")) {
-
+                    if (message == null || message.trim().equals("") || message.equals("null")) {
                         message = "This notification has no message.";
                     }
 
-                    Shared.showInformationDialog(
-                            new JFrame(),
-                            message,
-                            "Notification Message"
-                    );
+                    Shared.showInformationDialog(new JFrame(), message, "Notification Message");
                 }
             }
         }
