@@ -87,9 +87,9 @@ public class Equipment {
                 this.getModel(),
                 this.getSku(),
                 this.getBatch(),
-                this.getManufactureDate(),
-                this.getSubmissionDate(),
-                this.getRepairDate()
+                OutputController.dateFormater(this.getManufactureDate(),"day"),
+                OutputController.dateFormater(this.getManufactureDate(),"day"),
+                this.getRepairDate() == null ? "Not repaired yet" : OutputController.dateFormater(this.getRepairDate(),"day")
         };
     }
     

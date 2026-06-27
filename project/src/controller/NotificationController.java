@@ -3,6 +3,9 @@ import model.Client;
 import model.DataBase;
 import model.Manager;
 import model.Notification;
+import view.Shared;
+
+import javax.swing.*;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -277,9 +280,8 @@ public class NotificationController {
 
     /**
      * Fetches all unready notifications that are meant for managers
-     * @param i variable referring to the paging
-     * @param asc if the listing will be in and asc or desc order
-     * @return an arraylist with the information of 10 notifications
+     * @param showAll if true it will return all notifications read/unread
+     * @return an arraylist with the information of all notifications
      */
    public static ArrayList<Notification> listNotificationsManager(Boolean showAll) {
 
@@ -357,9 +359,8 @@ public class NotificationController {
 
     /**
      * Fetches all unready notifications that are employees or clients based on id
-     * @param i variable referring to the paging
-     * @param asc if the listing will be in and asc or desc order
      * @param accountId id of the account that wants the notifications
+     * @param showAll flag to allow to show all notifications
      * @return an arraylist with the information of 10 notifications
      */
     public static ArrayList<Notification> listNotifications(Integer accountId, Boolean showAll) {

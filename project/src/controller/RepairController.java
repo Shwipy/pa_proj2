@@ -94,10 +94,7 @@ public class RepairController {
 	}
 
 	/**
-	 * Allows listing(10 elements) by asc or desc order of the repairs of one employee
-	 * @param i variable to indicate the page
-	 * @param asc the order the items in the listes are in asc or desc
-	 * @param orderBy variable to identify which variable the list is being ordered by, start date/employee number
+	 * Allows listing all elements of the repairs of one employee
 	 * @param employeeId id of the employee with the repairs in question
 	 * @return Confirmation that the repair was or not added to the database
 	 */
@@ -387,6 +384,7 @@ public class RepairController {
 	/**
 	 * Allow a repair state to be set to accepted after an employee agrees to the repair
 	 * @param repairId id of the repair that was accepted
+	 * @param employeeId id of the employee that was accepted
 	 * @return Confirmation if the procedure was or not successful
 	 */
 	 public static Boolean startRepair(int repairId, int employeeId) {
@@ -526,10 +524,7 @@ public class RepairController {
 		}
 
 	/**
-	 * Allows for the listing of all available repairs in the database in groups of 10
-	 * @param i variable to indicate the page
-	 * @param asc the order the items in the listed are in asc or desc
-	 * @param orderBy variable to identify which variable the list is being ordered by, start date/employee number
+	 * Allows for the listing of all available repairs in the database
 	 * @return An array list containing 10 elements from the list
 	 */
 	 public static ArrayList<Repair> listAllRepairs() {
@@ -784,12 +779,9 @@ public class RepairController {
 		}
 
 	/**
-	 * Allows for the listing of all available repairs in the database in groups of 10 for a certain user
-	 * @param i variable to indicate the page
-	 * @param asc the order the items in the listed are in asc or desc
-	 * @param orderBy variable to identify which variable the list is being ordered by, start date/repair number
+	 * Allows for the listing of all available repairs in the database for a certain user
 	 * @param clientId client that created the repairs
-	 * @return An array list containing 10 repairs a client
+	 * @return An array list containing all repairs a client
 	 */
 	 public static ArrayList<Repair> listRepairsByClient(int clientId) {
 
@@ -998,7 +990,8 @@ public class RepairController {
 	 * Allow an employee to search for a string in the list of repairs he's working on
 	 * @param search string being searched for in the database
 	 * @param type type of field we are searching on, repair number/state
-	 * @return An array list containing 10 elements from the filtered results
+	 * @param employeeId id of the employee thats working on the repairs
+	 * @return An array list containing all elements from the filtered results
 	 */
 	//https://www.postgresql.org/docs/current/functions-matching.html
 	 public static ArrayList<Repair> searchRepairsByEmployee(String search, String type, int employeeId) {

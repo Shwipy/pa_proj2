@@ -148,7 +148,7 @@ public class ClientController {
                     "email = ?, " +
                     "active = ?, " +
                     "approved = ?, " +
-                    "pic = ?" +
+                    "pic = ? " +
                     "WHERE id = ?;" +
                     "UPDATE client " +
                     "SET nif = ?, " +

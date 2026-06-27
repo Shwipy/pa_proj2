@@ -92,7 +92,6 @@ public class Notification {
     public Object[] toTableRow() {
 
         String readStatusIcon;
-        //https://emojidb.org/checkbox-emojis
         if (this.getIsRead()){
             readStatusIcon = "✔";
         }else {

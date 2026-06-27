@@ -125,6 +125,9 @@ public class EmployeeView implements ActionListener, MouseListener {
                 NotificationController.listNotifications(employeeId, false);
 
         if (notifications != null) {
+            if (!notifications.isEmpty()) {
+                Shared.showInformationDialog(new JFrame(), "YOU GOT MAIL", "New Notifications");
+            }
             for (Notification notification : notifications) {
                 notificationModel.addRow(notification.toTableRow());
             }

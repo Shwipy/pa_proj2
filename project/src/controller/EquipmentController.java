@@ -11,7 +11,8 @@ import java.util.ArrayList;
 /**
  * Class to manage Equipment resources
  */
-public class EquipmentController {
+public class
+EquipmentController {
 
 	/**
 	 * Allows a client to add an equipment
@@ -149,10 +150,7 @@ public class EquipmentController {
 	}
 
 	/**
-	 * Query to get 10 elements from a certain clients equipments
-	 * @param i parameter used to indicate the page
-	 * @param asc indicates que order the data appears in asc or desc
-	 * @param orderBy indicates which parameter to order the results by
+	 * Query to get all elements from a certain clients equipments
 	 * @param clientId owner of the equipments that will be listed
 	 * @return an ArrayList with 10 entries from a clients equipment list
 	 */
@@ -263,60 +261,60 @@ public class EquipmentController {
 	    return null;
 	}
 
+//	/**
+//	 * Query to get 10 elements from all of the available equipments
+//	 * @param i parameter used to indicate the page
+//	 * @return an ArrayList with 10 elements from the equipment table
+//	 */
+//	public static ArrayList<Equipment> listAllEquipments(Integer i) {
+//
+//	    DataBase db = new DataBase();
+//	    PreparedStatement ps = null;
+//	    ResultSet result = null;
+//
+//	    try {
+//	        StringBuffer sqlQuery = new StringBuffer();
+//	        sqlQuery.append(" SELECT * FROM equipment LIMIT 10 OFFSET ? ");
+//
+//	        ps = db.getConn().prepareStatement(sqlQuery.toString());
+//	        ps.clearParameters();
+//	        ps.setInt(1, 10 * i);
+//
+//	        result = ps.executeQuery();
+//
+//	        ArrayList<Equipment> equipments = new ArrayList<Equipment>();
+//
+//	        while (result.next()) {
+//
+//	            Equipment equipment = new Equipment(
+//	                    result.getInt("id"),
+//	                    result.getInt("client_id"),
+//	                    result.getString("brand"),
+//	                    result.getString("model"),
+//	                    result.getString("sku"),
+//	                    result.getString("batch"),
+//	                    result.getLong("manufacture_date"),
+//	                    result.getLong("submission_date"),
+//	                    (Long) result.getObject("repair_date")
+//	            );
+//
+//	            equipments.add(equipment);
+//	        }
+//
+//	        return equipments;
+//
+//	    } catch (SQLException e) {
+//	        System.out.println("!! SQL Exception !!\n" + e);
+//	        e.printStackTrace();
+//	    } finally {
+//	        db.closeDb();
+//	    }
+//
+//	    return null;
+//	}
+
 	/**
-	 * Query to get 10 elements from all of the available equipments
-	 * @param i parameter used to indicate the page
-	 * @return an ArrayList with 10 elements from the equipment table
-	 */
-	public static ArrayList<Equipment> listAllEquipments(Integer i) {
-
-	    DataBase db = new DataBase();
-	    PreparedStatement ps = null;
-	    ResultSet result = null;
-
-	    try {
-	        StringBuffer sqlQuery = new StringBuffer();
-	        sqlQuery.append(" SELECT * FROM equipment LIMIT 10 OFFSET ? ");
-
-	        ps = db.getConn().prepareStatement(sqlQuery.toString());
-	        ps.clearParameters();
-	        ps.setInt(1, 10 * i);
-
-	        result = ps.executeQuery();
-
-	        ArrayList<Equipment> equipments = new ArrayList<Equipment>();
-
-	        while (result.next()) {
-
-	            Equipment equipment = new Equipment(
-	                    result.getInt("id"),
-	                    result.getInt("client_id"),
-	                    result.getString("brand"),
-	                    result.getString("model"),
-	                    result.getString("sku"),
-	                    result.getString("batch"),
-	                    result.getLong("manufacture_date"),
-	                    result.getLong("submission_date"),
-	                    (Long) result.getObject("repair_date")
-	            );
-
-	            equipments.add(equipment);
-	        }
-
-	        return equipments;
-
-	    } catch (SQLException e) {
-	        System.out.println("!! SQL Exception !!\n" + e);
-	        e.printStackTrace();
-	    } finally {
-	        db.closeDb();
-	    }
-
-	    return null;
-	}
-
-	/**
-	 * Query to get 10 elements from a certain clients equipments search
+	 * Query to get all elements from a certain clients equipments search
 	 * @param search String being searched in the equipent table
 	 * @param type if the search is being made by brand or sku
 	 * @param clientId owner of the equipments that will be listed from the search

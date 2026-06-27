@@ -205,6 +205,9 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
         ArrayList<Notification> notifications = NotificationController.listNotificationsManager(false);
 
         if (notifications != null) {
+            if (!notifications.isEmpty()) {
+                Shared.showInformationDialog(new JFrame(), "YOU GOT MAIL", "New Notifications");
+            }
             for (Notification notification : notifications) {
                 notificationModel.addRow(notification.toTableRow());
             }
