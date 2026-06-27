@@ -421,22 +421,77 @@ public class ClientView implements ActionListener, MouseListener {
             int selectedRow = notificationTable.getSelectedRow();
 
             if (selectedRow >= 0) {
-                int modelRow = notificationTable.convertRowIndexToModel(selectedRow);
-                String message = String.valueOf(notificationTable.getModel().getValueAt(modelRow, 1));
 
-                if (message == null || message.trim().equals("") || message.equals("null")) {
-                    message = "This notification has no message.";
+                int modelRow =
+                        notificationTable.convertRowIndexToModel(selectedRow);
+
+                Integer notificationId = (Integer)
+                        notificationTable.getModel().getValueAt(modelRow, 0);
+
+                Notification notification =
+                        NotificationController.getNotification(
+                                notificationId,
+                                clientId
+                        );
+
+                if (notification == null) {
+
+                    Shared.showErrorDialog(
+                            new JFrame(),
+                            "This notification is no longer available.",
+                            "Notification Error"
+                    );
+
+                    return;
                 }
 
-                Shared.showInformationDialog(
-                        new JFrame(),
-                        message,
-                        "Notification Message"
-                );
+                //--------------------------------------Repair Rejected or Finished--------------------------------------
+                if (notification.getType().equals("repairRejected")
+                        || notification.getType().equals("repairFinished")) {
+
+                    String message = notification.getMessage();
+
+                    if (message == null
+                            || message.trim().equals("")
+                            || message.equals("null")) {
+
+                        message = "This notification has no message.";
+                    }
+
+                    Shared.showInformationDialog(
+                            new JFrame(),
+                            message,
+                            "Notification Message"
+                    );
+
+                    NotificationController.maskAsRead(notification);
+
+                    fillNotificationTable(
+                            notificationShowAllBox.isSelected()
+                    );
+
+                //--------------------------------------Other Notifications--------------------------------------
+                } else {
+
+                    String message = notification.getMessage();
+
+                    if (message == null
+                            || message.trim().equals("")
+                            || message.equals("null")) {
+
+                        message = "This notification has no message.";
+                    }
+
+                    Shared.showInformationDialog(
+                            new JFrame(),
+                            message,
+                            "Notification Message"
+                    );
+                }
             }
         }
     }
-
+    
     @Override
     public void mousePressed(MouseEvent e) {}
 
