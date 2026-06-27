@@ -23,6 +23,8 @@ public class ClientView implements ActionListener, MouseListener {
     private JButton equipmentSearchButton;
     private JButton repairSearchButton;
     private JButton notificationSearchButton;
+    private JButton addEquipmentButton;
+    private JButton addRepairButton;
 
     private JComboBox equipmentSearchTypes;
     private JComboBox repairSearchTypes;
@@ -124,10 +126,16 @@ public class ClientView implements ActionListener, MouseListener {
                 "Brand",
                 "SKU"
         });
+        
         equipmentSearchbar.add(equipmentSearchTypes);
 
-        equipmentSearchbar.add(new JLabel());
-
+        addEquipmentButton = new JButton("Add Equipment");
+        addEquipmentButton.setToolTipText(
+                "Open the form to add a new equipment."
+        );
+        
+        addEquipmentButton.addActionListener(this);
+        equipmentSearchbar.add(addEquipmentButton);
         equipmentSearchButton = new JButton("Search");
         equipmentSearchButton.addActionListener(this);
         equipmentSearchbar.add(equipmentSearchButton);
@@ -173,7 +181,9 @@ public class ClientView implements ActionListener, MouseListener {
         });
         repairSearchbar.add(repairSearchTypes);
 
-        repairSearchbar.add(new JLabel());
+        addRepairButton = new JButton("Add Repair");
+        addRepairButton.addActionListener(this);
+        repairSearchbar.add(addRepairButton);
 
         repairSearchButton = new JButton("Search");
         repairSearchButton.addActionListener(this);
@@ -304,10 +314,69 @@ public class ClientView implements ActionListener, MouseListener {
         notificationTable.setModel(notificationModel);
         notificationTable.removeColumn(notificationTable.getColumnModel().getColumn(1));
     }
+    
+    private void showEquipmentWindow() {
+
+        JDialog dialog = new JDialog();
+
+        JPanel dialogWindow = new EquipmentWindow(
+                clientId,
+                this
+        );
+
+        dialog.setSize(600, 400);
+
+        dialog.setModalityType(
+                Dialog.ModalityType.APPLICATION_MODAL
+        );
+
+        dialog.add(dialogWindow);
+        dialog.setTitle("Add Equipment");
+        dialog.setResizable(false);
+        dialog.setLocationRelativeTo(null);
+
+        dialog.setVisible(true);
+
+        fillEquipmentTable(false);
+    }
+    
+    private void showRepairWindow() {
+
+        JDialog dialog = new JDialog();
+
+        JPanel dialogWindow = new RepairWindow(
+                clientId,
+                this
+        );
+
+        dialog.setSize(600, 400);
+
+        dialog.setModalityType(
+                Dialog.ModalityType.APPLICATION_MODAL
+        );
+
+        dialog.add(dialogWindow);
+        dialog.setTitle("Add Repair");
+        dialog.setResizable(false);
+        dialog.setLocationRelativeTo(null);
+
+        dialog.setVisible(true);
+
+        fillRepairTable(false);
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource().equals(equipmentSearchButton)){
+        
+    	if (e.getSource().equals(addEquipmentButton)) {
+    	    showEquipmentWindow();
+    	}
+    	
+    	if (e.getSource().equals(addRepairButton)) {
+    	    showRepairWindow();
+    	}
+    	
+    	if (e.getSource().equals(equipmentSearchButton)){
             fillEquipmentTable(true);
         }
 
