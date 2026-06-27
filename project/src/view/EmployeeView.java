@@ -262,28 +262,114 @@ public class EmployeeView implements ActionListener, MouseListener {
             int selectedRow = notificationTable.getSelectedRow();
 
             if (selectedRow >= 0) {
+
                 int modelRow =
                         notificationTable.convertRowIndexToModel(selectedRow);
 
-                String message = String.valueOf(
-                        notificationTable.getModel().getValueAt(modelRow, 1)
-                );
+                Integer notificationId = (Integer)
+                        notificationTable.getModel().getValueAt(modelRow, 0);
 
-                if (message == null
-                        || message.trim().equals("") || message.equals("null")) {
+                Notification notification =
+                        NotificationController.getNotification(
+                                notificationId,
+                                employeeId
+                        );
 
-                    message = "This notification has no message.";
+                if (notification == null) {
+
+                    Shared.showErrorDialog(
+                            new JFrame(),
+                            "This notification is no longer available.",
+                            "Notification Error"
+                    );
+
+                    return;
                 }
 
-                Shared.showInformationDialog(
-                        new JFrame(),
-                        message,
-                        "Notification Message"
-                );
-            }
-        }
-    }
+                //--------------------------------------Assign Employee--------------------------------------
+                if (notification.getType().equals("assignEmployee")) {
 
+                    Boolean answer = Shared.showYesNoDialog(
+                            new JFrame(),
+                            notification.getMessage(),
+                            "Repair Assignment"
+                    );
+
+                    //--------------------------------------Accept Repair--------------------------------------
+                    if (answer) {
+
+                        if (RepairController.acceptRepair(
+                                notification.getRepairId(),
+                                notification.getAccountId()
+                        )) {
+
+                            NotificationController.maskAsRead(notification);
+
+                            Shared.showInformationDialog(
+                                    new JFrame(),
+                                    "You were assigned to the repair!",
+                                    "Valid Operation"
+                            );
+
+                            fillRepairTable(false);
+
+                            fillNotificationTable(
+                                    notificationShowAllBox.isSelected()
+                            );
+
+                        } else {
+
+                            Shared.showErrorDialog(
+                                    new JFrame(),
+                                    "There was a problem accepting the repair.",
+                                    "Operation Error"
+                            );
+                        }
+
+                    //--------------------------------------Reject Assignment--------------------------------------
+                    } else {
+
+                        NotificationController.dennyRepair(
+                                notification.getAccountId(),
+                                notification.getRepairId()
+                        );
+
+                        NotificationController.maskAsRead(notification);
+
+                        Shared.showInformationDialog(
+                                new JFrame(),
+                                "You declined being assigned to the repair!",
+                                "Valid Operation"
+                        );
+
+                        fillNotificationTable(
+                                notificationShowAllBox.isSelected()
+                        );
+                    }
+
+                //--------------------------------------Other Notifications--------------------------------------
+                } else {
+
+                    String message = notification.getMessage();
+
+                    if (message == null
+                            || message.trim().equals("")
+                            || message.equals("null")) {
+
+                        message = "This notification has no message.";
+                    }
+
+                    Shared.showInformationDialog(
+                            new JFrame(),
+                            message,
+                            "Notification Message"
+                    );
+                }
+            }
+        }  
+    }
+    
+    
     @Override
     public void mousePressed(MouseEvent e) {}
 
