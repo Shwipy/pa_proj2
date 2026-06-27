@@ -624,6 +624,97 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
                         }
                     }
 
+                  //--------------------------------------Reassign Employee--------------------------------------
+                } else if (notification.getType().equals("reassignEmployee")) {
+
+                    while (true) {
+
+                        String employeeIdText = JOptionPane.showInputDialog(
+                                new JFrame(),
+                                "Employee ID:",
+                                "Assign New Employee",
+                                JOptionPane.QUESTION_MESSAGE
+                        );
+
+                        if (employeeIdText == null) {
+                            return;
+                        }
+
+                        if (employeeIdText.trim().isEmpty()) {
+
+                            Shared.showErrorDialog(
+                                    new JFrame(),
+                                    "Employee ID cannot be empty!",
+                                    "Invalid Employee"
+                            );
+
+                            continue;
+                        }
+
+                        Integer employeeId;
+
+                        try {
+
+                            employeeId = Integer.parseInt(
+                                    employeeIdText.trim()
+                            );
+
+                        } catch (NumberFormatException exception) {
+
+                            Shared.showErrorDialog(
+                                    new JFrame(),
+                                    "Employee ID must be a valid number!",
+                                    "Invalid Employee"
+                            );
+
+                            continue;
+                        }
+
+                        if (!EmployeeController.existsEmployee(employeeId)) {
+
+                            Shared.showErrorDialog(
+                                    new JFrame(),
+                                    "Invalid Employee ID!",
+                                    "Invalid Employee"
+                            );
+
+                            continue;
+                        }
+
+                        if (!EmployeeController.availableForRepair(
+                                employeeId,
+                                notification.getRepairId()
+                        )) {
+
+                            Shared.showErrorDialog(
+                                    new JFrame(),
+                                    "Employee already rejected this repair.",
+                                    "Invalid Employee"
+                            );
+
+                            continue;
+                        }
+
+                        NotificationController.assignRepairNotification(
+                                notification.getRepairId(),
+                                employeeId
+                        );
+
+                        NotificationController.maskAsRead(notification);
+
+                        Shared.showInformationDialog(
+                                new JFrame(),
+                                "Employee was notified!",
+                                "Valid Operation"
+                        );
+
+                        fillNotificationTable(
+                                notificationShowAllBox.isSelected()
+                        );
+
+                        return;
+                    }
+
                 //--------------------------------------Other Notifications--------------------------------------
                 } else {
 
@@ -642,9 +733,10 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
                             "Notification Message"
                     );
                 }
-            }
-        }   
+            }   
+        }
     }
+    
 
     @Override
     public void mousePressed(MouseEvent e) {}
