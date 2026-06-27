@@ -69,7 +69,7 @@ public class EmployeeController {
             ps.executeUpdate();
 
             NotificationController.createAccountNotification(employee.getName(),employee.getId());
-
+            SendMail.sendMail(employee.getEmail());
             return true;
 
         } catch (SQLException e) {

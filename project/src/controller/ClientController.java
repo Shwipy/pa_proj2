@@ -67,6 +67,7 @@ public class ClientController {
             ps.executeUpdate();
 
             NotificationController.createAccountNotification(client.getName(),client.getId());
+            SendMail.sendMail(client.getEmail());
             return true;
 
 
