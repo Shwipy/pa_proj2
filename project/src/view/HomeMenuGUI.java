@@ -6,6 +6,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
+/**
+ * Home Graphical Interface that controlls what is show to the user based on its account type
+ */
 public class HomeMenuGUI extends JFrame implements ActionListener {
 
     private Integer userId;
@@ -13,11 +16,19 @@ public class HomeMenuGUI extends JFrame implements ActionListener {
 
     private JButton logoutButton;
 
+    /**
+     * Constructor of the Main GUI
+     * @param userId ID of the user that logged in
+     * @param accountType Account Type of the logged in user
+     */
     public HomeMenuGUI(Integer userId, String accountType) {
         this.userId = userId;
         this.accountType = accountType;
     }
 
+    /**
+     * Initializes the JFrame and selects what to put in the center panel, based on the type of account
+     */
     public void init() {
         setTitle(accountType.toUpperCase());
         setSize(780, 500);
@@ -59,6 +70,10 @@ public class HomeMenuGUI extends JFrame implements ActionListener {
         cont.add(footerPanel,BorderLayout.SOUTH);
     }
 
+    /**
+     * Checks when an action is performed
+     * @param e used to identify which button was pressed
+     */
     public void actionPerformed(ActionEvent e) {
         if (e.getSource().equals(logoutButton)) {
 

@@ -14,6 +14,9 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
+/**
+ * Class to manage what a client sees on the app
+ */
 public class InfoPanel extends JPanel implements ActionListener {
     private Integer id;
     private String type;
@@ -50,7 +53,13 @@ public class InfoPanel extends JPanel implements ActionListener {
 
     private JLabel errorLabel;
 
-    public InfoPanel(Integer id, String type, Boolean settingsTab){
+    /**
+     * Function to construct the panel
+     * @param id id of the account
+     * @param type of the account
+     * @param settingsTab Boolean to identify if the page is being displayed in the settings tab or not
+     */
+    public InfoPanel(Integer id, String type, Boolean settingsTab) {
 
         this.id = id;
         this.type = type;
@@ -81,10 +90,10 @@ public class InfoPanel extends JPanel implements ActionListener {
                 break;
         }
 
-        JPanel accountPanel = new JPanel(new GridLayout(9,1));
+        JPanel accountPanel = new JPanel(new GridLayout(9, 1));
 
         JPanel namePanel = new JPanel();
-        JLabel nameLabel = new JLabel("Name:      ",SwingConstants.RIGHT);
+        JLabel nameLabel = new JLabel("Name:      ", SwingConstants.RIGHT);
         nameField = new JTextField(24);
         nameField.setText(account.getName());
         nameField.setEditable(false);
@@ -92,7 +101,7 @@ public class InfoPanel extends JPanel implements ActionListener {
         namePanel.add(nameField);
 
         JPanel usernamePanel = new JPanel();
-        JLabel usernameLabel = new JLabel("User Name: ",SwingConstants.RIGHT);
+        JLabel usernameLabel = new JLabel("User Name: ", SwingConstants.RIGHT);
         usernameField = new JTextField(24);
         usernameField.setText(account.getUsername());
         usernameField.setEditable(false);
@@ -100,7 +109,7 @@ public class InfoPanel extends JPanel implements ActionListener {
         usernamePanel.add(usernameField);
 
         JPanel passwordPanel = new JPanel();
-        JLabel passwordLabel = new JLabel("Password:  ",SwingConstants.RIGHT);
+        JLabel passwordLabel = new JLabel("Password:  ", SwingConstants.RIGHT);
         passwordField = new JTextField(24);
         passwordField.setText(account.getPassword());
         passwordField.setEditable(false);
@@ -108,7 +117,7 @@ public class InfoPanel extends JPanel implements ActionListener {
         passwordPanel.add(passwordField);
 
         JPanel emailPanel = new JPanel();
-        JLabel emailLabel = new JLabel("Email:     ",SwingConstants.RIGHT);
+        JLabel emailLabel = new JLabel("Email:     ", SwingConstants.RIGHT);
         emailField = new JTextField(24);
         emailField.setText(account.getEmail());
         emailField.setEditable(false);
@@ -116,25 +125,25 @@ public class InfoPanel extends JPanel implements ActionListener {
         emailPanel.add(emailField);
 
         checkBoxPanel = new JPanel();
-        JLabel activeLabel = new JLabel("Active: ",SwingConstants.RIGHT);
+        JLabel activeLabel = new JLabel("Active: ", SwingConstants.RIGHT);
         activeCheckBox = new JCheckBox();
         activeCheckBox.setSelected(account.getActive());
         activeCheckBox.setEnabled(false);
         checkBoxPanel.add(activeLabel);
         checkBoxPanel.add(activeCheckBox);
-        JLabel approvedLabel = new JLabel("Approved: ",SwingConstants.RIGHT);
+        JLabel approvedLabel = new JLabel("Approved: ", SwingConstants.RIGHT);
         approvedCheckBox = new JCheckBox();
         approvedCheckBox.setSelected(account.getApproved());
         approvedCheckBox.setEnabled(false);
         checkBoxPanel.add(approvedLabel);
         checkBoxPanel.add(approvedCheckBox);
 
-        if (settingsTab){
+        if (settingsTab) {
             inSettingsTab(settingsTab);
         }
 
         JPanel typePanel = new JPanel();
-        JLabel typeLabel = new JLabel("Type:      ",SwingConstants.RIGHT);
+        JLabel typeLabel = new JLabel("Type:      ", SwingConstants.RIGHT);
         typeField = new JTextField(24);
         typeField.setText(account.getType());
         typeField.setEditable(false);
@@ -152,24 +161,24 @@ public class InfoPanel extends JPanel implements ActionListener {
         tabPanel.addTab("Account", accountPanel);
 
         //-------------------------------------------------------Client + Employee Fields
-        JPanel personalDataPanel = new JPanel(new GridLayout(9,1));
+        JPanel personalDataPanel = new JPanel(new GridLayout(9, 1));
 
         JPanel nifPanel = new JPanel();
-        JLabel nifLabel = new JLabel("NIF:      ",SwingConstants.RIGHT);
+        JLabel nifLabel = new JLabel("NIF:      ", SwingConstants.RIGHT);
         nifField = new JTextField(24);
         nifField.setEditable(false);
         nifPanel.add(nifLabel);
         nifPanel.add(nifField);
 
         JPanel phonePanel = new JPanel();
-        JLabel phoneLabel = new JLabel("Phone: ",SwingConstants.RIGHT);
+        JLabel phoneLabel = new JLabel("Phone: ", SwingConstants.RIGHT);
         phoneField = new JTextField(24);
         phoneField.setEditable(false);
         phonePanel.add(phoneLabel);
         phonePanel.add(phoneField);
 
         JPanel residencePanel = new JPanel();
-        JLabel residenceLabel = new JLabel("Residence:  ",SwingConstants.RIGHT);
+        JLabel residenceLabel = new JLabel("Residence:  ", SwingConstants.RIGHT);
         residenceField = new JTextField(24);
         residenceField.setEditable(false);
         residencePanel.add(residenceLabel);
@@ -190,7 +199,7 @@ public class InfoPanel extends JPanel implements ActionListener {
                 residenceField.setText(client.getResidence());
 
                 JPanel bussinessSectorPanel = new JPanel();
-                JLabel bussinessSectorLabel = new JLabel("Business Sector: ",SwingConstants.LEFT);
+                JLabel bussinessSectorLabel = new JLabel("Business Sector: ", SwingConstants.LEFT);
                 bussinessSectorField = new JTextField(24);
                 bussinessSectorField.setText(client.getBusinessSector());
                 bussinessSectorField.setEditable(false);
@@ -198,7 +207,7 @@ public class InfoPanel extends JPanel implements ActionListener {
                 bussinessSectorPanel.add(bussinessSectorField);
 
                 JPanel tierPanel = new JPanel();
-                JLabel tierLabel = new JLabel("Tier:     ",SwingConstants.RIGHT);
+                JLabel tierLabel = new JLabel("Tier:     ", SwingConstants.RIGHT);
                 tierField = new JTextField(24);
                 tierField.setText(client.getTier());
                 tierField.setEditable(false);
@@ -208,7 +217,7 @@ public class InfoPanel extends JPanel implements ActionListener {
                 personalDataPanel.add(bussinessSectorPanel);
                 personalDataPanel.add(tierPanel);
 
-                tabPanel.insertTab("Personal",null, personalDataPanel,null,1);
+                tabPanel.insertTab("Personal", null, personalDataPanel, null, 1);
 
                 //-----Direta--
                 //mudar para a img que vem da bd
@@ -216,14 +225,14 @@ public class InfoPanel extends JPanel implements ActionListener {
                 imgPanel.setLayout(new GridLayout(3, 1));
 
                 imgLabel = new JLabel();
-                if(client.getPic() != null && !client.getPic().isEmpty() ){
+                if (client.getPic() != null && !client.getPic().isEmpty()) {
                     image = Toolkit.getDefaultToolkit().getImage(client.getPic());
-                }else{
+                } else {
                     image = Toolkit.getDefaultToolkit().getImage("profilepics/sample.png");
                 }
                 scaledImage = image.getScaledInstance(150, 150, Image.SCALE_DEFAULT);
 
-                imgLabel.setIcon( new ImageIcon(scaledImage) );
+                imgLabel.setIcon(new ImageIcon(scaledImage));
 
                 imgPanel.add(new JPanel());
                 imgPanel.add(imgLabel);
@@ -236,7 +245,7 @@ public class InfoPanel extends JPanel implements ActionListener {
                 residenceField.setText(employee.getResidence());
 
                 JPanel expertisePanel = new JPanel();
-                JLabel expertiseLabel = new JLabel("Level Expertise: ",SwingConstants.LEFT);
+                JLabel expertiseLabel = new JLabel("Level Expertise: ", SwingConstants.LEFT);
                 expertiseField = new JTextField(24);
                 expertiseField.setText(employee.getLvlExpertise());
                 expertiseField.setEditable(false);
@@ -244,7 +253,7 @@ public class InfoPanel extends JPanel implements ActionListener {
                 expertisePanel.add(expertiseField);
 
                 JPanel startDatePanel = new JPanel();
-                JLabel startDateLabel = new JLabel("Start Date:     ",SwingConstants.RIGHT);
+                JLabel startDateLabel = new JLabel("Start Date:     ", SwingConstants.RIGHT);
                 JTextField startDateField = new JTextField(24);
                 startDateField.setText(OutputController.dateFormater(employee.getStartDate(), "day"));
                 startDateField.setEditable(false);
@@ -255,7 +264,7 @@ public class InfoPanel extends JPanel implements ActionListener {
                 personalDataPanel.add(startDatePanel);
 
                 //https://docs.oracle.com/javase/8/docs/api/javax/swing/JTabbedPane.html#insertTab-java.lang.String-javax.swing.Icon-java.awt.Component-java.lang.String-int-
-                tabPanel.insertTab("Personal",null, personalDataPanel,"qwe",1);
+                tabPanel.insertTab("Personal", null, personalDataPanel, "qwe", 1);
 
                 //-----Direta--
                 //EU SEI QUE NÃO DEVIA ESTAR A DUPLICAR CODIGO MAS ESTAMOS SEM TEMPO!!
@@ -263,14 +272,14 @@ public class InfoPanel extends JPanel implements ActionListener {
                 imgPanel.setLayout(new GridLayout(3, 1));
 
                 imgLabel = new JLabel();
-                if (employee.getPic() != null && !employee.getPic().isEmpty() ){
+                if (employee.getPic() != null && !employee.getPic().isEmpty()) {
                     image = Toolkit.getDefaultToolkit().getImage(employee.getPic());
-                }else{
+                } else {
                     image = Toolkit.getDefaultToolkit().getImage("profilepics/sample.png");
                 }
                 scaledImage = image.getScaledInstance(150, 150, Image.SCALE_DEFAULT);
 
-                imgLabel.setIcon( new ImageIcon(scaledImage) );
+                imgLabel.setIcon(new ImageIcon(scaledImage));
 
                 imgPanel.add(new JPanel());
                 imgPanel.add(imgLabel);
@@ -285,14 +294,14 @@ public class InfoPanel extends JPanel implements ActionListener {
                 imgPanel.setLayout(new GridLayout(3, 1));
 
                 imgLabel = new JLabel();
-                if (account.getPic() != null && !account.getPic().isEmpty()){
+                if (account.getPic() != null && !account.getPic().isEmpty()) {
                     image = Toolkit.getDefaultToolkit().getImage(account.getPic());
-                }else{
+                } else {
                     image = Toolkit.getDefaultToolkit().getImage("profilepics/sample.png");
                 }
                 scaledImage = image.getScaledInstance(150, 150, Image.SCALE_DEFAULT);
 
-                imgLabel.setIcon( new ImageIcon(scaledImage) );
+                imgLabel.setIcon(new ImageIcon(scaledImage));
 
                 imgPanel.add(new JPanel());
                 imgPanel.add(imgLabel);
@@ -321,24 +330,32 @@ public class InfoPanel extends JPanel implements ActionListener {
         footerPanel.add(searchFotoButton);
         footerPanel.add(editButton);
 
-        this.add(footerPanel,BorderLayout.SOUTH);
-        this.add(imgPanel,BorderLayout.EAST);
+        this.add(footerPanel, BorderLayout.SOUTH);
+        this.add(imgPanel, BorderLayout.EAST);
     }
 
-    public void inSettingsTab(Boolean settingsTab){
+    /**
+     * function to change the properties of the page components
+     * @param settingsTab Bool that tells if we're in settings tab
+     */
+    public void inSettingsTab(Boolean settingsTab) {
 
-        if (settingsTab){
+        if (settingsTab) {
             activeCheckBox.setEnabled(!settingsTab);
             checkBoxPanel.setVisible(!settingsTab);
             approvedCheckBox.setEnabled(!settingsTab);
             checkBoxPanel.setVisible(!settingsTab);
-        }else{
+        } else {
             activeCheckBox.setEnabled(settingsTab);
             approvedCheckBox.setEnabled(settingsTab);
         }
     }
 
-    public void setEditable(Boolean state){
+    /**
+     * function to change the properties of the page components to editable
+     * @param state Bool that indicates if the page can be editable
+     */
+    public void setEditable(Boolean state) {
         nameField.setEditable(state);
         usernameField.setEditable(state);
         passwordField.setEditable(state);
@@ -347,7 +364,7 @@ public class InfoPanel extends JPanel implements ActionListener {
         activeCheckBox.setEnabled(state);
         searchFotoButton.setEnabled(state);
 
-        if (type.equals("client")){
+        if (type.equals("client")) {
             nifField.setEditable(true);
             phoneField.setEditable(true);
             residenceField.setEditable(true);
@@ -360,52 +377,55 @@ public class InfoPanel extends JPanel implements ActionListener {
         }
     }
 
-    public void validateFields(){
+    /**
+     * Function to validate fields
+     */
+    public void validateFields() {
         Manager updatedManager = account;
         Employee updatedEmployee = employee;
         Client updatedClient = client;
-        Boolean updated= false;
+        Boolean updated = false;
 
         if (nameField.getText().trim().isEmpty()) {
-            Shared.showErrorDialog(new JFrame(),"Name field cannot be empty!", "Invalid Form");
+            Shared.showErrorDialog(new JFrame(), "Name field cannot be empty!", "Invalid Form");
             return;
         }
 
         if (usernameField.getText().trim().isEmpty()) {
-            Shared.showErrorDialog(new JFrame(),"Username field cannot be empty!", "Invalid Form");
+            Shared.showErrorDialog(new JFrame(), "Username field cannot be empty!", "Invalid Form");
             return;
         }
 
         if (passwordField.getText().trim().isEmpty()) {
-            Shared.showErrorDialog(new JFrame(),"Password field cannot be empty!", "Invalid Form");
+            Shared.showErrorDialog(new JFrame(), "Password field cannot be empty!", "Invalid Form");
             return;
         }
 
-        if(!InputController.validateEmail(emailField.getText())){
-            Shared.showErrorDialog(new JFrame(),"Invalid Email", "Invalid Form");
+        if (!InputController.validateEmail(emailField.getText())) {
+            Shared.showErrorDialog(new JFrame(), "Invalid Email", "Invalid Form");
             return;
         }
 
-        if (!type.equals("manager")){
-            if (!InputController.validateNif(nifField.getText())){
-                Shared.showErrorDialog(new JFrame(),"Invalid NIF", "Invalid Form");
+        if (!type.equals("manager")) {
+            if (!InputController.validateNif(nifField.getText())) {
+                Shared.showErrorDialog(new JFrame(), "Invalid NIF", "Invalid Form");
                 return;
             }
 
-            if (!InputController.validatePhone(phoneField.getText())){
-                Shared.showErrorDialog(new JFrame(),"Invalid Phone", "Invalid Form");
+            if (!InputController.validatePhone(phoneField.getText())) {
+                Shared.showErrorDialog(new JFrame(), "Invalid Phone", "Invalid Form");
                 return;
             }
 
-            if (residenceField.getText().trim().isEmpty()){
-                Shared.showErrorDialog(new JFrame(),"Invalid Residence", "Invalid Form");
+            if (residenceField.getText().trim().isEmpty()) {
+                Shared.showErrorDialog(new JFrame(), "Invalid Residence", "Invalid Form");
                 return;
             }
 
-            if (type.equals("client")){
+            if (type.equals("client")) {
 
-                if (bussinessSectorField.getText().trim().isEmpty()){
-                    Shared.showErrorDialog(new JFrame(),"Invalid Bussiness Sector", "Invalid Form");
+                if (bussinessSectorField.getText().trim().isEmpty()) {
+                    Shared.showErrorDialog(new JFrame(), "Invalid Bussiness Sector", "Invalid Form");
                     return;
                 }
 
@@ -415,15 +435,15 @@ public class InfoPanel extends JPanel implements ActionListener {
 //                }
             }
 
-            if (type.equals("employee")){
-                if (expertiseField.getText().trim().isEmpty()){
-                    Shared.showErrorDialog(new JFrame(),"Invalid Level of Expertise", "Invalid Form");
+            if (type.equals("employee")) {
+                if (expertiseField.getText().trim().isEmpty()) {
+                    Shared.showErrorDialog(new JFrame(), "Invalid Level of Expertise", "Invalid Form");
                     return;
                 }
             }
         }
 
-        if (type.equals("manager")){
+        if (type.equals("manager")) {
             updatedManager.setName(nameField.getText());
             updatedManager.setUsername(usernameField.getText());
             updatedManager.setPassword(passwordField.getText());
@@ -474,17 +494,21 @@ public class InfoPanel extends JPanel implements ActionListener {
         }
 
 
-        if (updated){
-            Shared.showInformationDialog(new JFrame(),"The data was updated with success.","Valid Form");
+        if (updated) {
+            Shared.showInformationDialog(new JFrame(), "The data was updated with success.", "Valid Form");
 
             editButton.setText("Edit Account");
             setEditable(false);
             beingEdited = false;
-        }else{
-            Shared.showErrorDialog(new JFrame(),"There was an error updating the account.","Validation Error");
+        } else {
+            Shared.showErrorDialog(new JFrame(), "There was an error updating the account.", "Validation Error");
         }
     }
 
+    /**
+     * Checks when an action is performed
+     * @param e used to identify which button was pressed
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
 

@@ -14,6 +14,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
+/**
+ * Class to manage what an employee sees on the app
+ */
 public class EmployeeView implements ActionListener, MouseListener {
 
     private Integer employeeId;
@@ -30,7 +33,7 @@ public class EmployeeView implements ActionListener, MouseListener {
 
     private JCheckBox notificationShowAllBox;
 
-    private String [] repairColumnNames = {
+    private String[] repairColumnNames = {
             "ID",
             "Repair Number",
             "Employee ID",
@@ -43,7 +46,7 @@ public class EmployeeView implements ActionListener, MouseListener {
             "Notes"
     };
 
-    private String [] notificationColumnNames = {
+    private String[] notificationColumnNames = {
             "ID",
             "Message",
             "Read",
@@ -57,7 +60,10 @@ public class EmployeeView implements ActionListener, MouseListener {
         this.employeeId = employeeId;
     }
 
-    public JTabbedPane show(){
+    /**
+     * Function to show the graphical interface
+     */
+    public JTabbedPane show() {
         JTabbedPane tabPanel = new JTabbedPane();
 
         JPanel repairPanel = new JPanel();
@@ -72,7 +78,7 @@ public class EmployeeView implements ActionListener, MouseListener {
         //------------Repair Panel Main
         //https://docs.oracle.com/javase/tutorial/uiswing/components/table.html#data
         //https://docs.oracle.com/javase/8/docs/api/javax/swing/table/DefaultTableModel.html
-        DefaultTableModel repairModel = new DefaultTableModel(repairColumnNames,0);
+        DefaultTableModel repairModel = new DefaultTableModel(repairColumnNames, 0);
 
         ArrayList<Repair> repairs = RepairController.listRepairsByEmployee(employeeId);
 
@@ -92,7 +98,7 @@ public class EmployeeView implements ActionListener, MouseListener {
         JScrollPane repairScrollPane = new JScrollPane(repairTable);
 
         JPanel repairSearchbar = new JPanel();
-        repairSearchbar.setLayout(new GridLayout(1,5));
+        repairSearchbar.setLayout(new GridLayout(1, 5));
 
         JLabel repairSearchLabel = new JLabel("   Search: ", SwingConstants.RIGHT);
         repairSearchbar.add(repairSearchLabel);
@@ -119,7 +125,7 @@ public class EmployeeView implements ActionListener, MouseListener {
         //------------Notification Panel Main
         //https://docs.oracle.com/javase/tutorial/uiswing/components/table.html#data
         //https://docs.oracle.com/javase/8/docs/api/javax/swing/table/DefaultTableModel.html
-        DefaultTableModel notificationModel = new DefaultTableModel(notificationColumnNames,0);
+        DefaultTableModel notificationModel = new DefaultTableModel(notificationColumnNames, 0);
 
         ArrayList<Notification> notifications =
                 NotificationController.listNotifications(employeeId, false);
@@ -143,14 +149,14 @@ public class EmployeeView implements ActionListener, MouseListener {
         JScrollPane notificationScrollPane = new JScrollPane(notificationTable);
 
         JPanel notificationSearchbar = new JPanel();
-        notificationSearchbar.setLayout(new GridLayout(1,5));
+        notificationSearchbar.setLayout(new GridLayout(1, 5));
 
         notificationSearchbar.add(new JLabel());
         notificationSearchbar.add(new JLabel());
         notificationSearchbar.add(new JLabel());
 
         JPanel notificationShowAllPanel = new JPanel();
-        notificationShowAllPanel.setLayout(new GridLayout(1,2));
+        notificationShowAllPanel.setLayout(new GridLayout(1, 2));
 
         JLabel notificationShowAllLabel =
                 new JLabel("Show All: ", SwingConstants.RIGHT);
@@ -178,8 +184,12 @@ public class EmployeeView implements ActionListener, MouseListener {
         return tabPanel;
     }
 
+    /**
+     * Fills the repair equipment
+     * @param search Boolean to indicate if we're searching for something
+     */
     public void fillRepairTable(Boolean search) {
-        DefaultTableModel repairModel = new DefaultTableModel(repairColumnNames,0);
+        DefaultTableModel repairModel = new DefaultTableModel(repairColumnNames, 0);
         ArrayList<Repair> repairs;
 
         if (search) {
@@ -204,9 +214,13 @@ public class EmployeeView implements ActionListener, MouseListener {
         repairTable.removeColumn(repairTable.getColumnModel().getColumn(9));
     }
 
+    /**
+     * Updates the values of the rows of the notification table
+     * @param showAll Boolean to indicate if we're showing all notifications or just the unread ones
+     */
     public void fillNotificationTable(Boolean showAll) {
         DefaultTableModel notificationModel =
-                new DefaultTableModel(notificationColumnNames,0);
+                new DefaultTableModel(notificationColumnNames, 0);
 
         ArrayList<Notification> notifications =
                 NotificationController.listNotifications(employeeId, showAll);
@@ -225,17 +239,25 @@ public class EmployeeView implements ActionListener, MouseListener {
         );
     }
 
+    /**
+     * Checks when an action is performed
+     * @param e used to identify which button was pressed
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource().equals(repairSearchButton)){
+        if (e.getSource().equals(repairSearchButton)) {
             fillRepairTable(true);
         }
 
-        if (e.getSource().equals(notificationSearchButton)){
+        if (e.getSource().equals(notificationSearchButton)) {
             fillNotificationTable(notificationShowAllBox.isSelected());
         }
     }
 
+    /**
+     * Checks when an action is performed
+     * @param e used to identify mouse clicked
+     */
     //https://coderanch.com/t/341705/java/JTable-responding-row-clicks
     @Override
     public void mouseClicked(MouseEvent e) {
@@ -329,7 +351,7 @@ public class EmployeeView implements ActionListener, MouseListener {
                             );
                         }
 
-                    //--------------------------------------Reject Assignment--------------------------------------
+                        //--------------------------------------Reject Assignment--------------------------------------
                     } else {
 
                         NotificationController.dennyRepair(
@@ -350,7 +372,7 @@ public class EmployeeView implements ActionListener, MouseListener {
                         );
                     }
 
-                //--------------------------------------Other Notifications--------------------------------------
+                    //--------------------------------------Other Notifications--------------------------------------
                 } else {
 
                     String message = notification.getMessage();
@@ -369,19 +391,38 @@ public class EmployeeView implements ActionListener, MouseListener {
                     );
                 }
             }
-        }  
+        }
     }
-    
-    
-    @Override
-    public void mousePressed(MouseEvent e) {}
 
+    /**
+     * Mouse events not used
+     * @param e used to identify mouse event
+     */
     @Override
-    public void mouseReleased(MouseEvent e) {}
+    public void mousePressed(MouseEvent e) {
+    }
 
+    /**
+     * Mouse events not used
+     * @param e used to identify mouse event
+     */
     @Override
-    public void mouseEntered(MouseEvent e) {}
+    public void mouseReleased(MouseEvent e) {
+    }
 
+    /**
+     * Mouse events not used
+     * @param e used to identify mouse event
+     */
     @Override
-    public void mouseExited(MouseEvent e) {}
+    public void mouseEntered(MouseEvent e) {
+    }
+
+    /**s
+     * Mouse events not used
+     * @param e used to identify mouse event
+     */
+    @Override
+    public void mouseExited(MouseEvent e) {
+    }
 }

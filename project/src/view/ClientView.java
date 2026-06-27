@@ -16,6 +16,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
+/**
+ * Class to manage what a client sees on the app
+ */
 public class ClientView implements ActionListener, MouseListener {
 
     private Integer clientId;
@@ -38,7 +41,7 @@ public class ClientView implements ActionListener, MouseListener {
 
     private JCheckBox notificationShowAllBox;
 
-    private String [] equipmentColumnNames = {
+    private String[] equipmentColumnNames = {
             "ID",
             "Client ID",
             "Brand",
@@ -50,7 +53,7 @@ public class ClientView implements ActionListener, MouseListener {
             "Repair Date"
     };
 
-    private String [] repairColumnNames = {
+    private String[] repairColumnNames = {
             "ID",
             "Repair Number",
             "Employee ID",
@@ -63,7 +66,7 @@ public class ClientView implements ActionListener, MouseListener {
             "Notes"
     };
 
-    private String [] notificationColumnNames = {
+    private String[] notificationColumnNames = {
             "ID",
             "Message",
             "Read",
@@ -77,6 +80,9 @@ public class ClientView implements ActionListener, MouseListener {
         this.clientId = clientId;
     }
 
+    /**
+     * Function to show the graphical interface
+     */
     public JTabbedPane show() {
         JTabbedPane tabPanel = new JTabbedPane();
 
@@ -95,7 +101,7 @@ public class ClientView implements ActionListener, MouseListener {
         //------------Equipment Panel Main
         //https://docs.oracle.com/javase/tutorial/uiswing/components/table.html#data
         //https://docs.oracle.com/javase/8/docs/api/javax/swing/table/DefaultTableModel.html
-        DefaultTableModel equipmentModel = new DefaultTableModel(equipmentColumnNames,0);
+        DefaultTableModel equipmentModel = new DefaultTableModel(equipmentColumnNames, 0);
 
         ArrayList<Equipment> equipments = EquipmentController.listEquipmentsByClient(clientId);
 
@@ -114,7 +120,7 @@ public class ClientView implements ActionListener, MouseListener {
         JScrollPane equipmentScrollPane = new JScrollPane(equipmentTable);
 
         JPanel equipmentSearchbar = new JPanel();
-        equipmentSearchbar.setLayout(new GridLayout(1,5));
+        equipmentSearchbar.setLayout(new GridLayout(1, 5));
 
         JLabel equipmentSearchLabel = new JLabel("   Search: ", SwingConstants.RIGHT);
         equipmentSearchbar.add(equipmentSearchLabel);
@@ -126,14 +132,14 @@ public class ClientView implements ActionListener, MouseListener {
                 "Brand",
                 "SKU"
         });
-        
+
         equipmentSearchbar.add(equipmentSearchTypes);
 
         addEquipmentButton = new JButton("Add Equipment");
         addEquipmentButton.setToolTipText(
                 "Open the form to add a new equipment."
         );
-        
+
         addEquipmentButton.addActionListener(this);
         equipmentSearchbar.add(addEquipmentButton);
         equipmentSearchButton = new JButton("Search");
@@ -147,7 +153,7 @@ public class ClientView implements ActionListener, MouseListener {
         //------------Repair Panel Main
         //https://docs.oracle.com/javase/tutorial/uiswing/components/table.html#data
         //https://docs.oracle.com/javase/8/docs/api/javax/swing/table/DefaultTableModel.html
-        DefaultTableModel repairModel = new DefaultTableModel(repairColumnNames,0);
+        DefaultTableModel repairModel = new DefaultTableModel(repairColumnNames, 0);
 
         ArrayList<Repair> repairs = RepairController.listRepairsByClient(clientId);
 
@@ -167,7 +173,7 @@ public class ClientView implements ActionListener, MouseListener {
         JScrollPane repairScrollPane = new JScrollPane(repairTable);
 
         JPanel repairSearchbar = new JPanel();
-        repairSearchbar.setLayout(new GridLayout(1,5));
+        repairSearchbar.setLayout(new GridLayout(1, 5));
 
         JLabel repairSearchLabel = new JLabel("   Search: ", SwingConstants.RIGHT);
         repairSearchbar.add(repairSearchLabel);
@@ -196,7 +202,7 @@ public class ClientView implements ActionListener, MouseListener {
         //------------Notification Panel Main
         //https://docs.oracle.com/javase/tutorial/uiswing/components/table.html#data
         //https://docs.oracle.com/javase/8/docs/api/javax/swing/table/DefaultTableModel.html
-        DefaultTableModel notificationModel = new DefaultTableModel(notificationColumnNames,0);
+        DefaultTableModel notificationModel = new DefaultTableModel(notificationColumnNames, 0);
 
         ArrayList<Notification> notifications = NotificationController.listNotifications(clientId, false);
 
@@ -219,14 +225,14 @@ public class ClientView implements ActionListener, MouseListener {
         JScrollPane notificationScrollPane = new JScrollPane(notificationTable);
 
         JPanel notificationSearchbar = new JPanel();
-        notificationSearchbar.setLayout(new GridLayout(1,5));
+        notificationSearchbar.setLayout(new GridLayout(1, 5));
 
         notificationSearchbar.add(new JLabel());
         notificationSearchbar.add(new JLabel());
         notificationSearchbar.add(new JLabel());
 
         JPanel notificationShowAllPanel = new JPanel();
-        notificationShowAllPanel.setLayout(new GridLayout(1,2));
+        notificationShowAllPanel.setLayout(new GridLayout(1, 2));
 
         JLabel notificationShowAllLabel = new JLabel("Show All: ", SwingConstants.RIGHT);
         notificationShowAllPanel.add(notificationShowAllLabel);
@@ -253,8 +259,12 @@ public class ClientView implements ActionListener, MouseListener {
         return tabPanel;
     }
 
+    /**
+     * Fills the repair equipment
+     * @param search Boolean to indicate if we're searching for something
+     */
     public void fillEquipmentTable(Boolean search) {
-        DefaultTableModel equipmentModel = new DefaultTableModel(equipmentColumnNames,0);
+        DefaultTableModel equipmentModel = new DefaultTableModel(equipmentColumnNames, 0);
         ArrayList<Equipment> equipments;
 
         if (search) {
@@ -277,8 +287,12 @@ public class ClientView implements ActionListener, MouseListener {
         equipmentTable.setModel(equipmentModel);
     }
 
+    /**
+     * Fills the repair table
+     * @param search Boolean to indicate if we're searching for something
+     */
     public void fillRepairTable(Boolean search) {
-        DefaultTableModel repairModel = new DefaultTableModel(repairColumnNames,0);
+        DefaultTableModel repairModel = new DefaultTableModel(repairColumnNames, 0);
         ArrayList<Repair> repairs;
 
         if (search) {
@@ -302,8 +316,12 @@ public class ClientView implements ActionListener, MouseListener {
         repairTable.removeColumn(repairTable.getColumnModel().getColumn(9));
     }
 
+    /**
+     * Updates the values of the rows of the notification table
+     * @param showAll Boolean to indicate if we're showing all notifications or just the unread ones
+     */
     public void fillNotificationTable(Boolean showAll) {
-        DefaultTableModel notificationModel = new DefaultTableModel(notificationColumnNames,0);
+        DefaultTableModel notificationModel = new DefaultTableModel(notificationColumnNames, 0);
 
         ArrayList<Notification> notifications = NotificationController.listNotifications(clientId, showAll);
 
@@ -317,7 +335,10 @@ public class ClientView implements ActionListener, MouseListener {
         notificationTable.setModel(notificationModel);
         notificationTable.removeColumn(notificationTable.getColumnModel().getColumn(1));
     }
-    
+
+    /**
+     * Displays the form to add a new Equipment
+     */
     private void showEquipmentWindow() {
 
         JDialog dialog = new JDialog();
@@ -342,7 +363,10 @@ public class ClientView implements ActionListener, MouseListener {
 
         fillEquipmentTable(false);
     }
-    
+
+    /**
+     * Displays the form to add a new Repair
+     */
     private void showRepairWindow() {
 
         JDialog dialog = new JDialog();
@@ -368,30 +392,38 @@ public class ClientView implements ActionListener, MouseListener {
         fillRepairTable(false);
     }
 
+    /**
+     * Checks when an action is performed
+     * @param e used to identify which button was pressed
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
-        
-    	if (e.getSource().equals(addEquipmentButton)) {
-    	    showEquipmentWindow();
-    	}
-    	
-    	if (e.getSource().equals(addRepairButton)) {
-    	    showRepairWindow();
-    	}
-    	
-    	if (e.getSource().equals(equipmentSearchButton)){
+
+        if (e.getSource().equals(addEquipmentButton)) {
+            showEquipmentWindow();
+        }
+
+        if (e.getSource().equals(addRepairButton)) {
+            showRepairWindow();
+        }
+
+        if (e.getSource().equals(equipmentSearchButton)) {
             fillEquipmentTable(true);
         }
 
-        if (e.getSource().equals(repairSearchButton)){
+        if (e.getSource().equals(repairSearchButton)) {
             fillRepairTable(true);
         }
 
-        if (e.getSource().equals(notificationSearchButton)){
+        if (e.getSource().equals(notificationSearchButton)) {
             fillNotificationTable(notificationShowAllBox.isSelected());
         }
     }
 
+    /**
+     * Checks when an action is performed
+     * @param e used to identify mouse clicked
+     */
     //https://coderanch.com/t/341705/java/JTable-responding-row-clicks
     @Override
     public void mouseClicked(MouseEvent e) {
@@ -422,17 +454,11 @@ public class ClientView implements ActionListener, MouseListener {
 
             if (selectedRow >= 0) {
 
-                int modelRow =
-                        notificationTable.convertRowIndexToModel(selectedRow);
+                int modelRow = notificationTable.convertRowIndexToModel(selectedRow);
 
-                Integer notificationId = (Integer)
-                        notificationTable.getModel().getValueAt(modelRow, 0);
+                Integer notificationId = (Integer) notificationTable.getModel().getValueAt(modelRow, 0);
 
-                Notification notification =
-                        NotificationController.getNotification(
-                                notificationId,
-                                clientId
-                        );
+                Notification notification = NotificationController.getNotification(notificationId, clientId);
 
                 if (notification == null) {
 
@@ -446,15 +472,11 @@ public class ClientView implements ActionListener, MouseListener {
                 }
 
                 //--------------------------------------Repair Rejected or Finished--------------------------------------
-                if (notification.getType().equals("repairRejected")
-                        || notification.getType().equals("repairFinished")) {
+                if (notification.getType().equals("repairRejected") || notification.getType().equals("repairFinished")) {
 
                     String message = notification.getMessage();
 
-                    if (message == null
-                            || message.trim().equals("")
-                            || message.equals("null")) {
-
+                    if (message == null || message.trim().equals("") || message.equals("null")) {
                         message = "This notification has no message.";
                     }
 
@@ -466,18 +488,14 @@ public class ClientView implements ActionListener, MouseListener {
 
                     NotificationController.maskAsRead(notification);
 
-                    fillNotificationTable(
-                            notificationShowAllBox.isSelected()
-                    );
+                    fillNotificationTable(notificationShowAllBox.isSelected());
 
-                //--------------------------------------Other Notifications--------------------------------------
+                    //--------------------------------------Other Notifications--------------------------------------
                 } else {
 
                     String message = notification.getMessage();
 
-                    if (message == null
-                            || message.trim().equals("")
-                            || message.equals("null")) {
+                    if (message == null || message.trim().equals("") || message.equals("null")) {
 
                         message = "This notification has no message.";
                     }
@@ -491,16 +509,36 @@ public class ClientView implements ActionListener, MouseListener {
             }
         }
     }
-    
-    @Override
-    public void mousePressed(MouseEvent e) {}
 
+    /**
+     * Mouse events not used
+     * @param e used to identify mouse event
+     */
     @Override
-    public void mouseReleased(MouseEvent e) {}
+    public void mousePressed(MouseEvent e) {
+    }
 
+    /**
+     * Mouse events not used
+     * @param e used to identify mouse event
+     */
     @Override
-    public void mouseEntered(MouseEvent e) {}
+    public void mouseReleased(MouseEvent e) {
+    }
 
+    /**
+     * Mouse events not used
+     * @param e used to identify mouse event
+     */
     @Override
-    public void mouseExited(MouseEvent e) {}
+    public void mouseEntered(MouseEvent e) {
+    }
+
+    /**
+     * Mouse events not used
+     * @param e used to identify mouse event
+     */
+    @Override
+    public void mouseExited(MouseEvent e) {
+    }
 }

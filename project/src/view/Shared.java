@@ -8,9 +8,20 @@ import model.Notification;
 import javax.swing.*;
 import java.util.ArrayList;
 
+/**
+ * Class to manage the multiple types of Dialogs that cam appear
+ */
 public class Shared {
 
-    public static Boolean showOkCancelDialog(JFrame frame, String message, String title){
+    /**
+     * Function to display an OK/Cancel type Dialog
+     *
+     * @param frame   frame of the dialog
+     * @param message message of the dialog
+     * @param title   of the dialog
+     * @return result of the dialog
+     */
+    public static Boolean showOkCancelDialog(JFrame frame, String message, String title) {
         int dialogResult = JOptionPane.showConfirmDialog(
                 frame,
                 message,
@@ -21,6 +32,14 @@ public class Shared {
         return dialogResult == 0;
     }
 
+    /**
+     * Function to display an Yes/No type Dialog
+     *
+     * @param frame   frame of the dialog
+     * @param message message of the dialog
+     * @param title   of the dialog
+     * @return result of the dialog (boolean)
+     */
     public static Boolean showYesNoDialog(JFrame frame, String message, String title) {
 
         int dialogResult = JOptionPane.showConfirmDialog(
@@ -33,7 +52,14 @@ public class Shared {
         return dialogResult == JOptionPane.YES_OPTION;
     }
 
-    public static void showErrorDialog(JFrame frame, String message, String title){
+    /**
+     * Function to display an Error type Dialog
+     *
+     * @param frame   frame of the dialog
+     * @param message message of the dialog
+     * @param title   of the dialog
+     */
+    public static void showErrorDialog(JFrame frame, String message, String title) {
         JOptionPane.showMessageDialog(
                 frame,
                 message,
@@ -43,7 +69,14 @@ public class Shared {
 
     }
 
-    public static void showInformationDialog(JFrame frame, String message, String title){
+    /**
+     * Function to display an Information type Dialog
+     *
+     * @param frame   frame of the dialog
+     * @param message message of the dialog
+     * @param title   of the dialog
+     */
+    public static void showInformationDialog(JFrame frame, String message, String title) {
         JOptionPane.showMessageDialog(
                 frame,
                 message,
@@ -52,24 +85,43 @@ public class Shared {
         );
     }
 
-    //work in progress
-    public static Integer showSelectEmployeeDialog(JFrame frame,String message, String title, Integer employeeId, Integer repairId){
-        JLabel myLabel1 = new JLabel("Select the Employee for this Repair:");
-        JComboBox employeeCombobox = new JComboBox();
-        //ArrayList<Employee> availableEmployeeList = EmployeeController.availableForRepair(employeeId,repairId);
-        DefaultComboBoxModel model = new DefaultComboBoxModel( );
-        employeeCombobox.setModel(model);
-        JComponent[] inputs =
-                new JComponent[] { myLabel1,
-                        myLabel1,
-                        employeeCombobox};
-        int valor = JOptionPane.showConfirmDialog( null,
-                inputs,
-                "Message",
-                JOptionPane.OK_CANCEL_OPTION);
+    /**
+     * Function to display an Information type Dialog
+     *
+     * @param frame   frame of the dialog
+     * @param message message of the dialog
+     * @param title   of the dialog
+     * @return id of the selected employee
+     */
+    public static String showSelectEmployeeDialog(JFrame frame, String message, String title) {
+        String employeeIdText = JOptionPane.showInputDialog(
+                frame,
+                message,
+                title,
+                JOptionPane.QUESTION_MESSAGE
+        );
 
-        return 1;
+        return employeeIdText;
     }
+
+    //work in progress( Era para dar para escolher com uma bombobox os employees que estavam disponiveis, mas acabei por não conseguir.. ;_;)
+//    public static Integer showSelectEmployeeDialog(JFrame frame,String message, String title, Integer employeeId, Integer repairId){
+//        JLabel myLabel1 = new JLabel("Select the Employee for this Repair:");
+//        JComboBox employeeCombobox = new JComboBox();
+//        //ArrayList<Employee> availableEmployeeList = EmployeeController.availableForRepair(employeeId,repairId);
+//        DefaultComboBoxModel model = new DefaultComboBoxModel( );
+//        employeeCombobox.setModel(model);
+//        JComponent[] inputs =
+//                new JComponent[] { myLabel1,
+//                        myLabel1,
+//                        employeeCombobox};
+//        int valor = JOptionPane.showConfirmDialog( null,
+//                inputs,
+//                "Message",
+//                JOptionPane.OK_CANCEL_OPTION);
+//
+//        return 1;
+//    }
 
 
 }

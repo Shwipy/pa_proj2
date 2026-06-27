@@ -42,17 +42,17 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
     private Integer selectedId = -1;
     private String selectedType;
 
-    private String [] accountColumnNames = {
+    private String[] accountColumnNames = {
             "ID",
             "Name",
             "Username",
             "Active",
-            "Approved" ,
+            "Approved",
             "Email",
             "Type"
     };
 
-    private String [] repairColumnNames = {
+    private String[] repairColumnNames = {
             "ID",
             "Repair Number",
             "Employee ID",
@@ -65,7 +65,7 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
             "Notes"
     };
 
-    private String [] notificationColumnNames = {
+    private String[] notificationColumnNames = {
             "ID",
             "Message",
             "Read",
@@ -79,7 +79,10 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
         this.managerId = managerId;
     }
 
-    public JTabbedPane show(){
+    /**
+     * Function to show the graphical interface
+     */
+    public JTabbedPane show() {
         JTabbedPane tabPanel = new JTabbedPane();
 
         JPanel accountPanel = new JPanel();
@@ -97,11 +100,11 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
         //------------Account Panel Main
         //https://docs.oracle.com/javase/tutorial/uiswing/components/table.html#data
         //https://docs.oracle.com/javase/8/docs/api/javax/swing/table/DefaultTableModel.html
-        DefaultTableModel accountModel = new DefaultTableModel(accountColumnNames,0);
+        DefaultTableModel accountModel = new DefaultTableModel(accountColumnNames, 0);
 
         ArrayList<Manager> users = ManagerController.listUsers();
 
-        if (users != null){
+        if (users != null) {
             for (Manager user : users) {
                 accountModel.addRow(user.toTableRow());
             }
@@ -112,15 +115,15 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
         accountTable.setDefaultEditor(Object.class, null);
         accountTable.setAutoCreateRowSorter(true);
         //meti o mouselistener dentro da tabela para não ter de fazer depois confirmacoes a ver se a linha esta ou nao selected
-        accountTable.addMouseListener (this);
+        accountTable.addMouseListener(this);
         accountTable.getSelectionModel().addListSelectionListener(this);
 
         JScrollPane accountScrollPane = new JScrollPane(accountTable);
 
         JPanel accountSearchbar = new JPanel();
-        accountSearchbar.setLayout(new GridLayout(1,5));
+        accountSearchbar.setLayout(new GridLayout(1, 5));
 
-        JLabel accountSearchLabel = new JLabel("   Search: ",SwingConstants.RIGHT);
+        JLabel accountSearchLabel = new JLabel("   Search: ", SwingConstants.RIGHT);
         accountSearchbar.add(accountSearchLabel);
 
         accountSearchTerm = new JTextField();
@@ -145,7 +148,7 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
 
         //------------Repair Panel Main
         //https://docs.oracle.com/javase/8/docs/api/javax/swing/table/DefaultTableModel.html
-        DefaultTableModel repairModel = new DefaultTableModel(repairColumnNames,0);
+        DefaultTableModel repairModel = new DefaultTableModel(repairColumnNames, 0);
 
         ArrayList<Repair> repairs = RepairController.listAllRepairs();
 
@@ -164,7 +167,7 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
         JScrollPane repairScrollPane = new JScrollPane(repairTable);
 
         JPanel repairSearchbar = new JPanel();
-        repairSearchbar.setLayout(new GridLayout(1,5));
+        repairSearchbar.setLayout(new GridLayout(1, 5));
 
         JLabel repairSearchLabel = new JLabel("   Search: ", SwingConstants.RIGHT);
         repairSearchbar.add(repairSearchLabel);
@@ -180,9 +183,9 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
         repairSearchbar.add(repairSearchTypes);
 
         JPanel repairCheckFinishedPanel = new JPanel();
-        repairCheckFinishedPanel.setLayout(new GridLayout(1,2));
+        repairCheckFinishedPanel.setLayout(new GridLayout(1, 2));
 
-        JLabel repairCheckFinishedLabel = new JLabel("Incomplete: ",SwingConstants.RIGHT);
+        JLabel repairCheckFinishedLabel = new JLabel("Incomplete: ", SwingConstants.RIGHT);
         repairCheckFinishedPanel.add(repairCheckFinishedLabel);
 
         repairCheckFinishedBox = new JCheckBox();
@@ -200,7 +203,7 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
 
         //------------Notification Panel Main
         //https://docs.oracle.com/javase/8/docs/api/javax/swing/table/DefaultTableModel.html
-        DefaultTableModel notificationModel = new DefaultTableModel(notificationColumnNames,0);
+        DefaultTableModel notificationModel = new DefaultTableModel(notificationColumnNames, 0);
 
         ArrayList<Notification> notifications = NotificationController.listNotificationsManager(false);
 
@@ -222,14 +225,14 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
         JScrollPane notificationScrollPane = new JScrollPane(notificationTable);
 
         JPanel notificationSearchbar = new JPanel();
-        notificationSearchbar.setLayout(new GridLayout(1,5));
+        notificationSearchbar.setLayout(new GridLayout(1, 5));
 
         notificationSearchbar.add(new JLabel());
         notificationSearchbar.add(new JLabel());
         notificationSearchbar.add(new JLabel());
 
         JPanel notificationShowAllPanel = new JPanel();
-        notificationShowAllPanel.setLayout(new GridLayout(1,2));
+        notificationShowAllPanel.setLayout(new GridLayout(1, 2));
 
         JLabel notificationShowAllLabel = new JLabel("Show All: ", SwingConstants.RIGHT);
         notificationShowAllPanel.add(notificationShowAllLabel);
@@ -257,16 +260,20 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
         return tabPanel;
     }
 
-    public void fillTable(Boolean search){
-        DefaultTableModel accountModel = new DefaultTableModel(accountColumnNames,0);
+    /**
+     * Fills the account table
+     * @param search Boolean to indicate if we're searching for something
+     */
+    public void fillTable(Boolean search) {
+        DefaultTableModel accountModel = new DefaultTableModel(accountColumnNames, 0);
         ArrayList<Manager> users;
-        if (search){
-            users = ManagerController.searchUsers(accountSearchTerm.getText(),accountSearchTypes.getSelectedItem().toString().toLowerCase());
-        }else{
+        if (search) {
+            users = ManagerController.searchUsers(accountSearchTerm.getText(), accountSearchTypes.getSelectedItem().toString().toLowerCase());
+        } else {
             users = ManagerController.listUsers();
         }
 
-        if (users != null){
+        if (users != null) {
             for (Manager user : users) {
                 accountModel.addRow(user.toTableRow());
             }
@@ -276,7 +283,10 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
         accountTable.setModel(accountModel);
     }
 
-
+    /**
+     * Fills the repair table
+     * @param search Boolean to indicate if we're searching for something
+     */
     public void fillRepairTable(Boolean search) {
         DefaultTableModel repairModel = new DefaultTableModel(repairColumnNames, 0);
         ArrayList<Repair> repairs;
@@ -303,8 +313,12 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
         repairTable.removeColumn(repairTable.getColumnModel().getColumn(9));
     }
 
+    /**
+     * Updates the values of the rows of the notification table
+     * @param showAll Boolean to indicate if we're showing all notifications or just the unread ones
+     */
     public void fillNotificationTable(Boolean showAll) {
-        DefaultTableModel notificationModel = new DefaultTableModel(notificationColumnNames,0);
+        DefaultTableModel notificationModel = new DefaultTableModel(notificationColumnNames, 0);
 
         ArrayList<Notification> notifications = NotificationController.listNotificationsManager(showAll);
 
@@ -319,6 +333,10 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
         notificationTable.removeColumn(notificationTable.getColumnModel().getColumn(1));
     }
 
+    /**
+     * Checks when an action is performed
+     * @param e used to identify which button was pressed
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource().equals(accountSearchButton)) {
@@ -334,10 +352,14 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
         }
     }
 
+    /**
+     * Checks when an action is performed
+     * @param e used to identify mouse clicked
+     */
     //https://coderanch.com/t/341705/java/JTable-responding-row-clicks
     @Override
     public void mouseClicked(MouseEvent e) {
-        if (e.getSource().equals(accountTable) && e.getClickCount() == 2){
+        if (e.getSource().equals(accountTable) && e.getClickCount() == 2) {
             JDialog dialog = new JDialog();
             JPanel dialogWindow = new InfoPanel(selectedId, selectedType, false);
             dialog.setSize(780, 500);
@@ -380,7 +402,7 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
 
             if (selectedRow >= 0) {
 
-                int modelRow =notificationTable.convertRowIndexToModel(selectedRow);
+                int modelRow = notificationTable.convertRowIndexToModel(selectedRow);
 
                 Integer notificationId = (Integer)
                         notificationTable.getModel().getValueAt(modelRow, 0);
@@ -438,7 +460,7 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
                         }
                     }
 
-                //--------------------------------------New Repair--------------------------------------
+                    //--------------------------------------New Repair--------------------------------------
                 } else if (notification.getType().equals("newRepair")) {
 
                     Boolean answer = Shared.showYesNoDialog(
@@ -450,9 +472,7 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
                     //--------------------------------------Approve Repair--------------------------------------
                     if (answer) {
 
-                        if (!RepairController.existsSubmittedRepair(
-                                notification.getRepairId()
-                        )) {
+                        if (!RepairController.existsSubmittedRepair(notification.getRepairId())) {
 
                             Shared.showErrorDialog(
                                     new JFrame(),
@@ -462,29 +482,22 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
 
                             NotificationController.maskAsRead(notification);
 
-                            fillNotificationTable(
-                                    notificationShowAllBox.isSelected()
-                            );
+                            fillNotificationTable(notificationShowAllBox.isSelected());
 
                             return;
                         }
 
-                        if (RepairController.approveRepair(
-                                notification.getRepairId()
-                        )) {
+                        if (RepairController.approveRepair(notification.getRepairId())) {
 
                             while (true) {
 
-                                String employeeIdText =
-                                        JOptionPane.showInputDialog(
-                                                new JFrame(),
-                                                "Employee ID:",
-                                                "Assign Employee",
-                                                JOptionPane.QUESTION_MESSAGE
-                                        );
+                                String employeeIdText = Shared.showSelectEmployeeDialog(
+                                        new JFrame(),
+                                        "Employee ID:",
+                                        "Assign Employee"
+                                );
 
-                                if (employeeIdText == null
-                                        || employeeIdText.trim().isEmpty()) {
+                                if (employeeIdText == null || employeeIdText.trim().isEmpty()) {
 
                                     Shared.showErrorDialog(
                                             new JFrame(),
@@ -498,10 +511,7 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
                                 Integer employeeId;
 
                                 try {
-
-                                    employeeId = Integer.parseInt(
-                                            employeeIdText.trim()
-                                    );
+                                    employeeId = Integer.parseInt(employeeIdText.trim());
 
                                 } catch (NumberFormatException exception) {
 
@@ -525,10 +535,7 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
                                     continue;
                                 }
 
-                                if (!EmployeeController.availableForRepair(
-                                        employeeId,
-                                        notification.getRepairId()
-                                )) {
+                                if (!EmployeeController.availableForRepair(employeeId, notification.getRepairId())) {
 
                                     Shared.showErrorDialog(
                                             new JFrame(),
@@ -539,10 +546,7 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
                                     continue;
                                 }
 
-                                NotificationController.assignRepairNotification(
-                                        notification.getRepairId(),
-                                        employeeId
-                                );
+                                NotificationController.assignRepairNotification(notification.getRepairId(), employeeId);
 
                                 NotificationController.maskAsRead(notification);
 
@@ -554,9 +558,7 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
 
                                 fillRepairTable(false);
 
-                                fillNotificationTable(
-                                        notificationShowAllBox.isSelected()
-                                );
+                                fillNotificationTable(notificationShowAllBox.isSelected());
 
                                 return;
                             }
@@ -570,12 +572,10 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
                             );
                         }
 
-                    //--------------------------------------Reject Repair--------------------------------------
+                        //--------------------------------------Reject Repair--------------------------------------
                     } else {
 
-                        if (!RepairController.existsSubmittedRepair(
-                                notification.getRepairId()
-                        )) {
+                        if (!RepairController.existsSubmittedRepair(notification.getRepairId())) {
 
                             Shared.showErrorDialog(
                                     new JFrame(),
@@ -586,14 +586,9 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
                             return;
                         }
 
-                        Integer clientId =RepairController.getClientIdByRepair(
-                                        notification.getRepairId()
-                                );
+                        Integer clientId = RepairController.getClientIdByRepair(notification.getRepairId());
 
-                        if (clientId != null
-                                && RepairController.rejectRepair(
-                                        notification.getRepairId()
-                                )) {
+                        if (clientId != null && RepairController.rejectRepair(notification.getRepairId())) {
 
                             NotificationController.rejectRepairNotification(
                                     clientId,
@@ -624,7 +619,7 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
                         }
                     }
 
-                  //--------------------------------------Reassign Employee--------------------------------------
+                    //--------------------------------------Reassign Employee--------------------------------------
                 } else if (notification.getType().equals("reassignEmployee")) {
 
                     while (true) {
@@ -681,10 +676,7 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
                             continue;
                         }
 
-                        if (!EmployeeController.availableForRepair(
-                                employeeId,
-                                notification.getRepairId()
-                        )) {
+                        if (!EmployeeController.availableForRepair(employeeId, notification.getRepairId())) {
 
                             Shared.showErrorDialog(
                                     new JFrame(),
@@ -695,10 +687,7 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
                             continue;
                         }
 
-                        NotificationController.assignRepairNotification(
-                                notification.getRepairId(),
-                                employeeId
-                        );
+                        NotificationController.assignRepairNotification(notification.getRepairId(), employeeId);
 
                         NotificationController.maskAsRead(notification);
 
@@ -708,21 +697,17 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
                                 "Valid Operation"
                         );
 
-                        fillNotificationTable(
-                                notificationShowAllBox.isSelected()
-                        );
+                        fillNotificationTable(notificationShowAllBox.isSelected());
 
                         return;
                     }
 
-                //--------------------------------------Other Notifications--------------------------------------
+                    //--------------------------------------Other Notifications--------------------------------------
                 } else {
 
                     String message = notification.getMessage();
 
-                    if (message == null
-                            || message.trim().equals("")
-                            || message.equals("null")) {
+                    if (message == null || message.trim().equals("") || message.equals("null")) {
 
                         message = "This notification has no message.";
                     }
@@ -733,31 +718,54 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
                             "Notification Message"
                     );
                 }
-            }   
+            }
         }
     }
-    
 
+    /**
+     * Mouse events not used
+     * @param e used to identify mouse event
+     */
     @Override
-    public void mousePressed(MouseEvent e) {}
+    public void mousePressed(MouseEvent e) {
+    }
 
+    /**
+     * Mouse events not used
+     * @param e used to identify mouse event
+     */
     @Override
-    public void mouseReleased(MouseEvent e) {}
+    public void mouseReleased(MouseEvent e) {
+    }
 
+    /**
+     * Mouse events not used
+     * @param e used to identify mouse event
+     */
     @Override
-    public void mouseEntered(MouseEvent e) {}
+    public void mouseEntered(MouseEvent e) {
+    }
 
+    /**
+     * Mouse events not used
+     * @param e used to identify mouse event
+     */
     @Override
-    public void mouseExited(MouseEvent e) {}
+    public void mouseExited(MouseEvent e) {
+    }
 
+    /**
+     * Function to detect a list row was selected
+     * @param e used to identify listEvents
+     */
     @Override
     public void valueChanged(ListSelectionEvent e) {
 
         //https://docs.oracle.com/en/java//javase/17/docs/api/java.desktop/java/awt/event/AdjustmentEvent.html
         //O getSelectedRowCount > 0 ta aqui para não crashar quando mudamos a ordenaçao
-        if (!e.getValueIsAdjusting() && this.accountTable.getSelectedRowCount()>0){
-            selectedId = (Integer) this.accountTable.getValueAt(this.accountTable.getSelectedRow(),0);
-            selectedType = this.accountTable.getValueAt(this.accountTable.getSelectedRow(),6).toString();
+        if (!e.getValueIsAdjusting() && this.accountTable.getSelectedRowCount() > 0) {
+            selectedId = (Integer) this.accountTable.getValueAt(this.accountTable.getSelectedRow(), 0);
+            selectedType = this.accountTable.getValueAt(this.accountTable.getSelectedRow(), 6).toString();
         }
     }
 }

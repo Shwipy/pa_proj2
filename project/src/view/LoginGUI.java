@@ -4,6 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
+/**
+ * Login Graphical Interface, allow the user to authenticate himself or to navigate to create an account
+ */
 public class LoginGUI extends JFrame implements ActionListener {
 
     private Container cont;
@@ -19,6 +22,9 @@ public class LoginGUI extends JFrame implements ActionListener {
 
     private Integer userId;
 
+    /**
+     * Initializes the JFrame and selects what to put in the center panel, based on the type of account
+     */
     public void init() {
         cont = getContentPane();
         cont.setLayout(new BorderLayout());
@@ -84,6 +90,10 @@ public class LoginGUI extends JFrame implements ActionListener {
         cont.add(buttonPanel, BorderLayout.SOUTH);
     }
 
+    /**
+     * Checks when an action is performed
+     * @param e used to identify which button was pressed
+     */
     public void actionPerformed(ActionEvent e) {
         if (e.getSource().equals(createButton)) {
             RegisterGUI register = new RegisterGUI();

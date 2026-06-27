@@ -13,7 +13,9 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
-
+/**
+ * Register Account Graphical Interface, allow the user to create an account or to navigate back to login
+ */
 public class RegisterGUI extends JFrame implements ActionListener {
     private Boolean accountTypeClient = true;
     private String selectedImagePath = "sample.png";
@@ -44,7 +46,9 @@ public class RegisterGUI extends JFrame implements ActionListener {
     private JButton createButton;
     private JButton switchTypeButton;
 
-
+    /**
+     * Initializes the JFrame and all components in it
+     */
     public void init() {
         setTitle("Register Form");
         setSize(780, 500);
@@ -193,7 +197,7 @@ public class RegisterGUI extends JFrame implements ActionListener {
         cont.add(footerPanel, BorderLayout.SOUTH);
     }
 
-    public void userRegister(){
+    private void userRegister(){
         Boolean inserted;
 
         if (nameField.getText().trim().isEmpty()) {
@@ -299,6 +303,10 @@ public class RegisterGUI extends JFrame implements ActionListener {
         }
     }
 
+    /**
+     * Checks when an action is performed
+     * @param e used to identify which button was pressed
+     */
     public void actionPerformed(ActionEvent e) {
 
         if (e.getSource().equals(loginButton)) {

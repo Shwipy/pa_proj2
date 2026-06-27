@@ -1,6 +1,8 @@
 package view;
+
 import controller.*;
 import model.Equipment;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -21,6 +23,12 @@ public class EquipmentWindow extends JPanel implements ActionListener {
 
     private JButton createButton;
 
+
+    /**
+     * Checks when an action is performed
+     * @param clientId used to identify which button was pressed
+     * @param clientView used to identify which button was pressed
+     */
     public EquipmentWindow(Integer clientId, ClientView clientView) {
 
         this.clientId = clientId;
@@ -33,19 +41,13 @@ public class EquipmentWindow extends JPanel implements ActionListener {
 
         JPanel titlePanel = new JPanel();
 
-        JLabel titleLabel = new JLabel(
-                "ADD EQUIPMENT",
-                SwingConstants.CENTER
-        );
+        JLabel titleLabel = new JLabel("ADD EQUIPMENT", SwingConstants.CENTER);
 
         titlePanel.add(titleLabel);
 
         JPanel brandPanel = new JPanel();
 
-        JLabel brandLabel = new JLabel(
-                "Brand:              ",
-                SwingConstants.RIGHT
-        );
+        JLabel brandLabel = new JLabel("Brand:              ", SwingConstants.RIGHT);
 
         brandField = new JTextField(24);
 
@@ -54,10 +56,7 @@ public class EquipmentWindow extends JPanel implements ActionListener {
 
         JPanel modelPanel = new JPanel();
 
-        JLabel modelLabel = new JLabel(
-                "Model:              ",
-                SwingConstants.RIGHT
-        );
+        JLabel modelLabel = new JLabel("Model:              ", SwingConstants.RIGHT);
 
         modelField = new JTextField(24);
 
@@ -66,10 +65,7 @@ public class EquipmentWindow extends JPanel implements ActionListener {
 
         JPanel batchPanel = new JPanel();
 
-        JLabel batchLabel = new JLabel(
-                "Batch:              ",
-                SwingConstants.RIGHT
-        );
+        JLabel batchLabel = new JLabel("Batch:              ", SwingConstants.RIGHT);
 
         batchField = new JTextField(24);
 
@@ -78,10 +74,7 @@ public class EquipmentWindow extends JPanel implements ActionListener {
 
         JPanel manufactureDatePanel = new JPanel();
 
-        JLabel manufactureDateLabel = new JLabel(
-                "Manufacture Date: ",
-                SwingConstants.RIGHT
-        );
+        JLabel manufactureDateLabel = new JLabel("Manufacture Date: ", SwingConstants.RIGHT);
 
         manufactureDateField = new JTextField(24);
         manufactureDateField.setToolTipText("Use the format yyyy-MM-dd.");
@@ -103,9 +96,7 @@ public class EquipmentWindow extends JPanel implements ActionListener {
 
         createButton = new JButton("Create Equipment");
 
-        createButton.setToolTipText(
-                "Press to validate and create a new equipment."
-        );
+        createButton.setToolTipText("Press to validate and create a new equipment.");
 
         createButton.addActionListener(this);
 
@@ -121,6 +112,9 @@ public class EquipmentWindow extends JPanel implements ActionListener {
         this.add(footerPanel, BorderLayout.SOUTH);
     }
 
+    /**
+     * Function to validate all the field on an equipment form
+     */
     private void validateFields() {
 
         Boolean inserted;
@@ -176,8 +170,7 @@ public class EquipmentWindow extends JPanel implements ActionListener {
 
             dateFormat.setLenient(false);
 
-            Date date = dateFormat.parse(manufactureDateField.getText().trim()
-            );
+            Date date = dateFormat.parse(manufactureDateField.getText().trim());
 
             manufactureDate = date.getTime() / 1000;
 
@@ -192,7 +185,7 @@ public class EquipmentWindow extends JPanel implements ActionListener {
             return;
         }
 
-        String sku =EquipmentController.generateSKU();
+        String sku = EquipmentController.generateSKU();
 
         if (sku == null) {
 
@@ -217,7 +210,7 @@ public class EquipmentWindow extends JPanel implements ActionListener {
                 null
         );
 
-        inserted=EquipmentController.addEquipment(newEquipment);
+        inserted = EquipmentController.addEquipment(newEquipment);
 
         if (inserted) {
 
@@ -239,6 +232,10 @@ public class EquipmentWindow extends JPanel implements ActionListener {
         }
     }
 
+    /**
+     * Checks when an action is performed
+     * @param e used to identify which button was pressed
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
 

@@ -1,11 +1,16 @@
 package view;
+
 import controller.*;
 import model.Repair;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Add Repair Graphical Interface
+ */
 public class RepairWindow extends JPanel implements ActionListener {
 
     private Integer clientId;
@@ -93,7 +98,10 @@ public class RepairWindow extends JPanel implements ActionListener {
         this.add(scrollPane, BorderLayout.CENTER);
         this.add(footerPanel, BorderLayout.SOUTH);
     }
-    
+
+    /**
+     * Function to validate all the field on an equipment form
+     */
     private void validateFields() {
 
         Boolean inserted;
@@ -152,7 +160,7 @@ public class RepairWindow extends JPanel implements ActionListener {
             return;
         }
 
-        String repairNumber=RepairController.generateRepairNumber();
+        String repairNumber = RepairController.generateRepairNumber();
 
         if (repairNumber == null) {
 
@@ -178,15 +186,15 @@ public class RepairWindow extends JPanel implements ActionListener {
                 notesArea.getText().trim()
         );
 
-        inserted=RepairController.addRepair(newRepair);
+        inserted = RepairController.addRepair(newRepair);
 
         if (inserted) {
 
-        	Shared.showInformationDialog(
-        	        new JFrame(),
-        	        "Repair was created with success.",
-        	        "Valid Form"
-        	);
+            Shared.showInformationDialog(
+                    new JFrame(),
+                    "Repair was created with success.",
+                    "Valid Form"
+            );
 
             clientView.fillRepairTable(false);
 
@@ -200,10 +208,14 @@ public class RepairWindow extends JPanel implements ActionListener {
         }
     }
 
+    /**
+     * Checks when an action is performed
+     * @param e used to identify which button was pressed
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
 
-    	if (e.getSource().equals(createButton)) {
+        if (e.getSource().equals(createButton)) {
             validateFields();
         }
     }

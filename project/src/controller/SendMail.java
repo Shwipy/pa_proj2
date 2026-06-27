@@ -5,11 +5,17 @@ import javax.mail.*;
 import javax.mail.internet.*;
 import javax.activation.*;
 
-
+/**
+ * Utility class to send emails on account register (should have been inside one of the controllers...)
+ */
 public class SendMail {
 
-    public static void sendMail(String dest) {
-        String to = dest;
+    /**
+     * Fetches all unready notifications that are meant for managers
+     * @param destinationEmail String with the email of the person trying to create account
+     */
+    public static void sendMail(String destinationEmail) {
+        String to = destinationEmail;
         final String from = "andresequeira99@gmail.com";
         final String pwd = "lqgk eknc efee uqvi";
         String host = "smtp.gmail.com";
@@ -27,13 +33,13 @@ public class SendMail {
                     }
                 });
         try {
-            MimeMessage message = new MimeMessage(session); // Create a default MimeMessage object
-            message.setFrom(new InternetAddress(from)); // Set From: header field of the header
+            MimeMessage message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(from));
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
-            message.setSubject("Account Registered"); // Set Subject: header field
-            message.setText("Your account has been  registered in our app and is awaiting validation"); // Now set the actual message
-            Transport.send(message); // Send message
-            System.out.println("Sent message successfully....");
+            message.setSubject("Account Registered");
+            message.setText("Your account has been  registered in our app and is awaiting validation");
+            Transport.send(message);
+            System.out.println("Email sent!");
         } catch (MessagingException mex) {
             mex.printStackTrace();
         }
