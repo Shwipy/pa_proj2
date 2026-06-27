@@ -21,15 +21,16 @@ public class Shared {
         return dialogResult == 0;
     }
 
-    public static Boolean showYesNoDialog(JFrame frame, String message, String title){
+    public static Boolean showYesNoDialog(JFrame frame, String message, String title) {
+
         int dialogResult = JOptionPane.showConfirmDialog(
                 frame,
                 message,
                 title,
-                JOptionPane.YES_NO_CANCEL_OPTION
+                JOptionPane.YES_NO_OPTION
         );
 
-        return dialogResult == 0;
+        return dialogResult == JOptionPane.YES_OPTION;
     }
 
     public static void showErrorDialog(JFrame frame, String message, String title){
