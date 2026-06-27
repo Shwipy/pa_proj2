@@ -1,0 +1,85 @@
+https://www.geeksforgeeks.org/java/java-jtabbedpane/
+https://docs.oracle.com/javase/8/docs/api/javax/swing/table/TableRowSorter.html
+
+Table & TableModel:
+https://docs.oracle.com/javase/tutorial/uiswing/components/table.html#data
+https://docs.oracle.com/javase/8/docs/api/javax/swing/table/DefaultTableModel.html
+
+Disable Table Edit:
+https://stackoverflow.com/questions/9919230/disable-user-edit-in-jtable/36747065#36747065
+
+Get Value From CheckBox:
+https://stackoverflow.com/questions/13432941/getting-jcheckbox-selected-box-value/13433004#13433004
+
+https://docs.oracle.com/javase/8/docs/api/java/sql/ResultSet.html#getObject-java.lang.String-
+https://docs.oracle.com/javase/8/docs/api/java/lang/Number.html#intValue--
+
+Mail Lib:
+https://javaee.github.io/javamail/#Download_JavaMail_Release
+
+https://www.geeksforgeeks.org/java/java-jtabbedpane/
+https://docs.oracle.com/javase/8/docs/api/javax/swing/table/TableRowSorter.html
+
+Table & TableModel:
+https://docs.oracle.com/javase/tutorial/uiswing/components/table.html#data
+https://docs.oracle.com/javase/8/docs/api/javax/swing/table/DefaultTableModel.html
+
+Disable Table Edit:
+https://stackoverflow.com/questions/9919230/disable-user-edit-in-jtable/36747065#36747065
+
+Get Value From CheckBox:
+https://stackoverflow.com/questions/13432941/getting-jcheckbox-selected-box-value/13433004#13433004
+
+https://docs.oracle.com/javase/8/docs/api/java/sql/ResultSet.html#getObject-java.lang.String-
+https://docs.oracle.com/javase/8/docs/api/java/lang/Number.html#intValue--
+
+Mail Lib:
+https://javaee.github.io/javamail/#Download_JavaMail_Release
+
+
+https://www.geeksforgeeks.org/java/how-to-get-the-insert-id-in-jdbc/
+https://docs.oracle.com/javase/8/docs/api/java/lang/Math.html#random--
+https://www.postgresql.org/docs/current/functions-matching.html
+https://regex101.com/r/aiwNmf/1
+https://stackoverflow.com/questions/6687433/convert-a-date-format-in-epoch
+https://www.geeksforgeeks.org/java/difference-between-execute-query-and-update-methods-in-java/
+https://docs.oracle.com/javase/8/docs/api/java/sql/ResultSet.html#getObject-java.lang.String-
+https://docs.oracle.com/javase/8/docs/api/java/lang/Number.html#intValue--
+https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html
+https://docs.oracle.com/javase/8/docs/api/java/time/LocalDateTime.html#now--
+https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html#ofPattern-java.lang.String-
+https://www.postgresql.org/docs/current/functions-matching.html
+https://docs.oracle.com/javase/8/docs/api/java/util/Properties.html
+
+https://docs.oracle.com/javase/tutorial/uiswing/components/table.html#data
+https://docs.oracle.com/javase/8/docs/api/javax/swing/table/DefaultTableModel.html
+https://stackoverflow.com/questions/9919230/disable-user-edit-in-jtable/36747065#36747065
+https://stackoverflow.com/questions/10331949/setmodel-on-a-jtable-when-the-defaulttablemodel-has-changed
+https://coderanch.com/t/341705/java/JTable-responding-row-clicks
+https://docs.oracle.com/javase/8/docs/api/javax/swing/JTabbedPane.html#insertTab-java.lang.String-javax.swing.Icon-java.awt.Component-java.lang.String-int-
+https://docs.oracle.com/javase/8/docs/api/java/awt/Dialog.ModalityType.html
+https://docs.oracle.com/javase/tutorial/essential/io/copy.html
+https://docs.oracle.com/en/java//javase/17/docs/api/java.desktop/java/awt/event/AdjustmentEvent.html
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+LEI_PA_Cap_05. Comunicação em Rede (Sockets)
+
+
+
+
+
+
