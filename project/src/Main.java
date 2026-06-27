@@ -1,4 +1,5 @@
 import controller.OutputController;
+import controller.SendMail;
 import controller.SessionController;
 import view.LoginGUI;
 
@@ -17,7 +18,7 @@ public class Main {
     public static void main(String[] args) {
         //SessionController.addLogExecution();
         Long start = System.currentTimeMillis();
-
+        //SendMail.send("andresequeira99@gmail.com");
         Boolean hasUsers = SessionController.hasUsers();
 
         if (hasUsers == null) {

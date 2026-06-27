@@ -13,3 +13,6 @@ https://stackoverflow.com/questions/13432941/getting-jcheckbox-selected-box-valu
 
 https://docs.oracle.com/javase/8/docs/api/java/sql/ResultSet.html#getObject-java.lang.String-
 https://docs.oracle.com/javase/8/docs/api/java/lang/Number.html#intValue--
+
+Mail Lib:
+https://javaee.github.io/javamail/#Download_JavaMail_Release

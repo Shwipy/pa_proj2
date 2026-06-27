@@ -412,9 +412,7 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
 
                     if (answer) {
 
-                        if (ManagerController.activateAccount(
-                                notification.getSenderId()
-                        )) {
+                        if (ManagerController.activateAccount(notification.getSenderId())) {
 
                             NotificationController.maskAsRead(notification);
 
