@@ -227,6 +227,8 @@ public class EquipmentWindow extends JPanel implements ActionListener {
                     "Valid Form"
             );
 
+            clientView.fillEquipmentTable(false);
+
         } else {
 
             Shared.showErrorDialog(
