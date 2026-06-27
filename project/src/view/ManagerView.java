@@ -3,6 +3,7 @@ package view;
 import controller.ManagerController;
 import controller.NotificationController;
 import controller.RepairController;
+import controller.EmployeeController;
 import model.Manager;
 import model.Notification;
 import model.Repair;
@@ -397,6 +398,7 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
                     return;
                 }
 
+                //--------------------------------------New Account--------------------------------------
                 if (notification.getType().equals("newAccount")) {
 
                     Boolean answer = Shared.showYesNoDialog(
@@ -435,6 +437,193 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
                         }
                     }
 
+                //--------------------------------------New Repair--------------------------------------
+                } else if (notification.getType().equals("newRepair")) {
+
+                    Boolean answer = Shared.showYesNoDialog(
+                            new JFrame(),
+                            notification.getMessage(),
+                            "Notification Message"
+                    );
+
+                    //--------------------------------------Approve Repair--------------------------------------
+                    if (answer) {
+
+                        if (!RepairController.existsSubmittedRepair(
+                                notification.getRepairId()
+                        )) {
+
+                            Shared.showErrorDialog(
+                                    new JFrame(),
+                                    "This repair is no longer in submitted state.",
+                                    "Invalid Repair"
+                            );
+
+                            NotificationController.maskAsRead(notification);
+
+                            fillNotificationTable(
+                                    notificationShowAllBox.isSelected()
+                            );
+
+                            return;
+                        }
+
+                        if (RepairController.approveRepair(
+                                notification.getRepairId()
+                        )) {
+
+                            while (true) {
+
+                                String employeeIdText =
+                                        JOptionPane.showInputDialog(
+                                                new JFrame(),
+                                                "Employee ID:",
+                                                "Assign Employee",
+                                                JOptionPane.QUESTION_MESSAGE
+                                        );
+
+                                if (employeeIdText == null
+                                        || employeeIdText.trim().isEmpty()) {
+
+                                    Shared.showErrorDialog(
+                                            new JFrame(),
+                                            "Employee ID cannot be empty!",
+                                            "Invalid Employee"
+                                    );
+
+                                    continue;
+                                }
+
+                                Integer employeeId;
+
+                                try {
+
+                                    employeeId = Integer.parseInt(
+                                            employeeIdText.trim()
+                                    );
+
+                                } catch (NumberFormatException exception) {
+
+                                    Shared.showErrorDialog(
+                                            new JFrame(),
+                                            "Employee ID must be a valid number!",
+                                            "Invalid Employee"
+                                    );
+
+                                    continue;
+                                }
+
+                                if (!EmployeeController.existsEmployee(employeeId)) {
+
+                                    Shared.showErrorDialog(
+                                            new JFrame(),
+                                            "Invalid Employee ID!",
+                                            "Invalid Employee"
+                                    );
+
+                                    continue;
+                                }
+
+                                if (!EmployeeController.availableForRepair(
+                                        employeeId,
+                                        notification.getRepairId()
+                                )) {
+
+                                    Shared.showErrorDialog(
+                                            new JFrame(),
+                                            "Employee already rejected this repair.",
+                                            "Invalid Employee"
+                                    );
+
+                                    continue;
+                                }
+
+                                NotificationController.assignRepairNotification(
+                                        notification.getRepairId(),
+                                        employeeId
+                                );
+
+                                NotificationController.maskAsRead(notification);
+
+                                Shared.showInformationDialog(
+                                        new JFrame(),
+                                        "Repair approved with success, and the employee was notified!",
+                                        "Valid Operation"
+                                );
+
+                                fillRepairTable(false);
+
+                                fillNotificationTable(
+                                        notificationShowAllBox.isSelected()
+                                );
+
+                                return;
+                            }
+
+                        } else {
+
+                            Shared.showErrorDialog(
+                                    new JFrame(),
+                                    "There was an error approving the repair.",
+                                    "Operation Error"
+                            );
+                        }
+
+                    //--------------------------------------Reject Repair--------------------------------------
+                    } else {
+
+                        if (!RepairController.existsSubmittedRepair(
+                                notification.getRepairId()
+                        )) {
+
+                            Shared.showErrorDialog(
+                                    new JFrame(),
+                                    "This repair is no longer in submitted state.",
+                                    "Invalid Repair"
+                            );
+
+                            return;
+                        }
+
+                        Integer clientId =RepairController.getClientIdByRepair(
+                                        notification.getRepairId()
+                                );
+
+                        if (clientId != null
+                                && RepairController.rejectRepair(
+                                        notification.getRepairId()
+                                )) {
+
+                            NotificationController.rejectRepairNotification(
+                                    clientId,
+                                    notification.getRepairId()
+                            );
+
+                            NotificationController.maskAsRead(notification);
+
+                            Shared.showInformationDialog(
+                                    new JFrame(),
+                                    "Repair rejected and archived with success!",
+                                    "Valid Operation"
+                            );
+
+                            fillRepairTable(false);
+
+                            fillNotificationTable(
+                                    notificationShowAllBox.isSelected()
+                            );
+
+                        } else {
+
+                            Shared.showErrorDialog(
+                                    new JFrame(),
+                                    "There was an error rejecting the repair.",
+                                    "Operation Error"
+                            );
+                        }
+                    }
+
+                //--------------------------------------Other Notifications--------------------------------------
                 } else {
 
                     String message = notification.getMessage();
@@ -453,8 +642,7 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
                     );
                 }
             }
-        }
-        
+        }   
     }
 
     @Override
