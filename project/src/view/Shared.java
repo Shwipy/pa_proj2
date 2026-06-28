@@ -1,12 +1,6 @@
 package view;
 
-import controller.EmployeeController;
-import controller.NotificationController;
-import model.Employee;
-import model.Notification;
-
 import javax.swing.*;
-import java.util.ArrayList;
 
 /**
  * Class to manage the multiple types of Dialogs that cam appear
@@ -93,7 +87,7 @@ public class Shared {
      * @param title   of the dialog
      * @return id of the selected employee
      */
-    public static String showSelectEmployeeDialog(JFrame frame, String message, String title) {
+    public static String showInputDialog(JFrame frame, String message, String title) {
         String employeeIdText = JOptionPane.showInputDialog(
                 frame,
                 message,

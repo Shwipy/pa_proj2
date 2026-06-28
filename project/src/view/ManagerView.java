@@ -443,7 +443,7 @@ public class ManagerView implements ActionListener, MouseListener, ListSelection
                         if (RepairController.approveRepair(notification.getRepairId())) {
                             while (true) {
 
-                                String employeeIdText = Shared.showSelectEmployeeDialog(new JFrame(), "Employee ID:", "Assign Employee");
+                                String employeeIdText = Shared.showInputDialog(new JFrame(), "Employee ID:", "Assign Employee");
 
                                 if (employeeIdText == null || employeeIdText.trim().isEmpty()) {
                                     Shared.showErrorDialog(new JFrame(), "Employee ID cannot be empty!", "Invalid Employee");

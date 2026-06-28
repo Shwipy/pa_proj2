@@ -18,12 +18,12 @@ public class InputController {
      * @return the value of the inserted NIF
      */
     //Para testar os Regex's: https://regex101.com/r/aiwNmf/1
-    public static Boolean validateNif(String message){
+    public static Boolean validateNif(String message) {
         String nif = message.trim();
-        if(Pattern.matches("\\d{9}", nif)){
+        if (Pattern.matches("\\d{9}", nif)) {
             return true;
         }
-        return  false;
+        return false;
     }
 
     /**
@@ -33,9 +33,9 @@ public class InputController {
      * @param message small string to indicate the parameter being inputed ("Email>")
      * @return the value of the inserted email
      */
-    public static Boolean validateEmail(String message){
+    public static Boolean validateEmail(String message) {
         String email = message.trim().toLowerCase();
-        if(Pattern.matches("^[a-z0-9]{1}[a-z0-9._-]+@[a-z]{1}[a-z.]+[a-z]{1}\\.[a-z]{2,3}$", email)){
+        if (Pattern.matches("^[a-z0-9]{1}[a-z0-9._-]+@[a-z]{1}[a-z.]+[a-z]{1}\\.[a-z]{2,3}$", email)) {
             return true;
         }
         return false;
@@ -48,12 +48,12 @@ public class InputController {
      * @param message small string to indicate the parameter being inputed ("Phone>")
      * @return the value of the inserted phone number
      */
-    public static Boolean validatePhone(String message){
+    public static Boolean validatePhone(String message) {
         String phone = message.trim();
-        if(Pattern.matches("[239]{1}\\d{8}", phone)){
+        if (Pattern.matches("[239]{1}\\d{8}", phone)) {
             return true;
         }
-        return  false;
+        return false;
     }
 
     /**
@@ -62,12 +62,11 @@ public class InputController {
      * @param message small string to indicate the parameter being inputted ("id>")
      * @return the value of the parsed inputed value
      */
-    public static int readInt(String message){
-        while(true){
-            try{
+    public static int readInt(String message) {
+        while (true) {
+            try {
                 return Integer.valueOf(readString(message).trim()).intValue();
-            }
-            catch(Exception e){
+            } catch (Exception e) {
                 System.out.println("!!! Not an integer !!!");
             }
         }
@@ -79,24 +78,23 @@ public class InputController {
      * Forms a timestamp based on inputted values for day/mounth/year
      * @return the value of the epoch timestamp
      */
-    public static long readDate( ){
-        while(true){
+    public static long readDate() {
+        while (true) {
             //https://stackoverflow.com/questions/6687433/convert-a-date-format-in-epoch
             System.out.println("Manufacture Date: ");
             int year = readInt("Year>");
             int month = readInt("Mouth>");
             int day = readInt("Day>");
 
-            try{
+            try {
                 String readData = year + "-" + month + "-" + day;
                 SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
                 Date date = df.parse(readData);
-                long epoch = date.getTime()/1000;
+                long epoch = date.getTime() / 1000;
 
 
                 return epoch;
-            }
-            catch(Exception e){
+            } catch (Exception e) {
                 System.out.println("!!! Invalid Date. !!!");
             }
         }
@@ -108,14 +106,11 @@ public class InputController {
      * @param message small string to indicate the parameter being inputted (">")
      * @return the value of the parsed double value
      */
-    public static double readDouble(String message){
-        while(true){
-            try{
-                return Double.valueOf(readString(message).trim()).doubleValue();
-            }
-            catch(Exception e){
-                System.out.println("!!! Not a double !!!");
-            }
+    public static double readDouble(String message) {
+        try {
+            return Double.valueOf(message.trim()).doubleValue();
+        } catch (Exception e) {
+            return -1;
         }
     }
 
@@ -125,12 +120,11 @@ public class InputController {
      * @param message small string to indicate the parameter being inputted (">")
      * @return the value of the parsed long value
      */
-    public static long readLong(String message){
-        while(true)
-            try{
-                return Long.valueOf(readString(message).trim()).longValue() ;
-            }
-            catch(Exception e){
+    public static long readLong(String message) {
+        while (true)
+            try {
+                return Long.valueOf(readString(message).trim()).longValue();
+            } catch (Exception e) {
                 System.out.println("!!! Not a long !!!");
             }
     }
@@ -142,14 +136,11 @@ public class InputController {
      * @param message small string to indicate the parameter being inputted (">")
      * @return the value of the parsed float value
      */
-    public static float readFloat(String message){
-        while(true){
-            try{
-                return Float.valueOf(readString(message).trim()).floatValue();
-            }
-            catch(Exception e){
-                System.out.println("!!! Not a float !!!");
-            }
+    public static float readFloat(String message) {
+        try {
+            return Float.valueOf(message.trim()).floatValue();
+        } catch (Exception e) {
+            return -1;
         }
     }
 
@@ -159,15 +150,14 @@ public class InputController {
      * @param message small string to indicate the parameter being inputted ("Name>")
      * @return the value of the string
      */
-    public static String readString(String message){
+    public static String readString(String message) {
         String s = "";
 
-        try{
+        try {
             System.out.print(message);
             BufferedReader in = new BufferedReader(new InputStreamReader(System.in), 1);
             s = in.readLine();
-        }
-        catch (IOException e){
+        } catch (IOException e) {
             System.out.println("Error reading from the input stream.");
         }
 

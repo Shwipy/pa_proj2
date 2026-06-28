@@ -1,5 +1,6 @@
 package view;
 
+import controller.InputController;
 import controller.NotificationController;
 import controller.RepairController;
 import model.Notification;
@@ -252,19 +253,54 @@ public class EmployeeView implements ActionListener, MouseListener {
     @Override
     public void mouseClicked(MouseEvent e) {
         if (e.getSource().equals(repairTable) && e.getClickCount() == 2) {
-            System.out.println("Double click repair");
 
-            int selectedRow = repairTable.getSelectedRow();
+            Integer selectedRow = repairTable.getSelectedRow();
 
             if (selectedRow >= 0) {
-                int modelRow = repairTable.convertRowIndexToModel(selectedRow);
-                String notes = String.valueOf(repairTable.getModel().getValueAt(modelRow, 9));
+                Integer modelRow = repairTable.convertRowIndexToModel(selectedRow);
+                //Esquecemo-nos de fazer o finish!!!
+//                String notes = String.valueOf(repairTable.getModel().getValueAt(modelRow, 9));
+//
+//                if (notes == null || notes.trim().equals("") || notes.equals("null")) {
+//                    notes = "This repair has no notes.";
+//                }
+//
+//                Shared.showInformationDialog(new JFrame(), notes, "Repair Notes");
 
-                if (notes == null || notes.trim().equals("") || notes.equals("null")) {
-                    notes = "This repair has no notes.";
+                Integer repairId = (Integer) repairTable.getModel().getValueAt(modelRow, 0);
+                String status = String.valueOf(repairTable.getModel().getValueAt(modelRow, 8));
+                System.out.println(status);
+
+                if (!status.equals("in_progress")) {
+                    Shared.showErrorDialog(new JFrame(), "Can't finish this repair", "Invalid Status");
+                    return;
                 }
 
-                Shared.showInformationDialog(new JFrame(), notes, "Repair Notes");
+                Boolean answer = Shared.showYesNoDialog(new JFrame(), "Do you want to finish this repair?", "Finish Repair");
+
+                if (answer) {
+                    String inPrice = Shared.showInputDialog(new JFrame(), "Enter the repair price:", "Repair Price");
+
+                    if (inPrice != null && !inPrice.trim().isEmpty()) {
+
+                        Double price = InputController.readDouble(inPrice);
+
+                        if (price < 0) {
+                            Shared.showErrorDialog(new JFrame(), "Please enter a valid price!", "Invalid Input");
+                            return;
+                        }
+
+                        if (RepairController.finishRepair(repairId, employeeId, "", price)) {
+                            Shared.showInformationDialog(new JFrame(), "Repair finished successfully!", "Success");
+
+                            fillNotificationTable(false);
+                            fillRepairTable(notificationShowAllBox.isSelected());
+                        } else {
+                            Shared.showErrorDialog(new JFrame(), "There was a problem finishing the repair.", "Operation Error"
+                            );
+                        }
+                    }
+                }
             }
         }
 
@@ -300,7 +336,6 @@ public class EmployeeView implements ActionListener, MouseListener {
                             Shared.showInformationDialog(new JFrame(), "You were assigned to the repair!", "Valid Operation");
 
                             fillRepairTable(false);
-
                             fillNotificationTable(notificationShowAllBox.isSelected());
 
                         } else {

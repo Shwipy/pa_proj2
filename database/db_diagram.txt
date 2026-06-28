@@ -25,6 +25,7 @@ Table account{
   password varchar(256) [not null]
   active bool [default: false, not null]
   email varchar(128) [not null]
+  pic varchar(128)
   type varchar(32) [not null]
 }
 

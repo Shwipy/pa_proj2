@@ -25,7 +25,8 @@ CREATE TABLE "account" (
   "password" varchar(256) NOT NULL,
   "active" bool NOT NULL DEFAULT false,
   "email" varchar(128) NOT NULL,
-  "type" varchar(32) NOT NULL
+  "type" varchar(32) NOT NULL,
+  "pic" varchar(128)
 );
 
 CREATE TABLE "client" (
